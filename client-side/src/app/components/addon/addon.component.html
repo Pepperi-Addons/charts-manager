@@ -1,0 +1,13 @@
+<div class="addon-page-container">
+    <pep-top-bar [title]="'Charts Manager' | translate">
+    </pep-top-bar>
+    <div class="main-content">
+        <div class="content">
+            <generic-list [allowMultipleSelection]="false" [inline]="true" [dataSource]="listDataSource">
+                <div right-buttons>
+                    <pep-button [value]="'Add' | translate" [iconName]="'number_plus'" [iconPosition]="'end'" [sizeType]="'sm'" [styleType]="'strong'" [classNames]="'pep-spacing-element'" (buttonClick)="add()"></pep-button>
+                </div>
+            </generic-list>    
+        </div>
+    </div>
+</div>
