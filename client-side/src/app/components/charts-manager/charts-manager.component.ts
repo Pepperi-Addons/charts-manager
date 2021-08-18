@@ -61,7 +61,7 @@ export class ChartsManagerComponent implements OnInit {
     });
     this.key = this.activatedRoute.snapshot.params["chart_uuid"];
     this.loading = false;
-    this.chartsTypes = [{ key: '2DBar', value: '2D Bar' }, { key: '3DBar', value: '3D Bar' }, { key: 'Gauge', value: 'Gauge' }];
+    this.chartsTypes = [{ key: 'Single', value: 'Single' }, { key: 'Gauge', value: 'Gauge' }, { key: 'MultiSeries', value: 'MultiSeries' }];
   }
 
   ngOnInit() {

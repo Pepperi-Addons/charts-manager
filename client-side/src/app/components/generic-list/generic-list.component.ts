@@ -132,7 +132,7 @@ export class GenericListComponent implements OnInit, AfterViewInit {
       uuids = this.dataObjects.map(obj => obj.UID).filter(x => uuids.indexOf(x) === -1);
     }
     const objects = uuids.map(uuid => this.getObject(uuid))
-    if (objects[0].ReadOnly){
+    if (objects[0]?.ReadOnly){
       return [];
     }
     else{

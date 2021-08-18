@@ -9,35 +9,37 @@
         <div header-end-content>
             <div class="buttons-container">
                 <pep-button [value]="'Cancel' | translate" [styleType]="'strong'" (buttonClick)="cancelClicked()"></pep-button>
-                <pep-button [value]="(mode == 'Add' ? 'Add' : 'Update') | translate" [styleType]="'strong'" [disabled]="mode == 'Add'  ? (!chart.Type || chart.Nane=='' || chart.ScriptURL=='' ): false" (buttonClick)="saveClicked()"></pep-button>
+                <pep-button [value]="(mode == 'Add' ? 'Add' : 'Update') | translate" [styleType]="'strong'" [disabled]="(!chart.Type || chart.Nane=='' || chart.ScriptURL=='' )" (buttonClick)="saveClicked()"></pep-button>
             </div>
         </div>
     </pep-top-bar>
-    <h5>{{ 'Define the charts' | translate}}</h5>
     <br />
-    <div *ngIf="!loading" class="form" style="max-width: 60rem;">
-        <div>
+    <div class="main-content">
+        <div *ngIf="!loading" class="form" style="max-width: 60rem;">
+            <!-- <pep-field-title [label]=" 'Define the charts' | translate" > {{ 'Define the charts' | translate}} </pep-field-title > -->
             <div>
-                <pep-select [key]="'select1'" label="{{'Chart' | translate}}" [(value)]="chart.Type" [disabled]="mode != 'Add'" [options]="chartsTypes" [mandatory]="mode !== 'Update'" (valueChange)="onValueChanged('Component',$event)">
-                </pep-select>
-            </div>
-            <div>
-                <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'" [mandatory]="mode !== 'Update'" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
-            </div>
-            <div>
-                <pep-textbox [label]="'Description' | translate" [(value)]="chart.Description" [type]="'text'" (valueChange)="onValueChanged('Descriptoin', $event)"></pep-textbox>
-
-            </div>
-            <div>
-                <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [src]="chart.ScriptURL" [mandatory]="mode !== 'Update'" (fileChange)="onFileSelect($event)">
-                </pep-attachment>
                 <div>
-                    <mat-label *ngIf="chartHtml" class="body-xs">{{ 'Preview' | translate}}</mat-label>
-                    <div [innerHTML]="chartHtml"></div>
+                    <pep-select [key]="'select1'" label="{{'Chart' | translate}}" [(value)]="chart.Type" [disabled]="mode != 'Add'" [options]="chartsTypes" [mandatory]="mode !== 'Update'" (valueChange)="onValueChanged('Component',$event)">
+                    </pep-select>
                 </div>
+                <div>
+                    <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'" [mandatory]="true" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
+                </div>
+                <div>
+                    <pep-textbox [label]="'Description' | translate" [(value)]="chart.Description" [type]="'text'" (valueChange)="onValueChanged('Descriptoin', $event)"></pep-textbox>
 
+                </div>
+                <div>
+                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [src]="chart.ScriptURL" [mandatory]="true" (fileChange)="onFileSelect($event)">
+                    </pep-attachment>
+                    <div>
+                        <mat-label *ngIf="chartHtml" class="body-xs">{{ 'Preview' | translate}}</mat-label>
+                        <div [innerHTML]="chartHtml"></div>
+                    </div>
+
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
 </div>

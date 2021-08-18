@@ -1,4 +1,4 @@
-import { PapiClient, InstalledAddon, AddonData, FileStorage } from '@pepperi-addons/papi-sdk'
+import { PapiClient, InstalledAddon, AddonData, FileStorage, Addon } from '@pepperi-addons/papi-sdk'
 import { Client, Request } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
 import { chartsTableScheme } from './entities';
@@ -21,12 +21,15 @@ class ChartService {
     async upsert(client: Client, request: Request) {
         const body = request.body;
         await this.validatePostData(client, request);
-        const chartFile = await this.upsertChartFileStorage(body);
+        const chart = await this.getChart(body['Name']);
+        const chartFile = await this.upsertChartFileStorage(body, chart);
 
         body['ReadOnly'] = (body.ReadOnly || !body.ReadOnly) ? body.ReadOnly : false;
         body['FileID'] = chartFile.InternalID;
         body['ScriptURL'] = chartFile.URL;
-        body['Key'] = body['Name'];
+        if (!chart) {
+            body['Key'] = body['Name'];
+        }
 
         await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).upsert(body);
         return this.find({ key: body['Key'] });
@@ -45,16 +48,17 @@ class ChartService {
     }
 
 
-    private async upsertChartFileStorage(body) {
+    private async upsertChartFileStorage(body, chart) {
         try {
             const fileStorage: FileStorage = {
                 FileName: body.Name,
                 Title: body.Name,
                 URL: body.ScriptURL,
             }
-            const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).key(body.Name).get();
+            let chart;
+
             if (chart && chart['FileID']) {
-                if (chart['URL']=== body.ScriptURL)
+                if (chart['URL'] === body.ScriptURL)
                     fileStorage.InternalID = chart['FileID'];
             }
             return await this.papiClient.fileStorage.upsert(fileStorage)
@@ -71,6 +75,16 @@ class ChartService {
         this.validateParam(body, 'Type');
         this.validateParam(body, 'ScriptURL');
         this.validateTypeParams(body);
+    }
+
+    private async getChart(key: string) {
+        try {
+            const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).key(key).get();
+            return chart;
+        }
+        catch (e) {
+            return undefined;
+        }
     }
 
     validateParam(obj: any, paramName: string) {

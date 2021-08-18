@@ -16,11 +16,11 @@ const routes: Routes = [
         path: `settings/:addon_uuid`,
         children: [
             {
-                path: 'app',
+                path: 'charts',
                 component: AddonComponent,
             },
             {
-                path: 'app/:chart_uuid',
+                path: 'charts/:chart_uuid',
                 component: ChartsManagerComponent
             },
 

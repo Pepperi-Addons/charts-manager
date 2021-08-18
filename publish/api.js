@@ -2857,7 +2857,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.4";
+var AddonVersion = "0.0.6";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -2877,8 +2877,8 @@ var PublishConfig = {
 	Editors: [
 		{
 			ParentPackageName: "Configuration",
-			PackageName: "app",
-			Description: "Data Visualization"
+			PackageName: "charts",
+			Description: "charts"
 		}
 	],
 	Dependencies: {
@@ -2963,6 +2963,7 @@ class ChartService {
         const body = request.body;
         await this.validatePostData(client, request);
         const chartFile = await this.upsertChartFileStorage(body);
+        body['ReadOnly'] = (body.ReadOnly || !body.ReadOnly) ? body.ReadOnly : false;
         body['FileID'] = chartFile.InternalID;
         body['ScriptURL'] = chartFile.URL;
         body['Key'] = body['Name'];
@@ -2986,15 +2987,21 @@ class ChartService {
                 Title: body.Name,
                 URL: body.ScriptURL,
             };
-            const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).key(body.Name).get();
+            let chart;
+            try {
+                chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).key(body.Name).get();
+            }
+            catch (e) {
+                // do nothing..
+            }
             if (chart && chart['FileID']) {
-                if (!this.equalUrls(chart['URL'], body.ScriptURL))
+                if (chart['URL'] === body.ScriptURL)
                     fileStorage.InternalID = chart['FileID'];
             }
             return await this.papiClient.fileStorage.upsert(fileStorage);
         }
         catch (e) {
-            throw new Error(`Failed upsert file storage with URL: ${body.ScriptURL}`);
+            throw new Error(`Failed upsert file storage. error: ${e.message}`);
         }
     }
     async validatePostData(client, request) {
@@ -3009,9 +3016,6 @@ class ChartService {
         if (obj[paramName] == null) {
             throw new Error(`${paramName} is a required field`);
         }
-    }
-    equalUrls(url1, url2) {
-        return new URL(url1).pathname === new URL(url2).pathname;
     }
     validateTypeParams(body) {
         if (chart_1.indexOf(body['Type']) == -1) {
