@@ -1,8 +1,8 @@
 import { AddonData } from "@pepperi-addons/papi-sdk";
 
-export interface Chart extends AddonData{
+export interface Chart extends AddonData {
     Name: string;
-    ScriptURL: string;
+    ScriptURI: string;
     ReadOnly?: Boolean;
     Description?: string;
     Type: ChartType;
@@ -10,13 +10,13 @@ export interface Chart extends AddonData{
     Hidden?: boolean;
     CreationDateTime?: string;
     ModificationDateTime?: string;
-    Key?: string;
     [key: string]: any;
 }
 
 export interface ChartDTO {
+    Key?: string;
     Name: string;
-    ScriptURL: string;
+    ScriptURI: string;
     ReadOnly?: Boolean;
     Description?: string;
     Type: ChartType;
@@ -24,5 +24,6 @@ export interface ChartDTO {
     CreationDateTime?: string;
     ModificationDateTime?: string;
 }
+
 export declare const ChartTypes: readonly ["Single", "Gauge", "MultiSeries"];
 export declare type ChartType = typeof ChartTypes[number];

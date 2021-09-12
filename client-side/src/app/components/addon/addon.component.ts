@@ -6,6 +6,7 @@ import { PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog'
 import { GenericListDataSource } from '../generic-list/generic-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from '../../../../../server-side/models/chart'
+import { Console } from 'console';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { Chart } from '../../../../../server-side/models/chart'
 export class AddonComponent implements OnInit {
 
     screenSize: PepScreenSizeType;
-    charts:Chart[];
+    charts: Chart[];
 
     constructor(
         public addonService: AddonService,
@@ -41,15 +42,15 @@ export class AddonComponent implements OnInit {
 
     listDataSource: GenericListDataSource = {
         getList: (state) => {
-            let res : Chart[]= [];
+            let res: Chart[] = [];
             return this.addonService.papiClient.addons.data.uuid(this.addonService.addonUUID).table('Charts').iter().toArray().then((charts) => {
                 for (let chart of charts) {
                     res.push({
                         Type: chart.Type,
-                        Name: chart.Name,           
+                        Name: chart.Name,
                         Description: chart.Description,
                         Key: chart.Key,
-                        ScriptURL: chart.ScriptURL,
+                        ScriptURI: chart.ScriptURI,
                         ReadOnly: chart.ReadOnly
                     })
                 }
@@ -104,18 +105,29 @@ export class AddonComponent implements OnInit {
         },
 
         getActions: async (objs) => {
-            return objs.length ? [
+            let actions = objs.length ? [
                 {
-                    title: this.translate.instant("Edit"),
+                    title: this.translate.instant("Download"),
                     handler: async (objs) => {
-                        this.router.navigate([objs[0].Key], {
-                            state: {data: objs[0]},
-                            relativeTo: this.route,
-                            queryParamsHandling: 'merge'
-                        });
+                        this.downloadChart(objs[0]);
                     }
                 }
             ] : []
+            if (objs.length > 0 && !objs[0]?.ReadOnly) {
+                actions.unshift(
+                    {
+                        title: this.translate.instant("Edit"),
+                        handler: async (objs) => {
+                            this.router.navigate([objs[0].Key], {
+                                state: { data: objs[0] },
+                                relativeTo: this.route,
+                                queryParamsHandling: 'merge'
+                            });
+                        }
+                    }
+                );
+            }
+            return actions;
         }
     }
 
@@ -125,4 +137,21 @@ export class AddonComponent implements OnInit {
             queryParamsHandling: 'merge'
         });
     }
+
+
+    downloadChart(chart) {
+
+        fetch(chart.ScriptURI, { method: `GET` })
+            .then(response => response.blob())
+            .then(blob => {
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = `${chart.Name}.js`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            });
+    };
+
 }

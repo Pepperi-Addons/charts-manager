@@ -9,7 +9,7 @@
         <div header-end-content>
             <div class="buttons-container">
                 <pep-button [value]="'Cancel' | translate" [styleType]="'strong'" (buttonClick)="cancelClicked()"></pep-button>
-                <pep-button [value]="(mode == 'Add' ? 'Add' : 'Update') | translate" [styleType]="'strong'" [disabled]="(!chart.Type || chart.Nane=='' || chart.ScriptURL=='' )" (buttonClick)="saveClicked()"></pep-button>
+                <pep-button [value]="(mode == 'Add' ? 'Add' : 'Update') | translate" [styleType]="'strong'" [disabled]="(!chart.Type || chart.Name=='' || chart.ScriptURI=='' )" (buttonClick)="saveClicked()"></pep-button>
             </div>
         </div>
     </pep-top-bar>
@@ -30,13 +30,11 @@
 
                 </div>
                 <div>
-                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [src]="chart.ScriptURL" [mandatory]="true" (fileChange)="onFileSelect($event)">
+                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
                     </pep-attachment>
-                    <div>
-                        <mat-label *ngIf="chartHtml" class="body-xs">{{ 'Preview' | translate}}</mat-label>
-                        <div [innerHTML]="chartHtml"></div>
+                    <label [hidden]="!this.chart.ScriptURI" >{{'Preview' | translate}}</label>
+                    <div [hidden]="!this.chart.ScriptURI" id="previewArea">
                     </div>
-
                 </div>
             </div>
 

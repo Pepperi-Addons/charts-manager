@@ -6,15 +6,10 @@ import { DynamicScriptLoader } from 'src/app/services/dynamic-script-loader-serv
 
 import { FakeMissingTranslationHandler, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PepDialogActionButton, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
-import { AddonData, PapiClient } from '@pepperi-addons/papi-sdk';
-import jwt from 'jwt-decode';
-import { get } from 'scriptjs';
-import { Renderer2 } from '@angular/core';
+import { PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 import 'systemjs'
 import 'systemjs/dist/extras/amd'
-import { UpperCasePipe } from '@angular/common';
-import { Chart } from '../../../../../server-side/models/chart';
+import { Chart, ChartTypes } from '../../../../../server-side/models/chart';
 
 @Component({
   selector: 'addon-charts-manager',
@@ -28,18 +23,37 @@ export class ChartsManagerComponent implements OnInit {
     Description: '',
     ReadOnly: false,
     Type: undefined,
-    ScriptURL: ''
+    ScriptURI: ''
   }
 
-  jsFileloading = true;
   screenSize: PepScreenSizeType;
-  chartsTypes: IPepOption[];
+  chartsTypes: IPepOption[] = [];
   chartHtml: SafeHtml = undefined;
   chartCustomJS: any = undefined;
   mode: 'Add' | 'Update' = 'Add';
 
   loading: boolean = true
   key: string;
+  chartInstance;
+
+  seedComplexData = {
+    groups: ["ActionDate", "Chain", "User"],
+    series: ["total sales sum"],
+    values: [
+      { "ActionDate": '01/01/01', "Chain": "rami", "User": "ey", "total sales sum": 30 },
+      { "ActionDate": '01/02/01', "Chain": "rami", "User": "ey", "total sales sum": 20 },
+      { "ActionDate": '01/01/01', "Chain": "shufersal", "User": "ey", "total sales sum": 50 },
+      { "ActionDate": '01/02/01', "Chain": "shufersal", "User": "ey", "total sales sum": 30 },
+    ],
+  };
+  seedData = {
+    groups: ["ActionDate"],
+    series: ["rami", "shufersal"],
+    values: [
+      { "ActionDate": "10/3/2021", "rami": 30, "shufersal": 50 },
+      { "ActionDate": "10/04/2021", "rami": 20, "shufersal": 30 }
+    ]
+  }
 
   constructor(
     public addonService: AddonService,
@@ -48,7 +62,6 @@ export class ChartsManagerComponent implements OnInit {
     public dialogService: PepDialogService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fileService: PepFileService,
     public sanitizer: DomSanitizer,
     private cd: ChangeDetectorRef,
     public loaderService: PepLoaderService,
@@ -61,7 +74,9 @@ export class ChartsManagerComponent implements OnInit {
     });
     this.key = this.activatedRoute.snapshot.params["chart_uuid"];
     this.loading = false;
-    this.chartsTypes = [{ key: 'Single', value: 'Single' }, { key: 'Gauge', value: 'Gauge' }, { key: 'MultiSeries', value: 'MultiSeries' }];
+    ChartTypes.forEach((chartType) => {
+      this.chartsTypes.push({ key: chartType, value: chartType })
+    })
   }
 
   ngOnInit() {
@@ -69,9 +84,8 @@ export class ChartsManagerComponent implements OnInit {
     if (history.state.data) {
       this.chart = history.state.data;
       this.mode = 'Update'
-      this.importUserFileAndExecute(this.chart.ScriptURL);
+      this.importChartFileAndExecute();
     }
-
   }
 
   goBack() {
@@ -112,51 +126,73 @@ export class ChartsManagerComponent implements OnInit {
         break;
       }
     }
-
   }
-
 
   onFileSelect(event) {
 
     if (!event) {
-      this.chartHtml = "";
-      this.chart.ScriptURL = '';
+      this.chart.ScriptURI = '';
     }
     else {
+      debugger;
       this.loaderService.show();
       this.cd.detectChanges();
       let fileStr = event.fileStr;
-      const content = decodeURIComponent(
-        escape(
-          window.atob(fileStr.split(";")[1].split(",")[1])
-        ))
-      const contentold = fileStr.split(";")[1].split(",")[1];
-      this.addonService.papiClient.fileStorage.tmp().then((presignedUrl) => {
-        fetch(presignedUrl.UploadURL, {
-          method: `PUT`,
-          body: content,
-        }).then(() => {
-          this.chart.ScriptURL = presignedUrl.DownloadURL;
-          this.importUserFileAndExecute(presignedUrl.DownloadURL);
+      console.log(fileStr);
+      this.chart.ScriptURI = fileStr;
+      this.importChartFileAndExecute();
 
-        })
-      })
     }
 
   }
 
-  private importUserFileAndExecute(jsUrl) {
-    System.import(jsUrl).then((res) => {
-      this.chartCustomJS = res;
-      this.jsFileloading = false;
-      setTimeout(() => this.preview(), 1000);
+  private importChartFileAndExecute() {
+  
+    System.import(this.chart.ScriptURI).then((res) => {
+      const configuration = {
+        label: 'Sales',
+        data: this.seedData
+      }
 
+      const previewDiv = document.getElementById("previewArea");
+      this.chartInstance = new res.default.default({
+        configuration: configuration,
+        loadLibrariesFiles: this.loadSrcJSFiles,
+        previewDiv: previewDiv
+      });
+      this.loaderService.hide();
 
     });
   }
 
-  getData() {
-    return this.addonService.papiClient.get(`/elasticsearch/totals/transaction_lines?select=count(Item.ExternalID)&group_by=Transaction.Status`);
+  loadSrcJSFiles(imports) {
+
+    let promises = [];
+
+    imports.forEach(src => {
+      promises.push(new Promise<void>((resolve) => {
+        debugger
+        const existing = document.getElementById(src);
+        debugger;
+        if (!existing) {
+          let _oldDefine = window['define'];
+          window['define'] = null;
+
+          const node = document.createElement('script');
+          node.src = src;
+          node.id = src;
+          node.onload = (script) => {
+            window['define'] = _oldDefine;
+            resolve()
+          };
+          document.getElementsByTagName('head')[0].appendChild(node);
+        }
+        else {
+          resolve();
+        }
+      }));
+    });
+    return Promise.all(promises);
   }
 
   preview() {

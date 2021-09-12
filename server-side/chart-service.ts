@@ -2,8 +2,10 @@ import { PapiClient, InstalledAddon, AddonData, FileStorage, Addon } from '@pepp
 import { Client, Request } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
 import { chartsTableScheme } from './entities';
-import { Chart, ChartType, ChartTypes } from './models/chart'
+import { Chart, ChartTypes } from './models/chart'
 import { ChartMap } from './chart-map';
+import { v4 as uuid } from 'uuid';
+import { Constants } from './constants';
 
 class ChartService {
     papiClient: PapiClient
@@ -19,72 +21,71 @@ class ChartService {
     }
 
     async upsert(client: Client, request: Request) {
-        const body = request.body;
-        await this.validatePostData(client, request);
-        const chart = await this.getChart(body['Name']);
-        const chartFile = await this.upsertChartFileStorage(body, chart);
 
-        body['ReadOnly'] = (body.ReadOnly || !body.ReadOnly) ? body.ReadOnly : false;
-        body['FileID'] = chartFile.InternalID;
-        body['ScriptURL'] = chartFile.URL;
-        if (!chart) {
-            body['Key'] = body['Name'];
+        const body = request.body;
+        await this.validatePostData(request);
+
+        const chartFile = await this.upsertChartFile(body);
+
+        body.ReadOnly = body.ReadOnly ?? false;
+        body.FileID = chartFile.InternalID;
+        body.ScriptURI = chartFile.URL;
+
+        if (!body.Key){
+            body.Key = uuid()
         }
 
-        await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).upsert(body);
-        return this.find({ key: body['Key'] });
+        const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).upsert(body);
+        return ChartMap.toDTO(<Chart>chart);
 
     }
 
     async find(query: any) {
-        if (query.key != null) {
-            const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).key(query.key).get();
+
+        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name);
+
+        if (query.key) {
+            const chart = await adal.key(query.key).get();
             return ChartMap.toDTO(<Chart>chart);
         }
         else {
-            const charts = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).find(query);
+            const charts = await adal.find(query);
             return charts.map(chart => ChartMap.toDTO(<Chart>chart))
         }
     }
 
+    private async upsertChartFile(body) {
 
-    private async upsertChartFileStorage(body, chart) {
         try {
             const fileStorage: FileStorage = {
                 FileName: body.Name,
                 Title: body.Name,
-                URL: body.ScriptURL,
             }
-            let chart;
 
-            if (chart && chart['FileID']) {
-                if (chart['URL'] === body.ScriptURL)
-                    fileStorage.InternalID = chart['FileID'];
+            if (this.isDataURL(body.ScriptURI)) {
+                fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
             }
+            else {
+                fileStorage.URL = body.ScriptURI
+            }
+
+            if (body.FileID) {
+                fileStorage.InternalID = body.FileID;
+            }
+
             return await this.papiClient.fileStorage.upsert(fileStorage)
         }
         catch (e) {
-            throw new Error(`Failed upsert file storage. error: ${e.message}`);
+            throw new Error(`Failed upsert file storage. error: ${e}`);
         }
-
     }
-    private async validatePostData(client: Client, request: Request) {
+
+    private async validatePostData(request: Request) {
         const body = request.body;
-        //const ownerUUID = (request.header['X-Pepperi-OwnerID'] == null ? null : request.header['X-Pepperi-OwnerID'].toLowerCase());
         this.validateParam(body, 'Name');
         this.validateParam(body, 'Type');
-        this.validateParam(body, 'ScriptURL');
+        this.validateParam(body, 'ScriptURI');
         this.validateTypeParams(body);
-    }
-
-    private async getChart(key: string) {
-        try {
-            const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).key(key).get();
-            return chart;
-        }
-        catch (e) {
-            return undefined;
-        }
     }
 
     validateParam(obj: any, paramName: string) {
@@ -93,13 +94,15 @@ class ChartService {
         }
     }
 
-
     validateTypeParams(body: any) {
         if (ChartTypes.indexOf(body['Type']) == -1) {
             throw new Error(`${body['Type']} is not supported type`);
         }
     }
-}
 
+    isDataURL(s) {
+        return !!s.match(Constants.DataURLRegex);
+    }
+}
 
 export default ChartService;

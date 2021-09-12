@@ -13,6 +13,7 @@ import { charts } from './meta-data';
 import ChartService from './chart-service';
 import { chartsTableScheme } from './entities';
 import config from '../addon.config.json'
+import { v4 as uuid } from 'uuid';
 
 export async function install(client: Client, request: Request): Promise<any> {
     const service = new ChartService(client)
@@ -47,9 +48,8 @@ export async function downgrade(client: Client, request: Request): Promise<any> 
 
 async function upsertCharts(papiClient, charts) {
     try {
-        var uuid = require('uuid');
         for (let chart of charts) {
-            chart.Key = uuid.v1();
+            chart.Key = uuid();
             await papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).upsert(chart);
         }
         return {

@@ -4,8 +4,9 @@ export class ChartMap {
   
     public static toDTO (chart: Chart): ChartDTO {
       return {
+        Key: chart.Key,
         Name: chart.Name,
-        ScriptURL: chart.ScriptURL,
+        ScriptURI: chart.ScriptURI,
         Type: chart.Type,
         Description: chart.Description,
         Hidden: chart.Hidden,

@@ -40,12 +40,12 @@ import {
 import { DataView, GridDataViewField, DataViewFieldType, DataViewFieldTypes } from '@pepperi-addons/papi-sdk/dist/entities/data-view';
 
 export interface GenericListDataSource {
-    getList(state: { searchString: string }): Promise<any[]>;
-    getDataView(): Promise<DataView>;
-    getActions(objs: any[]): Promise<{
-        title: string;
-        handler: (obj: any) => Promise<void>;
-    }[]>;
+  getList(state: { searchString: string }): Promise<any[]>;
+  getDataView(): Promise<DataView>;
+  getActions(objs: any[]): Promise<{
+    title: string;
+    handler: (obj: any) => Promise<void>;
+  }[]>;
 }
 
 @Component({
@@ -55,7 +55,7 @@ export interface GenericListDataSource {
 })
 export class GenericListComponent implements OnInit, AfterViewInit {
   @ViewChild(PepListComponent) customList: PepListComponent;
-  
+
   @Input()
   dataSource: GenericListDataSource;
   dataObjects: any[] = []
@@ -83,21 +83,21 @@ export class GenericListComponent implements OnInit, AfterViewInit {
   screenSize: PepScreenSizeType;
 
   constructor(
-      private dataConvertorService: PepDataConvertorService,
-      private layoutService: PepLayoutService,
-      // private httpService: PepHttpService,
-      private translate: TranslateService
+    private dataConvertorService: PepDataConvertorService,
+    private layoutService: PepLayoutService,
+    // private httpService: PepHttpService,
+    private translate: TranslateService
   ) {
-      this.layoutService.onResize$.pipe().subscribe((size) => {
-          this.screenSize = size;
-      });
+    this.layoutService.onResize$.pipe().subscribe((size) => {
+      this.screenSize = size;
+    });
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit(): void {
-      this.reload();
+    this.reload();
   }
 
   private loadMenuItems(): void {
@@ -124,20 +124,17 @@ export class GenericListComponent implements OnInit, AfterViewInit {
   }
 
   getMenuObjects() {
-    let uuids=this.customList.getSelectedItemsData().rows;
-    if (this.customList.getSelectedItemsData().rows.length == 1 && this.customList.getSelectedItemsData().rows[0]==""){
-      uuids=[];
+    let uuids = this.customList.getSelectedItemsData().rows;
+    if (this.customList.getSelectedItemsData().rows.length == 1 && this.customList.getSelectedItemsData().rows[0] == "") {
+      uuids = [];
     }
     if (this.customList.getIsAllSelectedForActions()) {
       uuids = this.dataObjects.map(obj => obj.UID).filter(x => uuids.indexOf(x) === -1);
     }
     const objects = uuids.map(uuid => this.getObject(uuid))
-    if (objects[0]?.ReadOnly){
-      return [];
-    }
-    else{
-      return objects;
-    }
+
+    return objects;
+
 
   }
 
@@ -155,43 +152,43 @@ export class GenericListComponent implements OnInit, AfterViewInit {
   }
 
   async reload() {
-      if (this.customList && this.dataSource) {
-          this.dataObjects = await this.dataSource.getList({
-            searchString: this.searchString
-          });
-          const dataView = await this.dataSource.getDataView();
-          const tableData = this.dataObjects.map(x => this.convertToPepRowData(x, dataView));
-          const data = this.dataConvertorService.convertListData(tableData);
-          data.forEach((obj, i) => {
-            this.dataObjects[i].UID = obj.UID;
-          })
-          const uiControl = this.dataConvertorService.getUiControl(tableData[0]);
-          this.customList.initListData(uiControl, data.length, data, 'table');
-        
-          this.loadMenuItems();
-      }
+    if (this.customList && this.dataSource) {
+      this.dataObjects = await this.dataSource.getList({
+        searchString: this.searchString
+      });
+      const dataView = await this.dataSource.getDataView();
+      const tableData = this.dataObjects.map(x => this.convertToPepRowData(x, dataView));
+      const data = this.dataConvertorService.convertListData(tableData);
+      data.forEach((obj, i) => {
+        this.dataObjects[i].UID = obj.UID;
+      })
+      const uiControl = this.dataConvertorService.getUiControl(tableData[0]);
+      this.customList.initListData(uiControl, data.length, data, 'table');
+
+      this.loadMenuItems();
+    }
   }
 
   convertToPepRowData(object: any, dataView: DataView) {
-      const row = new PepRowData();
-      row.Fields = [];
+    const row = new PepRowData();
+    row.Fields = [];
 
-      for (const field of dataView.Fields as GridDataViewField[]) {
-          row.Fields.push({
-            ApiName: field.FieldID,
-            Title: this.translate.instant(field.Title),
-            XAlignment: 1,
-            FormattedValue: object[field.FieldID] || '',
-            Value: object[field.FieldID] || '',
-            ColumnWidth: 10,
-            AdditionalValue: '',
-            OptionalValues: [],
-            FieldType: DataViewFieldTypes[field.Type],
-            ReadOnly: field.ReadOnly,
-            Enabled: !field.ReadOnly
-        })
-      }
-      return row;
+    for (const field of dataView.Fields as GridDataViewField[]) {
+      row.Fields.push({
+        ApiName: field.FieldID,
+        Title: this.translate.instant(field.Title),
+        XAlignment: 1,
+        FormattedValue: object[field.FieldID] || '',
+        Value: object[field.FieldID] || '',
+        ColumnWidth: 10,
+        AdditionalValue: '',
+        OptionalValues: [],
+        FieldType: DataViewFieldTypes[field.Type],
+        ReadOnly: field.ReadOnly,
+        Enabled: !field.ReadOnly
+      })
+    }
+    return row;
   }
 
   onAnimationStateChange(state): void { }
