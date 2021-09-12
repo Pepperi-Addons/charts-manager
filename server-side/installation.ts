@@ -28,7 +28,7 @@ export async function install(client: Client, request: Request): Promise<any> {
     catch (err) {
         return {
             success: false,
-            errorMessage:  ('message' in err) ? 'Got error ' + err.message : 'Unknown error occured.',
+            errorMessage:  err,
         }
     }
 }
@@ -58,7 +58,7 @@ async function upsertCharts(papiClient, charts) {
         }
     }
     catch (err) {
-        throw new Error(('message' in err) ? err.message : 'Unknown Error Occured');
+        throw err;
         
     }
 }

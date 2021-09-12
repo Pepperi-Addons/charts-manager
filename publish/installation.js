@@ -24,7 +24,7 @@ const charts = [
     {
         Name: "Pie chart",
         Description: "blue and red",
-        ScriptURI: "https://cdn.staging.pepperi.com/1110703/CustomizationFile/de6dcc5c-be05-4b55-b730-2f1fed1a26cb/newest",
+        ScriptURI: "https://cdn.staging.pepperi.com/1110703/CustomizationFile/5f9e0948-3c9d-472e-a5d5-e7186f787911/TemplateExample",
         Hidden: false,
         ReadOnly: true,
         Type: "MultiSeries"
@@ -32,7 +32,7 @@ const charts = [
     {
         Name: "2D bar",
         Description: "",
-        ScriptURI: "https://cdn.staging.pepperi.com/1110703/CustomizationFile/de6dcc5c-be05-4b55-b730-2f1fed1a26cb/newest",
+        ScriptURI: "https://cdn.staging.pepperi.com/1110703/CustomizationFile/5f9e0948-3c9d-472e-a5d5-e7186f787911/TemplateExample",
         Hidden: false,
         ReadOnly: true,
         Type: "Gauge"
@@ -3202,7 +3202,7 @@ class ChartService {
             return await this.papiClient.fileStorage.upsert(fileStorage);
         }
         catch (e) {
-            throw new Error(`Failed upsert file storage. error: ${e.message}`);
+            throw new Error(`Failed upsert file storage. error: ${e}`);
         }
     }
     async validatePostData(request) {
@@ -3245,7 +3245,7 @@ async function install(client, request) {
     catch (err) {
         return {
             success: false,
-            errorMessage: ('message' in err) ? 'Got error ' + err.message : 'Unknown error occured.',
+            errorMessage: err,
         };
     }
 }
@@ -3270,7 +3270,7 @@ async function upsertCharts(papiClient, charts) {
         };
     }
     catch (err) {
-        throw new Error(('message' in err) ? err.message : 'Unknown Error Occured');
+        throw err;
     }
 }
 

@@ -3183,7 +3183,7 @@ class ChartService {
             return await this.papiClient.fileStorage.upsert(fileStorage);
         }
         catch (e) {
-            throw new Error(`Failed upsert file storage. error: ${e.message}`);
+            throw new Error(`Failed upsert file storage. error: ${e}`);
         }
     }
     async validatePostData(request) {
