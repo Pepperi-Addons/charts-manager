@@ -25,6 +25,7 @@ define(["exports"], function (_exports) {
 		 }
 		 
 		initChart(){
+			
 			var ctx = document.getElementById('my-chart');
 
 			this.chart = new Chart(ctx, {
@@ -43,25 +44,26 @@ define(["exports"], function (_exports) {
 		}
 		
 		updateData() {
+
 			let data = {};			
 			
-			for (let i=0; i< this.configuration.data.series.length; i++) {								
+			for (const i=0; i< this.configuration.data.series.length; i++) {								
 				let series = this.configuration.data.series[i];
 				let values = [];										
-				for (let k=0; k< this.configuration.data.values.length; k++) {						
+				for (const k=0; k < this.configuration.data.values.length; k++) {						
 					let item = this.configuration.data.values[k];																	
 					values.push(item[series])
 				}
 				data[series] = values;				
 			}
 
-			let label = [];
-			for (let k=0; k< this.configuration.data.values.length; k++) {
+			let labels = [];
+			for (const k=0; k < this.configuration.data.values.length; k++) {
 					let item = this.configuration.data.values[k];				
-					label.push(item[this.configuration.data.groups[0]]);
+					labels.push(item[this.configuration.data.groups[0]]);
 			}			
 
-			let myDatasets=[];
+			let datasets=[];
 			
 			for (let i=0; i < this.configuration.data.groups.length; i++) {
 				let group = this.configuration.data.groups[i];
@@ -77,13 +79,13 @@ define(["exports"], function (_exports) {
 							xAxisKey: group
 						}
 					}
-					myDatasets.push(dataSet);					
+					datasets.push(dataSet);					
 				}
 			}
 						
 			this.chart.data = {
-				labels:label,
-				datasets: myDatasets
+				labels:labels,
+				datasets: datasets
 			}
 		
 			this.chart.update();
