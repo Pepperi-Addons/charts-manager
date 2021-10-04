@@ -18,9 +18,8 @@ import { v4 as uuid } from 'uuid';
 export async function install(client: Client, request: Request): Promise<any> {
     const service = new ChartService(client)
     try {
-
         await service.papiClient.addons.data.schemes.post(chartsTableScheme);
-        await upsertCharts(service.papiClient, charts);
+        await upsertCharts(service, charts);
 
         return { success: true, resultObject: {} }
 
@@ -46,11 +45,11 @@ export async function downgrade(client: Client, request: Request): Promise<any> 
 }
 
 
-async function upsertCharts(papiClient, charts) {
+async function upsertCharts(service, charts) {
     try {
         for (let chart of charts) {
             chart.Key = uuid();
-            await papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).upsert(chart);
+            await service.upsert({body: chart});
         }
         return {
             success: true,

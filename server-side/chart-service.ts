@@ -20,7 +20,7 @@ class ChartService {
         });
     }
 
-    async upsert(client: Client, request: Request) {
+    async upsert(request: Request) {
 
         const body = request.body;
         await this.validatePostData(request);

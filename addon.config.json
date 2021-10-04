@@ -1,6 +1,6 @@
 {
   "AddonUUID": "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad",
-  "AddonVersion": "0.0.13",
+  "AddonVersion": "0.0.21",
   "DebugPort": 4500,
   "WebappBaseUrl": "https://app.sandbox.pepperi.com",
   "DefaultEditor": "main",
@@ -13,7 +13,8 @@
   ],
   "Assets": [
     "en.json",
-    "en.ngx-lib.json"
+    "en.ngx-lib.json",
+    "line.js"
   ],
   "PublishConfig": {
     "ClientStack": "ng10",

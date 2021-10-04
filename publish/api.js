@@ -2859,7 +2859,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.12";
+var AddonVersion = "0.0.20";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -2872,7 +2872,8 @@ var Editors = [
 ];
 var Assets = [
 	"en.json",
-	"en.ngx-lib.json"
+	"en.ngx-lib.json",
+	"line.js"
 ];
 var PublishConfig = {
 	ClientStack: "ng10",
@@ -3140,7 +3141,7 @@ class ChartService {
             addonUUID: client.AddonUUID
         });
     }
-    async upsert(client, request) {
+    async upsert(request) {
         var _a;
         const body = request.body;
         await this.validatePostData(request);
@@ -3211,7 +3212,7 @@ class ChartService {
 async function charts(client, request) {
     const service = new ChartService(client);
     if (request.method == 'POST') {
-        return await service.upsert(client, request);
+        return await service.upsert(request);
     }
     else if (request.method == 'GET') {
         return await service.find(request.query);

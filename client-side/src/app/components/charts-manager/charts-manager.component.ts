@@ -48,12 +48,18 @@ export class ChartsManagerComponent implements OnInit {
   };
   seedData = {
     groups: ["ActionDate"],
-    series: ["rami", "shufersal"],
+    series: ["Series 1", "Series 2"],
     values: [
-      { "ActionDate": "10/3/2021", "rami": 30, "shufersal": 50 },
-      { "ActionDate": "10/04/2021", "rami": 20, "shufersal": 30 }
+      { "ActionDate": "01/01/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
+      { "ActionDate": "01/02/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
+      { "ActionDate": "01/03/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
+      { "ActionDate": "01/04/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
+      { "ActionDate": "01/05/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
+      { "ActionDate": "01/06/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() }
+
     ]
   }
+
 
   constructor(
     public addonService: AddonService,
@@ -128,6 +134,10 @@ export class ChartsManagerComponent implements OnInit {
     }
   }
 
+  getRandomNumber() {
+    return Math.floor(Math.random() * 100);
+  }
+
   onFileSelect(event) {
 
     if (!event) {
@@ -147,20 +157,19 @@ export class ChartsManagerComponent implements OnInit {
   }
 
   private importChartFileAndExecute() {
-  
+
     System.import(this.chart.ScriptURI).then((res) => {
       const configuration = {
-        label: 'Sales',
-        data: this.seedData
+        label: 'Sales'
       }
+      this.loadSrcJSFiles(res.deps).then(() => {
+        const previewDiv = document.getElementById("previewArea");
+        this.chartInstance = new res.default.default(previewDiv, configuration);
+        this.chartInstance.data = this.seedData;
+        this.chartInstance.update();
+        this.loaderService.hide();
 
-      const previewDiv = document.getElementById("previewArea");
-      this.chartInstance = new res.default.default({
-        configuration: configuration,
-        loadLibrariesFiles: this.loadSrcJSFiles,
-        previewDiv: previewDiv
-      });
-      this.loaderService.hide();
+      })
 
     });
   }
