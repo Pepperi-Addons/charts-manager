@@ -10,9 +10,6 @@ export const chartsTableScheme: AddonDataScheme = {
         Description: {
             Type: "String"
         },
-        Type: {
-            Type: "String",
-        },
         URL: {
             Type: "String",
         },

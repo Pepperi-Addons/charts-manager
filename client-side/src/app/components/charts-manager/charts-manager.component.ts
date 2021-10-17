@@ -6,7 +6,7 @@ import { DynamicScriptLoader } from 'src/app/services/dynamic-script-loader-serv
 
 import { FakeMissingTranslationHandler, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
+import { PepDialogActionButton, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 import 'systemjs'
 import 'systemjs/dist/extras/amd'
 import { Chart, ChartTypes } from '../../../../../server-side/models/chart';
@@ -56,7 +56,6 @@ export class ChartsManagerComponent implements OnInit {
       { "ActionDate": "01/04/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
       { "ActionDate": "01/05/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
       { "ActionDate": "01/06/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() }
-
     ]
   }
 
@@ -110,9 +109,28 @@ export class ChartsManagerComponent implements OnInit {
     this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', this.chart).toPromise().then((res) => {
       this.loaderService.hide();
       this.goBack();
+    }).catch(ex => {
+      console.log(ex);
+      this.openCustomDialog("Error", ex);
     })
   }
 
+  openCustomDialog(title: string, content: string, callback?: any) {
+    const actionButton: PepDialogActionButton = {
+      title: "OK",
+      className: "",
+      callback: callback,
+    };
+
+    const dialogData = new PepDialogData({
+      title: title,
+      content: content,
+      actionButtons: [actionButton],
+      actionsType: "custom",
+      showClose: false,
+    });
+    this.dialogService.openDefaultDialog(dialogData);
+  }
   cancelClicked() {
     this.goBack();
   }

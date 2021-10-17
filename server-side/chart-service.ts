@@ -22,8 +22,11 @@ class ChartService {
 
     async upsert(request: Request) {
 
+        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name);
+
         const body = request.body;
-        await this.validatePostData(request);
+        this.validatePostData(request);
+        await this.validateName(body,adal);
 
         const chartFile = await this.upsertChartFile(body);
 
@@ -35,7 +38,7 @@ class ChartService {
             body.Key = uuid()
         }
 
-        const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).upsert(body);
+        const chart = await adal.upsert(body);
         return ChartMap.toDTO(<Chart>chart);
 
     }
@@ -61,18 +64,20 @@ class ChartService {
                 FileName: body.Name,
                 Title: body.Name,
             }
-
-            if (this.isDataURL(body.ScriptURI)) {
-                fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
-            }
-            else {
-                fileStorage.URL = body.ScriptURI
-            }
-
             if (body.FileID) {
                 fileStorage.InternalID = body.FileID;
             }
-
+            if (body.Hidden){
+                fileStorage.Hidden = true;
+            }       
+            else{
+                if (this.isDataURL(body.ScriptURI)) {
+                    fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
+                }
+                else {
+                    fileStorage.URL = body.ScriptURI
+                }
+            }     
             return await this.papiClient.fileStorage.upsert(fileStorage)
         }
         catch (e) {
@@ -80,12 +85,18 @@ class ChartService {
         }
     }
 
-    private async validatePostData(request: Request) {
+    private validatePostData(request: Request) {
         const body = request.body;
         this.validateParam(body, 'Name');
-        this.validateParam(body, 'Type');
         this.validateParam(body, 'ScriptURI');
-        this.validateTypeParams(body);
+       
+    }
+
+    async validateName(body: any, adal: any) {
+        const existingName = await adal.find({where:`Name='${body.Name}'`});
+        if (existingName.length >0 && existingName[0].Key!=body.Key){
+            throw new Error(`A chart with this name already exist.`);
+        }
     }
 
     validateParam(obj: any, paramName: string) {

@@ -1,31 +1,86 @@
-
 define(["exports"], function (exports) {
-  "use strict";
+	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
+    // some JSDoc comments for IDE intellisense
 
+    /**
+     * @typedef Configuration A configuration object supplied to the chart by the embedder
+     * @type {object}
+     * @property {string} label The label of the chart
+     */
+
+    /**
+     * @typedef ChartData A data object supplied to the chart by the embedder containing the chart data
+     * @type {object}
+     * @property {string[]} series The chart data groups
+     * @property {string[]} groups The chart data series
+     * @property {object[]} values The chart data values
+     */
+	 
+    /**
+     * This is the class the embedder will use to render the chart
+     */
 	class MyChart {
-		chart;
+		
+        /**
+         * The chart constructor.
+         * 
+         * @param {HTMLElement} element The embedder supplies this HTMLElement which can be used to render UI
+         * @param {Configuration} configuration a JSON object that holds the chart specific configuration
+         */
 		constructor(element, configuration) {
+            /**
+             * The embedder of this chart will insert the chart data to this property
+             * @type {ChartData}
+             */
+            this.data = {};
+
+			// the chart will be created in the HTML element
 			this.chart = element;	
 		}
 		
-			// set the data to the chart
-		update(data) {
-			// create ui object
-			let content = '<div _ngcontent-sgu-c156 class="rows ng-star-inserted"><div _ngcontent-sgu-c156 class="content row">';
-			for (let i=0; i<this.data.series.length; i++) {
-				content += '<div _ngcontent-sgu-c156 class="info-chart chart-background"><p _ngcontent-sgu-c156 class="desc color-dimmed">' + this.data.series[i] + '</p><p _ngcontent-sgu-c156 class="value bold">' + this.data.values[0][this.data.series[i]] + '</p></div>';
-			};
-			content += '</div></div>';
-			this.chart.innerHTML = content;
+		/**
+         * This function must be implemented by the chart
+         * the embedder calls this function when there are changes to the chart data
+         */
+		update() {
+			// update the embedder with the new html content
+			this.chart.innerHTML = this.getHTML();
 		}
+		
+		/**
+         * This function returns an html which will be created in the embedder. 
+         */
+        getHTML() {
+			// create the content element
+			let content = `<div style="display: flex;flex-direction: column;gap: 2rem;margin: 0.5rem;">
+								<div style="margin:0;display: flex;gap: 2rem;">`;
+			for (let i=0; i<this.data.series.length; i++) {
+				content += `<div style="padding: 2rem 2.5rem;
+									background: rgb(255, 255, 255);
+									box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05),
+												0px 8px 16px 0px rgba(0, 0, 0, 0.04),
+												0px 12px 24px 0px rgba(0, 0, 0, 0.04);
+									border-radius: 8px;">
+								<p style="text-align: center; margin: 10px 0px" class="color-dimmed">
+									${this.data.series[i]}
+								</p>
+								<p style="text-align: center; margin: 10px 0px" class="bold" >
+									${this.data.values[0][this.data.series[i]]}
+								</p>
+							</div>`;
+			};
+			content += `</div></div>`;
+            return content;
+        }
 	}
+	
+	// defines the dependencies required for the chart
 	const deps = [];
 
-	exports.default = MyChart;
-	exports.deps = deps;
-
+	// export the chart constructor so it will be used by the embedder.
+    exports.default = MyChart;
+    exports.deps = deps;
+    Object.defineProperty(exports, '__esModule', { value: true });
+	
 });

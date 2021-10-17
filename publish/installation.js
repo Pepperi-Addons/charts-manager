@@ -2902,7 +2902,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.20";
+var AddonVersion = "0.0.25";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -3186,8 +3186,10 @@ class ChartService {
     }
     async upsert(request) {
         var _a;
+        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name);
         const body = request.body;
-        await this.validatePostData(request);
+        this.validatePostData(request);
+        await this.validateName(body, adal);
         const chartFile = await this.upsertChartFile(body);
         body.ReadOnly = (_a = body.ReadOnly) !== null && _a !== void 0 ? _a : false;
         body.FileID = chartFile.InternalID;
@@ -3195,7 +3197,7 @@ class ChartService {
         if (!body.Key) {
             body.Key = C__Users_hadar_l_Documents_New_Framwork_Hadar_Tests_chartsManager_serverSide_node_modules_uuid.v4();
         }
-        const chart = await this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name).upsert(body);
+        const chart = await adal.upsert(body);
         return ChartMap.toDTO(chart);
     }
     async find(query) {
@@ -3230,12 +3232,18 @@ class ChartService {
             throw new Error(`Failed upsert file storage. error: ${e}`);
         }
     }
-    async validatePostData(request) {
+    validatePostData(request) {
         const body = request.body;
         this.validateParam(body, 'Name');
-        this.validateParam(body, 'Type');
+        //this.validateParam(body, 'Type');
+        //this.validateTypeParams(body);
         this.validateParam(body, 'ScriptURI');
-        this.validateTypeParams(body);
+    }
+    async validateName(body, adal) {
+        const existingName = await adal.find({ where: `Name=${body.Name}` });
+        if (existingName.length > 0 && existingName[0].Key != body.Key) {
+            throw new Error(`A chart with this name already exist.`);
+        }
     }
     validateParam(obj, paramName) {
         if (obj[paramName] == null) {

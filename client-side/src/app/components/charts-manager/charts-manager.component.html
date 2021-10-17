@@ -8,8 +8,8 @@
         </div>
         <div header-end-content>
             <div class="buttons-container">
-                <pep-button [value]="'Cancel' | translate" [styleType]="'strong'" (buttonClick)="cancelClicked()"></pep-button>
-                <pep-button [value]="(mode == 'Add' ? 'Add' : 'Update') | translate" [styleType]="'strong'" [disabled]="(!chart.Type || chart.Name=='' || chart.ScriptURI=='' )" (buttonClick)="saveClicked()"></pep-button>
+                <pep-button *ngIf="!chart.ReadOnly" [value]="'Cancel' | translate" [styleType]="'strong'" (buttonClick)="cancelClicked()"></pep-button>
+                <pep-button *ngIf="!chart.ReadOnly" [value]="(mode == 'Add' ? 'Add' : 'Update') | translate" [styleType]="'strong'" [disabled]="(chart.Name=='' || chart.ScriptURI=='' )" (buttonClick)="saveClicked()"></pep-button>
             </div>
         </div>
     </pep-top-bar>
@@ -18,19 +18,19 @@
         <div *ngIf="!loading" class="form" style="max-width: 60rem;">
             <!-- <pep-field-title [label]=" 'Define the charts' | translate" > {{ 'Define the charts' | translate}} </pep-field-title > -->
             <div>
-                <div>
+                <!-- <div>
                     <pep-select [key]="'select1'" label="{{'Chart' | translate}}" [(value)]="chart.Type" [disabled]="mode != 'Add'" [options]="chartsTypes" [mandatory]="mode !== 'Update'" (valueChange)="onValueChanged('Component',$event)">
                     </pep-select>
+                </div> -->
+                <div>
+                    <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'"  [disabled]="chart.ReadOnly" [mandatory]="true" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
                 </div>
                 <div>
-                    <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'" [mandatory]="true" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
-                </div>
-                <div>
-                    <pep-textbox [label]="'Description' | translate" [(value)]="chart.Description" [type]="'text'" (valueChange)="onValueChanged('Descriptoin', $event)"></pep-textbox>
+                    <pep-textbox [label]="'Description' | translate" [(value)]="chart.Description" [disabled]="chart.ReadOnly" [type]="'text'" (valueChange)="onValueChanged('Descriptoin', $event)"></pep-textbox>
 
                 </div>
                 <div>
-                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
+                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [disabled]="chart.ReadOnly"  [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
                     </pep-attachment>
                     <label [hidden]="!this.chart.ScriptURI" >{{'Preview' | translate}}</label>
                     <div [hidden]="!this.chart.ScriptURI" id="previewArea">

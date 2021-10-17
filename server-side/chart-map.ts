@@ -7,7 +7,6 @@ export class ChartMap {
         Key: chart.Key,
         Name: chart.Name,
         ScriptURI: chart.ScriptURI,
-        Type: chart.Type,
         Description: chart.Description,
         Hidden: chart.Hidden,
         ReadOnly: chart.ReadOnly,

@@ -1,6 +1,6 @@
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Component, OnInit } from "@angular/core";
-import { PepFileService, PepLayoutService, PepScreenSizeType } from '@pepperi-addons/ngx-lib';
+import { PepAddonService, PepFileService, PepLayoutService, PepLoaderService, PepScreenSizeType } from '@pepperi-addons/ngx-lib';
 import { AddonService } from '../../services/addon.service';
 import { PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 import { GenericListDataSource } from '../generic-list/generic-list.component';
@@ -26,7 +26,9 @@ export class AddonComponent implements OnInit {
         public translate: TranslateService,
         public router: Router,
         public route: ActivatedRoute,
-        private fileService: PepFileService
+        private fileService: PepFileService,
+        private pepAddonService: PepAddonService,
+        public loaderService: PepLoaderService
     ) {
 
         this.layoutService.onResize$.subscribe(size => {
@@ -37,7 +39,6 @@ export class AddonComponent implements OnInit {
     }
 
     ngOnInit() {
-
     }
 
     listDataSource: GenericListDataSource = {
@@ -69,13 +70,13 @@ export class AddonComponent implements OnInit {
                 Type: 'Grid',
                 Title: '',
                 Fields: [
-                    {
-                        FieldID: 'Type',
-                        Type: 'TextBox',
-                        Title: this.translate.instant("Component"),
-                        Mandatory: false,
-                        ReadOnly: true
-                    },
+                    // {
+                    //     FieldID: 'Type',
+                    //     Type: 'TextBox',
+                    //     Title: this.translate.instant("Component"),
+                    //     Mandatory: false,
+                    //     ReadOnly: true
+                    // },
                     {
                         FieldID: 'Name',
                         Type: 'TextBox',
@@ -124,6 +125,26 @@ export class AddonComponent implements OnInit {
                                 queryParamsHandling: 'merge'
                             });
                         }
+                    },
+                    {
+                        title: this.translate.instant("Delete"),
+                        handler: async (objs) => {
+                            this.deleteChart(objs[0]);
+                        }
+                    }
+                );
+            }
+            if (objs[0]?.ReadOnly) {
+                actions.unshift(
+                    {
+                        title: this.translate.instant("Preview"),
+                        handler: async (objs) => {
+                            this.router.navigate([objs[0].Key], {
+                                state: { data: objs[0] },
+                                relativeTo: this.route,
+                                queryParamsHandling: 'merge'
+                            });
+                        }
                     }
                 );
             }
@@ -152,6 +173,18 @@ export class AddonComponent implements OnInit {
                 a.click();
                 a.remove();
             });
+    };
+
+    deleteChart(chart) {
+        chart.Hidden = true;
+        this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', chart).toPromise().then((res) => {
+            this.loaderService.hide();
+          
+        }).catch(ex => {
+            console.log(ex);
+            //this.openCustomDialog("Error", ex);
+        })
+
     };
 
 }
