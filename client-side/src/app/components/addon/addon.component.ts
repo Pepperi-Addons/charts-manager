@@ -50,7 +50,7 @@ export class AddonComponent implements OnInit {
             return this.addonService.papiClient.addons.data.uuid(this.addonService.addonUUID).table(CHARTS_TABLE_NAME).iter().toArray().then((charts) => {
                 for (let chart of charts) {
                     res.push({
-                        Type: chart.Type,
+                        Type: chart.ReadOnly? this.translate.instant("System"): this.translate.instant("UserDefined"),
                         Name: chart.Name,
                         Description: chart.Description,
                         Key: chart.Key,
@@ -93,11 +93,21 @@ export class AddonComponent implements OnInit {
                         Title: this.translate.instant("Description"),
                         Mandatory: false,
                         ReadOnly: true
+                    },
+                    {
+                        FieldID: 'Type',
+                        Type: 'TextBox',
+                        Title: this.translate.instant("Type"),
+                        Mandatory: false,
+                        ReadOnly: true
                     }
                 ],
                 Columns: [
                     {
                         Width: 25
+                    },
+                    {
+                        Width: 50
                     },
                     {
                         Width: 25

@@ -125,7 +125,7 @@ define(['exports'], function (exports) {
          * This function returns an html which will be created in the embedder. 
          */
         getHTML() {
-            return `<div style="border:1px solid #000000;">
+            return `<div >
                 <canvas></canvas>
                 </div>`;
         }

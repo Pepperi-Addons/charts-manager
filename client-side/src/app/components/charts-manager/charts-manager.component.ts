@@ -143,7 +143,7 @@ export class ChartsManagerComponent implements OnInit {
         this.chart.Description = $event;
         break;
       }
-      case 'Component': {
+      case 'Type': {
         this.chart.Type = $event;
         break;
       }

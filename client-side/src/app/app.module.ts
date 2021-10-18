@@ -25,7 +25,6 @@ import { PepSideBarModule } from '@pepperi-addons/ngx-lib/side-bar';
 import { ChartsManagerComponent } from './components/charts-manager/charts-manager.component';
 import { PepAttachmentModule } from '@pepperi-addons/ngx-lib/attachment';
 import { PepSelectModule } from '@pepperi-addons/ngx-lib/select';
-import { CustomChartsComponent } from './components/custom-charts/custom-charts.component';
 import { PepImageModule } from '@pepperi-addons/ngx-lib/image';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PepFieldTitleModule } from '@pepperi-addons/ngx-lib/field-title';
@@ -59,7 +58,7 @@ export function createTranslateLoader(http: HttpClient, fileService: PepFileServ
         AddonComponent,
         GenericListComponent,
         ChartsManagerComponent,
-        CustomChartsComponent
+        
     ],
     imports: [
         PepFieldTitleModule,

@@ -172,15 +172,15 @@ export class GenericListComponent implements OnInit, AfterViewInit {
   convertToPepRowData(object: any, dataView: DataView) {
     const row = new PepRowData();
     row.Fields = [];
-
-    for (const field of dataView.Fields as GridDataViewField[]) {
+    for(let i=0;i<dataView.Fields.length;i++){
+      let field = dataView.Fields[i] as GridDataViewField;
       row.Fields.push({
         ApiName: field.FieldID,
         Title: this.translate.instant(field.Title),
         XAlignment: 1,
         FormattedValue: object[field.FieldID] || '',
         Value: object[field.FieldID] || '',
-        ColumnWidth: 10,
+        ColumnWidth: dataView['Columns'][i].Width,
         AdditionalValue: '',
         OptionalValues: [],
         FieldType: DataViewFieldTypes[field.Type],
@@ -188,6 +188,8 @@ export class GenericListComponent implements OnInit, AfterViewInit {
         Enabled: !field.ReadOnly
       })
     }
+  
+    
     return row;
   }
 

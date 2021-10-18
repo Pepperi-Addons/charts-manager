@@ -18,5 +18,8 @@
     "Description": "Description",
     "MultiSeries": "Multi Series",
     "FailedExecuteFile": "Failed to execute the file content",
-    "FailedLoadLibrary": "Failed to load library: {{library}}"   
+    "FailedLoadLibrary": "Failed to load library: {{library}}",
+    "Type": "Type",
+    "UserDefined": "User defined",
+    "System": "System"
 }

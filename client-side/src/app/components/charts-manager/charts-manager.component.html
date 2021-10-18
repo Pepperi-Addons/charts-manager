@@ -1,8 +1,7 @@
-<div class="addon-page-container">
+<div class="addon-page-container" style="max-width: 80rem;margin-bottom: 2rem;">
     <pep-top-bar [inline]="false">
         <div header-start-content>
             <div class="buttons-container">
-
                 <pep-button [value]="'Charts manager' | translate" (buttonClick)="backClicked()" [iconName]="'arrow_left_alt'"></pep-button>
             </div>
         </div>
@@ -15,29 +14,19 @@
     </pep-top-bar>
     <br />
     <div class="main-content">
-        <div *ngIf="!loading" class="form" style="max-width: 60rem;">
-            <!-- <pep-field-title [label]=" 'Define the charts' | translate" > {{ 'Define the charts' | translate}} </pep-field-title > -->
-            <div>
-                <!-- <div>
-                    <pep-select [key]="'select1'" label="{{'Chart' | translate}}" [(value)]="chart.Type" [disabled]="mode != 'Add'" [options]="chartsTypes" [mandatory]="mode !== 'Update'" (valueChange)="onValueChanged('Component',$event)">
-                    </pep-select>
-                </div> -->
-                <div>
-                    <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'"  [disabled]="chart.ReadOnly" [mandatory]="true" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
-                </div>
-                <div>
+        <div *ngIf="!loading" class="form">
+            <div class="flex-container">
+                <div style="width: 30rem;">
+                    <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'" [disabled]="chart.ReadOnly" [mandatory]="true" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
                     <pep-textbox [label]="'Description' | translate" [(value)]="chart.Description" [disabled]="chart.ReadOnly" [type]="'text'" (valueChange)="onValueChanged('Descriptoin', $event)"></pep-textbox>
-
-                </div>
-                <div>
-                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [disabled]="chart.ReadOnly"  [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
+                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [disabled]="chart.ReadOnly" [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
                     </pep-attachment>
-                    <label [hidden]="!this.chartInstance" >{{'Preview' | translate}}</label>
+                </div>
+                <div style="width: 47rem;">
+                    <label [hidden]="!this.chartInstance">{{'Preview' | translate}}</label>
                     <div [hidden]="!this.chartInstance" id="previewArea">
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-</div>
