@@ -2,8 +2,6 @@ import { ChangeDetectorRef, Component, OnInit, SystemJsNgModuleLoader, TemplateR
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IPepOption, PepAddonService, PepFileService, PepLayoutService, PepLoaderService, PepScreenSizeType, PepSessionService } from '@pepperi-addons/ngx-lib';
 import { AddonService } from 'src/app/services/addon.service';
-import { DynamicScriptLoader } from 'src/app/services/dynamic-script-loader-service.service';
-
 import { FakeMissingTranslationHandler, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PepDialogActionButton, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
@@ -34,7 +32,7 @@ export class ChartsManagerComponent implements OnInit {
 
   loading: boolean = true
   key: string;
-  chartInstance;
+  chartInstance = undefined;
 
   seedComplexData = {
     groups: ["ActionDate", "Chain", "User"],
@@ -159,7 +157,8 @@ export class ChartsManagerComponent implements OnInit {
   onFileSelect(event) {
 
     if (!event) {
-      this.chart.ScriptURI = '';
+      this.chartInstance = undefined;
+      this.chart.ScriptURI='';
     }
     else {
       debugger;
@@ -187,10 +186,14 @@ export class ChartsManagerComponent implements OnInit {
         this.chartInstance.update();
         this.loaderService.hide();
 
+      }).catch(err => {
+        this.handleErrorDialog(this.translate.instant("FailedExecuteFile"));
       })
-
+    }).catch(err => {
+      this.handleErrorDialog(this.translate.instant("FailedExecuteFile"));
     });
   }
+
 
   loadSrcJSFiles(imports) {
 
@@ -212,6 +215,11 @@ export class ChartsManagerComponent implements OnInit {
             window['define'] = _oldDefine;
             resolve()
           };
+          node.onerror = (script) => {
+            this.handleErrorDialog(this.translate.instant("FailedLoadLibrary", {
+              library: script['target'].id
+            }));
+          };
           document.getElementsByTagName('head')[0].appendChild(node);
         }
         else {
@@ -220,6 +228,11 @@ export class ChartsManagerComponent implements OnInit {
       }));
     });
     return Promise.all(promises);
+  }
+
+  private handleErrorDialog(message: string) {
+    this.loaderService.hide();
+    this.addonService.openDialog(this.translate.instant("Error"), message);
   }
 
   preview() {

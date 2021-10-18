@@ -32,8 +32,8 @@
                 <div>
                     <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [disabled]="chart.ReadOnly"  [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
                     </pep-attachment>
-                    <label [hidden]="!this.chart.ScriptURI" >{{'Preview' | translate}}</label>
-                    <div [hidden]="!this.chart.ScriptURI" id="previewArea">
+                    <label [hidden]="!this.chartInstance" >{{'Preview' | translate}}</label>
+                    <div [hidden]="!this.chartInstance" id="previewArea">
                     </div>
                 </div>
             </div>

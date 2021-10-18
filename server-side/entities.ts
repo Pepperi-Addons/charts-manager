@@ -1,8 +1,10 @@
 import { AddonDataScheme } from "@pepperi-addons/papi-sdk";
 
+export const CHARTS_TABLE_NAME = 'Charts';
+
 export const chartsTableScheme: AddonDataScheme = {
-    Name: 'Charts',
-    Type: 'indexed_data',
+    Name: CHARTS_TABLE_NAME,
+    Type: 'data',
     Fields: {
         Name: {
             Type: "String"
@@ -10,7 +12,7 @@ export const chartsTableScheme: AddonDataScheme = {
         Description: {
             Type: "String"
         },
-        URL: {
+        URI: {
             Type: "String",
         },
         FileID: {

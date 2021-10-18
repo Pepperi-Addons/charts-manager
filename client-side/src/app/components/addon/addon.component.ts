@@ -1,12 +1,13 @@
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { PepAddonService, PepFileService, PepLayoutService, PepLoaderService, PepScreenSizeType } from '@pepperi-addons/ngx-lib';
 import { AddonService } from '../../services/addon.service';
 import { PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
-import { GenericListDataSource } from '../generic-list/generic-list.component';
+import { GenericListComponent, GenericListDataSource } from '../generic-list/generic-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Chart } from '../../../../../server-side/models/chart'
+import { Chart, } from '../../../../../server-side/models/chart'
 import { Console } from 'console';
+import { CHARTS_TABLE_NAME } from '../../../../../server-side/entities';
 
 
 @Component({
@@ -19,6 +20,8 @@ export class AddonComponent implements OnInit {
 
     screenSize: PepScreenSizeType;
     charts: Chart[];
+    @ViewChild(GenericListComponent) 
+    chartsList: GenericListComponent;
 
     constructor(
         public addonService: AddonService,
@@ -44,7 +47,7 @@ export class AddonComponent implements OnInit {
     listDataSource: GenericListDataSource = {
         getList: (state) => {
             let res: Chart[] = [];
-            return this.addonService.papiClient.addons.data.uuid(this.addonService.addonUUID).table('Charts').iter().toArray().then((charts) => {
+            return this.addonService.papiClient.addons.data.uuid(this.addonService.addonUUID).table(CHARTS_TABLE_NAME).iter().toArray().then((charts) => {
                 for (let chart of charts) {
                     res.push({
                         Type: chart.Type,
@@ -179,9 +182,10 @@ export class AddonComponent implements OnInit {
         chart.Hidden = true;
         this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', chart).toPromise().then((res) => {
             this.loaderService.hide();
-          
+            this.chartsList.reload();
         }).catch(ex => {
             console.log(ex);
+            this.translate.instant("Preview")
             //this.openCustomDialog("Error", ex);
         })
 

@@ -16,5 +16,7 @@
     "Component": "Component" ,
     "Name": "Name",
     "Description": "Description",
-    "MultiSeries": "Multi Series"
+    "MultiSeries": "Multi Series",
+    "FailedExecuteFile": "Failed to execute the file content",
+    "FailedLoadLibrary": "Failed to load library: {{library}}"   
 }

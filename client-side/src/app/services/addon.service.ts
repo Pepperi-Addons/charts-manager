@@ -3,7 +3,8 @@ import jwt from 'jwt-decode';
 import { PapiClient } from '@pepperi-addons/papi-sdk';
 import { Injectable } from '@angular/core';
 
-import {PepHttpService, PepDataConvertorService, PepSessionService} from '@pepperi-addons/ngx-lib';
+import { PepHttpService, PepDataConvertorService, PepSessionService } from '@pepperi-addons/ngx-lib';
+import { PepDialogActionButton, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 
 @Injectable({ providedIn: 'root' })
 export class AddonService {
@@ -12,20 +13,21 @@ export class AddonService {
     parsedToken: any
     papiBaseURL = ''
     addonUUID;
-
+    dialogRef;
     get papiClient(): PapiClient {
         return new PapiClient({
             baseURL: this.papiBaseURL,
             token: this.session.getIdpToken(),
             addonUUID: this.addonUUID,
-            suppressLogging:true
+            suppressLogging: true
         })
     }
 
     constructor(
-        public session:  PepSessionService,
+        public session: PepSessionService,
         public pepperiDataConverter: PepDataConvertorService,
-        private pepHttp: PepHttpService
+        private pepHttp: PepHttpService,
+        public dialogService: PepDialogService
     ) {
         const accessToken = this.session.getIdpToken();
         this.parsedToken = jwt(accessToken);
@@ -48,4 +50,23 @@ export class AddonService {
         return this.pepHttp.postPapiApiCall(endpoint, body);
     }
 
+    openDialog(title: string, content: string, callback?: any) {
+        const actionButton: PepDialogActionButton = {
+            title: "OK",
+            className: "",
+            callback: callback,
+
+        };
+        const dialogConfig = this.dialogService.getDialogConfig({ disableClose: true, panelClass: 'pepperi-standalone' }, 'inline')
+        //dialogConfig.minWidth = '30px';
+        const dialogData = new PepDialogData({
+            title: title,
+            content: content,
+            actionButtons: [actionButton],
+            actionsType: "custom",
+            showClose: false,
+
+        });
+        this.dialogService.openDefaultDialog(dialogData, dialogConfig);
+    }
 }

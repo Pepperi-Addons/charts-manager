@@ -2859,7 +2859,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.25";
+var AddonVersion = "0.0.29";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -2901,27 +2901,7 @@ var config = {
 	PublishConfig: PublishConfig
 };
 
-const chartsTableScheme = {
-    Name: 'Charts',
-    Type: 'indexed_data',
-    Fields: {
-        Name: {
-            Type: "String"
-        },
-        Description: {
-            Type: "String"
-        },
-        Type: {
-            Type: "String",
-        },
-        URL: {
-            Type: "String",
-        },
-        FileID: {
-            Type: "Integer",
-        },
-    },
-};
+const CHARTS_TABLE_NAME = 'Charts';
 
 var chart = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -2942,7 +2922,6 @@ class ChartMap {
             Key: chart.Key,
             Name: chart.Name,
             ScriptURI: chart.ScriptURI,
-            Type: chart.Type,
             Description: chart.Description,
             Hidden: chart.Hidden,
             ReadOnly: chart.ReadOnly,
@@ -3143,7 +3122,7 @@ class ChartService {
     }
     async upsert(request) {
         var _a;
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name);
+        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         const body = request.body;
         this.validatePostData(request);
         await this.validateName(body, adal);
@@ -3158,7 +3137,7 @@ class ChartService {
         return ChartMap.toDTO(chart);
     }
     async find(query) {
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name);
+        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         if (query.key) {
             const chart = await adal.key(query.key).get();
             return ChartMap.toDTO(chart);
@@ -3174,14 +3153,19 @@ class ChartService {
                 FileName: body.Name,
                 Title: body.Name,
             };
-            if (this.isDataURL(body.ScriptURI)) {
-                fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
-            }
-            else {
-                fileStorage.URL = body.ScriptURI;
-            }
             if (body.FileID) {
                 fileStorage.InternalID = body.FileID;
+            }
+            if (body.Hidden) {
+                fileStorage.Hidden = true;
+            }
+            else {
+                if (this.isDataURL(body.ScriptURI)) {
+                    fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
+                }
+                else {
+                    fileStorage.URL = body.ScriptURI;
+                }
             }
             return await this.papiClient.fileStorage.upsert(fileStorage);
         }
@@ -3192,12 +3176,10 @@ class ChartService {
     validatePostData(request) {
         const body = request.body;
         this.validateParam(body, 'Name');
-        //this.validateParam(body, 'Type');
-        //this.validateTypeParams(body);
         this.validateParam(body, 'ScriptURI');
     }
     async validateName(body, adal) {
-        const existingName = await adal.find({ where: `Name=${body.Name}` });
+        const existingName = await adal.find({ where: `Name='${body.Name}'` });
         if (existingName.length > 0 && existingName[0].Key != body.Key) {
             throw new Error(`A chart with this name already exist.`);
         }

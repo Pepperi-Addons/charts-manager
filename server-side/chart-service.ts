@@ -1,7 +1,7 @@
 import { PapiClient, InstalledAddon, AddonData, FileStorage, Addon } from '@pepperi-addons/papi-sdk'
 import { Client, Request } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
-import { chartsTableScheme } from './entities';
+import { chartsTableScheme, CHARTS_TABLE_NAME } from './entities';
 import { Chart, ChartTypes } from './models/chart'
 import { ChartMap } from './chart-map';
 import { v4 as uuid } from 'uuid';
@@ -22,7 +22,7 @@ class ChartService {
 
     async upsert(request: Request) {
 
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name);
+        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
 
         const body = request.body;
         this.validatePostData(request);
@@ -45,7 +45,7 @@ class ChartService {
 
     async find(query: any) {
 
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(chartsTableScheme.Name);
+        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
 
         if (query.key) {
             const chart = await adal.key(query.key).get();
