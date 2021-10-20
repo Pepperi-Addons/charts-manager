@@ -16,24 +16,34 @@ import config from '../addon.config.json'
 import { v4 as uuid } from 'uuid';
 
 export async function install(client: Client, request: Request): Promise<any> {
+    const res={
+        success: true,
+        errorMessage: '',
+    }
     const service = new ChartService(client)
     try {
-        await service.papiClient.addons.data.schemes.post(chartsTableScheme);
-        await upsertCharts(service, charts);
 
-        return { success: true, resultObject: {} }
+        await service.papiClient.addons.data.schemes.post(chartsTableScheme);
+        await upsertCharts(client,request, service, charts);
+
+        return res;
 
     }
-    catch (err) {
-        return {
-            success: false,
-            errorMessage:  err,
-        }
+    catch (err) {    
+        return handleException(err);
     }
 }
 
 export async function uninstall(client: Client, request: Request): Promise<any> {
-    return { success: true, resultObject: {} }
+    try{
+        const service = new ChartService(client)
+        await service.papiClient.post(`/addons/data/schemes/${chartsTableScheme.Name}/purge`);
+        return { success: true, resultObject: {} }
+    }
+    catch(err){
+        return handleException(err);
+
+    }
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
@@ -44,12 +54,28 @@ export async function downgrade(client: Client, request: Request): Promise<any> 
     return { success: true, resultObject: {} }
 }
 
+function handleException(err) {
+    let errorMessage = 'Unknown Error Occured';
+    if (err instanceof Error) {
+        errorMessage = err.message;
+    }
+    return {
+        success: false,
+        errorMessage: errorMessage,
+        resultObject: {}
+    };
+}
 
-async function upsertCharts(service, charts) {
+async function upsertCharts(client: Client, request: Request,service, charts) {
     try {
+        // https://cdn.pepperi.com/Addon/Public/3d118baf-f576-4cdb-a81e-c2cc9af4d7ad/0.0.33/ChartsTemplates/Line.js
+
+        //https://cdn.pepperi.com/Addon/Public/3d118baf-f576-4cdb-a81e-c2cc9af4d7ad/0.0.31/assets/ChartsTemplates/horizontal%20bar.js
         for (let chart of charts) {
             chart.Key = uuid();
-            await service.upsert({body: chart});
+            chart.ScriptURI = `${client.AssetsBaseUrl}/assets/ChartsTemplates/${chart.Name.toLowerCase()}.js`
+            console.log(`chart ScriptURI: ${chart.ScriptURI}`)
+            await service.upsert({ body: chart });
         }
         return {
             success: true,
@@ -57,7 +83,7 @@ async function upsertCharts(service, charts) {
         }
     }
     catch (err) {
-        throw err;
-        
+        throw new Error('Failed to upsert charts templates files');
+
     }
 }

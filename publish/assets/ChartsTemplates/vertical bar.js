@@ -54,28 +54,27 @@ define(['exports'], function (exports) {
          * the embedder calls this function when there are changes to the chart data
          */
         update() {
-			// the pie chart does not know how to handle multiple group values, so the first value is always used.
-//          // the data has multiple group by values -> show them in the x-axis
-//			if (this.data.groups.length > 0) {  
-//				this.chart.data = {
-//					datasets: this.data.groups.map(group => {
-//	                    return this.data.series.map(series => {
-//	                        return this.getGroupedDataSet(series, group, series);
-//	                    })
-//	                }).flat()
-//				}
-//			
-//			} else { 
-                // the data has no group by -> show the series in the x-axis
+            // the data has multiple group by values -> show them in the y-axis
+			if (this.data.groups.length > 0) {  
+				this.chart.data = {
+					datasets: this.data.groups.map(group => {
+                        return this.data.series.map(series => {
+                            return this.getGroupedDataSet(series, series, group);
+                        })
+                    }).flat()
+				}
+			
+			} else { 
+                // the data has no group by -> show the series in the y-axis
                 this.chart.data = {
 					datasets: [
                         this.getDataSet()
                     ],
                     labels: this.data.series
 				}
-//				// hide the series legend title
-//				this.chart.options.plugins.legend.display = false;
-//			}
+				// hide the series legend title
+				this.chart.options.plugins.legend.display = false;
+			}
 	
 			// update the chart.js chart
 			this.chart.update();
@@ -104,8 +103,7 @@ define(['exports'], function (exports) {
          */
         getDataSet() {
             const colors = this.data.series.map(series => this.getRandomColor());
-            return {
-				label: '',
+            return {						
                 data: this.data.series.map(series => {
                     return this.data.values[0][series];
                 }),
@@ -136,8 +134,9 @@ define(['exports'], function (exports) {
          */
         getChartJSConfiguration(label) {
             return {
-				type: 'pie',
+				type: 'bar',
 				options: {
+					indexAxis: 'y',
 					scales: {
 						yAxes: [{
 							ticks: {
@@ -145,14 +144,14 @@ define(['exports'], function (exports) {
 							}
 						}]
 					},
-					plugins: {
+					plugins:{
 						title: {
 							display: true,
 							text: label,
 							align: 'start',
 							padding: 10,
 							font: {
-								size: 32,
+								size: 24,
 								lineHeight: 2
 							},
 						},
@@ -166,7 +165,7 @@ define(['exports'], function (exports) {
 							align: 'start',
 						}
 					}
-				}
+				}			
 			};
         }
     }

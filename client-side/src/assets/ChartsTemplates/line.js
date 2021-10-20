@@ -54,18 +54,17 @@ define(['exports'], function (exports) {
          * the embedder calls this function when there are changes to the chart data
          */
         update() {
-			// the pie chart does not know how to handle multiple group values, so the first value is always used.
-//          // the data has multiple group by values -> show them in the x-axis
-//			if (this.data.groups.length > 0) {  
-//				this.chart.data = {
-//					datasets: this.data.groups.map(group => {
-//	                    return this.data.series.map(series => {
-//	                        return this.getGroupedDataSet(series, group, series);
-//	                    })
-//	                }).flat()
-//				}
-//			
-//			} else { 
+            // the data has multiple group by values -> show them in the x-axis
+			if (this.data.groups.length > 0) {  
+				this.chart.data = {
+					datasets: this.data.groups.map(group => {
+                        return this.data.series.map(series => {
+                            return this.getGroupedDataSet(series, group, series);
+                        })
+                    }).flat()
+				}
+			
+			} else { 
                 // the data has no group by -> show the series in the x-axis
                 this.chart.data = {
 					datasets: [
@@ -73,9 +72,9 @@ define(['exports'], function (exports) {
                     ],
                     labels: this.data.series
 				}
-//				// hide the series legend title
-//				this.chart.options.plugins.legend.display = false;
-//			}
+				// hide the series legend title
+				this.chart.options.plugins.legend.display = false;
+			}
 	
 			// update the chart.js chart
 			this.chart.update();
@@ -104,8 +103,7 @@ define(['exports'], function (exports) {
          */
         getDataSet() {
             const colors = this.data.series.map(series => this.getRandomColor());
-            return {
-				label: '',
+            return {						
                 data: this.data.series.map(series => {
                     return this.data.values[0][series];
                 }),
@@ -126,7 +124,7 @@ define(['exports'], function (exports) {
          * This function returns an html which will be created in the embedder. 
          */
         getHTML() {
-            return `<div >
+            return `<div>
                 <canvas></canvas>
                 </div>`;
         }
@@ -136,7 +134,7 @@ define(['exports'], function (exports) {
          */
         getChartJSConfiguration(label) {
             return {
-				type: 'pie',
+				type: 'line',
 				options: {
 					scales: {
 						yAxes: [{
@@ -145,14 +143,14 @@ define(['exports'], function (exports) {
 							}
 						}]
 					},
-					plugins: {
+					plugins:{
 						title: {
 							display: true,
 							text: label,
 							align: 'start',
 							padding: 10,
 							font: {
-								size: 32,
+								size: 24,
 								lineHeight: 2
 							},
 						},
@@ -166,7 +164,7 @@ define(['exports'], function (exports) {
 							align: 'start',
 						}
 					}
-				}
+				}			
 			};
         }
     }

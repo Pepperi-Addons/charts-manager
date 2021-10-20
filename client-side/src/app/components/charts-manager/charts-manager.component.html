@@ -2,7 +2,7 @@
     <pep-top-bar [inline]="false">
         <div header-start-content>
             <div class="buttons-container">
-                <pep-button [value]="'Charts manager' | translate" (buttonClick)="backClicked()" [iconName]="'arrow_left_alt'"></pep-button>
+                <pep-button [value]="'Charts manager' | translate" [iconPosition]="'start'" (buttonClick)="backClicked()" [iconName]="'arrow_left_alt'"></pep-button>
             </div>
         </div>
         <div header-end-content>
@@ -23,7 +23,9 @@
                     </pep-attachment>
                 </div>
                 <div style="width: 47rem;">
-                    <label [hidden]="!this.chartInstance">{{'Preview' | translate}}</label>
+                    <pep-field-title class="body-xs title" *ngIf="this.chartInstance" [label]="'Preview' | translate" class="header">
+                    </pep-field-title>
+                    <!-- <label [hidden]="!this.chartInstance">{{'Preview' | translate}}</label> -->
                     <div [hidden]="!this.chartInstance" id="previewArea">
                     </div>
                 </div>

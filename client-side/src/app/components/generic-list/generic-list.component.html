@@ -29,7 +29,10 @@
     </ng-template>
     <ng-template #listTemplate>
         <div class="list-wrapper" #listContainer id="listContainer">
-            <pep-list [supportSorting]="false" [supportResizing]="true" [selectionTypeForActions]="allowMultipleSelection ? 'multi' : (allowSelection ? 'single' : 'none')" [noDataFoundMsg]="'No data' | translate" (fieldClick)="onCustomizeFieldClick($event)" (selectedItemsChange)="selectedRowsChanged($event)">
+            <pep-list [supportSorting]="false" [supportResizing]="true"
+            [parentScroll]="listContainer" 
+             [selectionTypeForActions]="allowMultipleSelection ? 'multi' : (allowSelection ? 'single' : 'none')"
+              [noDataFoundMsg]="'No data' | translate" (fieldClick)="onCustomizeFieldClick($event)" (selectedItemsChange)="selectedRowsChanged($event)">
             </pep-list>
         </div>
     </ng-template>

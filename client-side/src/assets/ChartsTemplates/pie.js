@@ -23,6 +23,7 @@ define(['exports'], function (exports) {
      */
     class MyChart {
 
+
         /**
          * The chart constructor.
          * 
@@ -54,6 +55,12 @@ define(['exports'], function (exports) {
          * the embedder calls this function when there are changes to the chart data
          */
         update() {
+			debugger;
+			const colorsToAdd = this.data.series.length - this.colors.length;
+			this.colorsToAdd=2;
+			//if (this.colorsToAdd>0){
+				this.addRandomColors(2);
+			//}
 			// the pie chart does not know how to handle multiple group values, so the first value is always used.
 //          // the data has multiple group by values -> show them in the x-axis
 //			if (this.data.groups.length > 0) {  
@@ -85,12 +92,12 @@ define(['exports'], function (exports) {
          * This function returns a dataset object array for a chart.js chart.
          */
         getGroupedDataSet(label, xAxisKey, yAxisKey) {
-            const color = this.getRandomColor();
+            const color = this.getRandomColorFromArray();
             return {						
                 label: label,
                 data: this.data.values,
-                borderColor: 'rgb('+color+')',
-                backgroundColor: 'rgba('+color+', 0.2)',
+                borderColor: color,
+                backgroundColor: color & '33',
                 borderWidth: 1,
                 parsing: {
                     yAxisKey: yAxisKey,
@@ -103,14 +110,14 @@ define(['exports'], function (exports) {
          * This function returns a dataset object for a chart.js chart.
          */
         getDataSet() {
-            const colors = this.data.series.map(series => this.getRandomColor());
+            const colors = this.data.series.map(series => this.getRandomColorFromArray());
             return {
 				label: '',
                 data: this.data.series.map(series => {
                     return this.data.values[0][series];
                 }),
-                borderColor: colors.map(color => `rgb(${color})`),
-                backgroundColor: colors.map(color => `rgba(${color}, 0.2)`),
+                borderColor: colors.map(color => color),
+                backgroundColor: colors.map(color => color & '33'),
                 borderWidth: 1
             }
         }
@@ -119,9 +126,22 @@ define(['exports'], function (exports) {
          * This function returns a random color. 
          */
         getRandomColor() {
-            return `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
+            const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
+			return `rgb(${color})`;
         }
 
+        getRandomColorFromArray() {
+			debugger;
+			var idx = Math.floor(Math.random() * this.colors.length);
+			return `${this.colors[idx]}`;
+            //return `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
+        }
+		
+		addRandomColors(numberOfColorsToAdd){
+			for(var i=0; i < numberOfColorsToAdd; i++){
+				this.colors.push(this.getRandomColor());
+			}
+		}
 		/**
          * This function returns an html which will be created in the embedder. 
          */
@@ -152,7 +172,7 @@ define(['exports'], function (exports) {
 							align: 'start',
 							padding: 10,
 							font: {
-								size: 32,
+								size: 24,
 								lineHeight: 2
 							},
 						},
@@ -169,6 +189,8 @@ define(['exports'], function (exports) {
 				}
 			};
         }
+		
+		colors = ['#1766A6','#FE5000','#FF9800','#83B30C'];
     }
 
 	// defines the dependencies required for the chart

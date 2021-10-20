@@ -152,7 +152,7 @@ define(['exports'], function (exports) {
 							align: 'start',
 							padding: 10,
 							font: {
-								size: 32,
+								size: 24,
 								lineHeight: 2
 							},
 						},

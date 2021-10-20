@@ -147,7 +147,22 @@ define(['exports'], function (exports) {
 					plugins: {
 						title: {
 							display: true,
-							text: label
+							text: label,
+							align: 'start',
+							padding: 10,
+							font: {
+								size: 32,
+								lineHeight: 2
+							},
+						},
+						legend: {
+							labels: {
+								color: '#00000075',
+								boxHeight: 15,
+								padding: 10,
+							},
+							position: 'bottom',
+							align: 'start',
 						}
 					}
 				}
