@@ -3152,6 +3152,7 @@ class ChartService {
             const fileStorage = {
                 FileName: body.Name,
                 Title: body.Name,
+				Is
             };
             if (body.FileID) {
                 fileStorage.InternalID = body.FileID;
