@@ -35,9 +35,9 @@ export class ChartsManagerComponent implements OnInit {
   chartInstance = undefined;
 
   seedComplexData = {
-    groups: ["ActionDate", "Chain", "User"],
-    series: ["total sales sum"],
-    values: [
+    Groups: ["ActionDate", "Chain", "User"],
+    Series: ["total sales sum"],
+    DataSet: [
       { "ActionDate": '01/01/01', "Chain": "rami", "User": "ey", "total sales sum": 30 },
       { "ActionDate": '01/02/01', "Chain": "rami", "User": "ey", "total sales sum": 20 },
       { "ActionDate": '01/01/01', "Chain": "shufersal", "User": "ey", "total sales sum": 50 },
@@ -45,9 +45,9 @@ export class ChartsManagerComponent implements OnInit {
     ],
   };
   seedData = {
-    groups: ["ActionDate"],
-    series: ["Series 1", "Series 2"],
-    values: [
+    Groups: ["ActionDate"],
+    Series: ["Series 1", "Series 2"],
+    DataSet: [
       { "ActionDate": "01/01/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
       { "ActionDate": "01/02/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
       { "ActionDate": "01/03/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() },
@@ -56,6 +56,7 @@ export class ChartsManagerComponent implements OnInit {
       { "ActionDate": "01/06/2021", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() }
     ]
   }
+  
 
 
   constructor(

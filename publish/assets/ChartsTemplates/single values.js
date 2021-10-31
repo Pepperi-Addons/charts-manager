@@ -12,9 +12,9 @@ define(["exports"], function (exports) {
     /**
      * @typedef ChartData A data object supplied to the chart by the embedder containing the chart data
      * @type {object}
-     * @property {string[]} series The chart data groups
-     * @property {string[]} groups The chart data series
-     * @property {object[]} values The chart data values
+     * @property {string[]} Series The chart data Groups
+     * @property {string[]} Groups The chart data Series
+     * @property {object[]} DataSet The chart data DataSet
      */
 	 
     /**
@@ -55,7 +55,7 @@ define(["exports"], function (exports) {
 			// create the content element
 			let content = `<div style="display: flex;flex-direction: column;gap: 2rem;margin: 0.5rem;">
 								<div style="margin:0;display: flex;gap: 2rem;">`;
-			for (let i=0; i<this.data.series.length; i++) {
+			for (let i=0; i<this.data.Series.length; i++) {
 				content += `<div style="padding: 2rem 2.5rem;
 									background: rgb(255, 255, 255);
 									box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05),
@@ -63,10 +63,10 @@ define(["exports"], function (exports) {
 												0px 12px 24px 0px rgba(0, 0, 0, 0.04);
 									border-radius: 8px;">
 								<p style="text-align: center; margin: 10px 0px" class="color-dimmed">
-									${this.data.series[i]}
+									${this.data.Series[i]}
 								</p>
 								<p style="text-align: center; margin: 10px 0px" class="bold" >
-									${this.data.values[0][this.data.series[i]]}
+									${this.data.DataSet[0][this.data.Series[i]]}
 								</p>
 							</div>`;
 			};

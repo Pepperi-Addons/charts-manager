@@ -59,7 +59,7 @@ define(['exports'], function (exports) {
 			const colorsToAdd = this.data.series.length - this.colors.length;
 			this.colorsToAdd=2;
 			//if (this.colorsToAdd>0){
-				this.addRandomColors(2);
+				this.setColors(2);
 			//}
 			// the pie chart does not know how to handle multiple group values, so the first value is always used.
 //          // the data has multiple group by values -> show them in the x-axis
@@ -125,10 +125,6 @@ define(['exports'], function (exports) {
 		/**
          * This function returns a random color. 
          */
-        getRandomColor() {
-            const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
-			return `rgb(${color})`;
-        }
 
         getRandomColorFromArray() {
 			debugger;
@@ -137,9 +133,10 @@ define(['exports'], function (exports) {
             //return `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
         }
 		
-		addRandomColors(numberOfColorsToAdd){
+		setColors(numberOfColorsToAdd){
 			for(var i=0; i < numberOfColorsToAdd; i++){
-				this.colors.push(this.getRandomColor());
+				const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
+				this.colors.push(`rgb(${color})`);
 			}
 		}
 		/**

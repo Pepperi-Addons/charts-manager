@@ -12,9 +12,9 @@ define(['exports'], function (exports) {
     /**
      * @typedef ChartData A data object supplied to the chart by the embedder containing the chart data
      * @type {object}
-     * @property {string[]} series The chart data groups
-     * @property {string[]} groups The chart data series
-     * @property {object[]} values The chart data values
+     * @property {string[]} Series The chart data Groups
+     * @property {string[]} Groups The chart data Series
+     * @property {object[]} DataSet The chart data DataSet
      */
 
     /**
@@ -54,25 +54,25 @@ define(['exports'], function (exports) {
          * the embedder calls this function when there are changes to the chart data
          */
         update() {
-            // the data has multiple group by values -> show them in the x-axis
-			if (this.data.groups.length > 0) {  
+            // the data has multiple group by DataSet -> show them in the x-axis
+			if (this.data.Groups.length > 0) {  
 				this.chart.data = {
-					datasets: this.data.groups.map(group => {
-                        return this.data.series.map(series => {
-                            return this.getGroupedDataSet(series, group, series);
+					datasets: this.data.Groups.map(group => {
+                        return this.data.Series.map(Series => {
+                            return this.getGroupedDataSet(Series, group, Series);
                         })
                     }).flat()
 				}
 			
 			} else { 
-                // the data has no group by -> show the series in the x-axis
+                // the data has no group by -> show the Series in the x-axis
                 this.chart.data = {
 					datasets: [
                         this.getDataSet()
                     ],
-                    labels: this.data.series
+                    labels: this.data.Series
 				}
-				// hide the series legend title
+				// hide the Series legend title
 				this.chart.options.plugins.legend.display = false;
 			}
 	
@@ -87,7 +87,7 @@ define(['exports'], function (exports) {
             const color = this.getRandomColor();
             return {						
                 label: label,
-                data: this.data.values,
+                data: this.data.DataSet,
                 borderColor: 'rgb('+color+')',
                 backgroundColor: 'rgba('+color+', 0.2)',
                 borderWidth: 1,
@@ -102,10 +102,10 @@ define(['exports'], function (exports) {
          * This function returns a dataset object for a chart.js chart.
          */
         getDataSet() {
-            const colors = this.data.series.map(series => this.getRandomColor());
+            const colors = this.data.Series.map(Series => this.getRandomColor());
             return {						
-                data: this.data.series.map(series => {
-                    return this.data.values[0][series];
+                data: this.data.Series.map(Series => {
+                    return this.data.DataSet[0][Series];
                 }),
                 borderColor: colors.map(color => `rgb(${color})`),
                 backgroundColor: colors.map(color => `rgba(${color}, 0.2)`),

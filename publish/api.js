@@ -2859,7 +2859,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.34";
+var AddonVersion = "0.0.38";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -2872,8 +2872,7 @@ var Editors = [
 ];
 var Assets = [
 	"en.json",
-	"en.ngx-lib.json",
-	"line.js"
+	"en.ngx-lib.json"
 ];
 var PublishConfig = {
 	ClientStack: "ng10",
@@ -3150,9 +3149,9 @@ class ChartService {
     async upsertChartFile(body) {
         try {
             const fileStorage = {
-                FileName: body.Name,
+                FileName: `${body.Name}.js`,
                 Title: body.Name,
-				Is
+                IsSync: false
             };
             if (body.FileID) {
                 fileStorage.InternalID = body.FileID;

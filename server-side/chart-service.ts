@@ -61,7 +61,7 @@ class ChartService {
 
         try {
             const fileStorage: FileStorage = {
-                FileName: body.Name,
+                FileName: `${body.Name}.js`,
                 Title: body.Name,
                 IsSync:false
             }
