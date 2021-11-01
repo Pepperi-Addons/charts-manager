@@ -86,7 +86,7 @@ define(['exports'], function (exports) {
         getGroupedDataSet(label, xAxisKey, yAxisKey) {
             const color = this.getRandomColor();
             return {						
-                label: label,
+                label: `ido`,
                 data: this.data.DataSet,
                 borderColor: 'rgb('+color+')',
                 backgroundColor: 'rgba('+color+', 0.2)',
