@@ -55,10 +55,10 @@ define(['exports'], function (exports) {
          * the embedder calls this function when there are changes to the chart data
          */
         update() {
-            debugger;
+            
             const colorsToAdd = this.data.Series.length - this.colors.length;
             if (colorsToAdd > 0) {
-                this.addRandomColors(2);
+                this.addRandomColors(colorsToAdd);
             }
             // the pie chart does not know how to handle multiple group values, so the first value is always used.
             //          // the data has multiple group by values -> show them in the x-axis
@@ -90,20 +90,20 @@ define(['exports'], function (exports) {
         /**
          * This function returns a dataset object array for a chart.js chart.
          */
-        getGroupedDataSet(label, xAxisKey, yAxisKey) {
-            const color = this.getRandomColorFromArray();
-            return {
-                label: label,
-                data: this.data.DataSet,
-                borderColor: color,
-                backgroundColor: color,
-                borderWidth: 1,
-                parsing: {
-                    yAxisKey: yAxisKey,
-                    xAxisKey: xAxisKey
-                }
-            }
-        }
+        // getGroupedDataSet(label, xAxisKey, yAxisKey) {
+        //     const color = this.getRandomColorFromArray();
+        //     return {
+        //         label: label,
+        //         data: this.data.DataSet,               
+        //         borderColor: 'rgb(' + color + ')',
+        //         backgroundColor: 'rgba(' + color + ', 0.33)',
+        //         borderWidth: 1,
+        //         parsing: {
+        //             yAxisKey: yAxisKey,
+        //             xAxisKey: xAxisKey
+        //         }
+        //     }
+        // }
 
         /**
          * This function returns a dataset object for a chart.js chart.
@@ -114,25 +114,20 @@ define(['exports'], function (exports) {
                 label: '',
                 data: this.data.Series.map(series => {
                     return this.data.DataSet[0][series];
-                }),
-                borderColor: colors.map(color => color),
-                backgroundColor: colors.map(color => color),
+                }),              
+                borderColor: colors.map(color => 'rgb(' + color + ')'),
+                backgroundColor: colors.map(color => 'rgba(' + color + ', 0.2)',),
                 borderWidth: 1
             }
         }
 
-        getRandomColorFromArray() {
-            debugger;
-            var idx = Math.floor(Math.random() * this.colors.length);
-            return `${this.colors[idx]}`;
-            //return `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
-        }
         addRandomColors(numberOfColorsToAdd) {
             for (var i = 0; i < numberOfColorsToAdd; i++) {
                 const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
-                this.colors.push(`rgb(${color},0.33)`);
+                this.colors.push(color);
             }
         }
+        
         /**
          * This function returns an html which will be created in the embedder. 
          */
@@ -181,7 +176,7 @@ define(['exports'], function (exports) {
             };
         }
 
-        colors = ['rgb(23, 102, 166, 0.33)', '#FE5000', 'rgb(255, 152, 0, 0.33)', '#83B30C'];
+        colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
     }
 
     // defines the dependencies required for the chart
