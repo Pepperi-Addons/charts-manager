@@ -19,7 +19,7 @@ define(['exports'], function (exports) {
 
     /**
      * This is the class the embedder will use to render the chart
-	 * In this file we will use a chart from chart.js
+     * In this file we will use a chart from chart.js
      */
     class MyChart {
 
@@ -43,10 +43,10 @@ define(['exports'], function (exports) {
             const canvas = element.querySelector('canvas');
 
             // retrieve a chart.js configuration using the label from the embedder configuration
-			const conf = this.getChartJSConfiguration(configuration.label);
+            const conf = this.getChartJSConfiguration(configuration.label);
 
             // create a chart.js Chart element on the canvas with the configuration
-			this.chart = new Chart(canvas, conf);
+            this.chart = new Chart(canvas, conf);
         }
 
         /**
@@ -54,42 +54,55 @@ define(['exports'], function (exports) {
          * the embedder calls this function when there are changes to the chart data
          */
         update() {
+
+            const colorsToAdd = this.data.Series.length - this.colors.length;
+            if (colorsToAdd > 0) {
+                this.addRandomColors(colorsToAdd);
+            }
+
             // the data has multiple group by DataSet -> show them in the y-axis
-			if (this.data.Groups.length > 0) {  
-				this.chart.data = {
-					datasets: this.data.Groups.map(group => {
-                        return this.data.Series.map(Series => {
-                            return this.getGroupedDataSet(Series, Series, group);
+            if (this.data.Groups.length > 0) {
+                this.chart.data = {
+                    datasets: this.data.Groups.map(group => {
+                        return this.data.Series.map((series, seriesIndex) => {
+                            return this.getGroupedDataSet(series, series, group, seriesIndex);
                         })
                     }).flat()
-				}
-			
-			} else { 
+                }
+
+            } else {
                 // the data has no group by -> show the Series in the y-axis
                 this.chart.data = {
-					datasets: [
+                    datasets: [
                         this.getDataSet()
                     ],
                     labels: this.data.Series
-				}
-				// hide the Series legend title
-				this.chart.options.plugins.legend.display = false;
-			}
-	
-			// update the chart.js chart
-			this.chart.update();
+                }
+                // hide the Series legend title
+                this.chart.options.plugins.legend.display = false;
+            }
+
+            // update the chart.js chart
+            this.chart.update();
         }
 
-		/**
+        addRandomColors(numberOfColorsToAdd) {
+            for (var i = 0; i < numberOfColorsToAdd; i++) {
+                const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
+                this.colors.push(color);
+            }
+        }
+        
+        /**
          * This function returns a dataset object array for a chart.js chart.
          */
-        getGroupedDataSet(label, xAxisKey, yAxisKey) {
-            const color = this.getRandomColor();
-            return {						
+        getGroupedDataSet(label, xAxisKey, yAxisKey, seriesIndex) {
+            const color = this.colors[seriesIndex];
+            return {
                 label: label,
                 data: this.data.DataSet,
-                borderColor: 'rgb('+color+')',
-                backgroundColor: 'rgba('+color+', 0.2)',
+                borderColor: 'rgb(' + color + ')',
+                backgroundColor: 'rgba(' + color + ', 0.33)',
                 borderWidth: 1,
                 parsing: {
                     yAxisKey: yAxisKey,
@@ -98,29 +111,28 @@ define(['exports'], function (exports) {
             }
         }
 
-		/**
+        /**
          * This function returns a dataset object for a chart.js chart.
          */
         getDataSet() {
-            const colors = this.data.Series.map(Series => this.getRandomColor());
-            return {						
+            const colors = this.data.Series.map((serie, index) => this.colors[index]);
+            return {
                 data: this.data.Series.map(Series => {
                     return this.data.DataSet[0][Series];
                 }),
                 borderColor: colors.map(color => `rgb(${color})`),
-                backgroundColor: colors.map(color => `rgba(${color}, 0.2)`),
+                backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
                 borderWidth: 1
             }
         }
 
-		/**
+        /**
          * This function returns a random color. 
          */
-        getRandomColor() {
-            return `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
-        }
+        colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
 
-		/**
+
+        /**
          * This function returns an html which will be created in the embedder. 
          */
         getHTML() {
@@ -129,53 +141,53 @@ define(['exports'], function (exports) {
                 </div>`;
         }
 
-		/**
+        /**
          * This function returns a chart.js configuration object. 
          */
         getChartJSConfiguration(label) {
             return {
-				type: 'bar',
-				options: {
-					indexAxis: 'y',
-					scales: {
-						yAxes: [{
-							ticks: {
-								beginAtZero: true
-							}
-						}]
-					},
-					plugins:{
-						title: {
-							display: true,
-							text: label,
-							align: 'start',
-							padding: 10,
-							font: {
-								size: 24,
-								lineHeight: 2
-							},
-						},
-						legend: {
-							labels: {
-								color: '#00000075',
-								boxHeight: 15,
-								padding: 10,
-							},
-							position: 'bottom',
-							align: 'start',
-						}
-					}
-				}			
-			};
+                type: 'bar',
+                options: {
+                    indexAxis: 'y',
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: label,
+                            align: 'start',
+                            padding: 10,
+                            font: {
+                                size: 24,
+                                lineHeight: 2
+                            },
+                        },
+                        legend: {
+                            labels: {
+                                color: '#00000075',
+                                boxHeight: 15,
+                                padding: 10,
+                            },
+                            position: 'bottom',
+                            align: 'start',
+                        }
+                    }
+                }
+            };
         }
     }
 
-	// defines the dependencies required for the chart
+    // defines the dependencies required for the chart
     const deps = [
         'https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js'
     ];
 
-	// export the chart constructor so it will be used by the embedder.
+    // export the chart constructor so it will be used by the embedder.
     exports.default = MyChart;
     exports.deps = deps;
     Object.defineProperty(exports, '__esModule', { value: true });
