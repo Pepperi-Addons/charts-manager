@@ -5,9 +5,9 @@ import { AddonService } from 'src/app/services/addon.service';
 import { FakeMissingTranslationHandler, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PepDialogActionButton, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
-import 'systemjs'
-import 'systemjs/dist/extras/amd'
 import { Chart, ChartTypes } from '../../../../../server-side/models/chart';
+import 'systemjs';
+import 'systemjs-babel';
 
 @Component({
   selector: 'addon-charts-manager',
@@ -182,7 +182,7 @@ export class ChartsManagerComponent implements OnInit {
       }
       this.loadSrcJSFiles(res.deps).then(() => {
         const previewDiv = document.getElementById("previewArea");
-        this.chartInstance = new res.default.default(previewDiv, configuration);
+        this.chartInstance = new res.default(previewDiv, configuration);
         this.chartInstance.data = this.seedData;
         this.chartInstance.update();
         this.loaderService.hide();

@@ -68,9 +68,7 @@ function handleException(err) {
 
 async function upsertCharts(client: Client, request: Request,service, charts) {
     try {
-        // https://cdn.pepperi.com/Addon/Public/3d118baf-f576-4cdb-a81e-c2cc9af4d7ad/0.0.33/ChartsTemplates/Line.js
-
-        //https://cdn.pepperi.com/Addon/Public/3d118baf-f576-4cdb-a81e-c2cc9af4d7ad/0.0.31/assets/ChartsTemplates/horizontal%20bar.js
+       
         for (let chart of charts) {
             chart.Key = uuid();
             chart.ScriptURI = `${client.AssetsBaseUrl}/assets/ChartsTemplates/${chart.Name.toLowerCase()}.js`
