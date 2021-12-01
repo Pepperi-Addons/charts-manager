@@ -39,7 +39,7 @@ export default class MyChart {
         const canvas = element.querySelector('canvas');
 
         // retrieve a chart.js configuration using the label from the embedder configuration
-        const conf = this.getChartJSConfiguration(configuration.label);
+        const conf = this.getChartJSConfiguration();
 
         // create a chart.js Chart element on the canvas with the configuration
         this.chart = new Chart(canvas, conf);
@@ -50,17 +50,28 @@ export default class MyChart {
      * the embedder calls this function when there are changes to the chart data
      */
     update() {
+        debugger;
+        const groups = this.data.MetaData.map((data) => data.Groups)[0];
+        const series = this.data.MetaData.map((data) => data.Series)[0];
 
-        const colorsToAdd = this.data.Series.length - this.colors.length;
+        const uniqGroups = groups.filter(function (elem, index, self) {
+            return index === self.indexOf(elem);
+        });
+        const uniqSeries = series.filter(function (elem, index, self) {
+            return index === self.indexOf(elem);
+        });
+
+
+        const colorsToAdd = uniqSeries.length - this.colors.length;
         if (colorsToAdd > 0) {
             this.addRandomColors(colorsToAdd);
         }
 
         // the data has multiple group by DataSet -> show them in the y-axis
-        if (this.data.Groups.length > 0) {
+        if (uniqGroups.length > 0) {
             this.chart.data = {
-                datasets: this.data.Groups.map(group => {
-                    return this.data.Series.map((series, seriesIndex) => {
+                datasets: uniqGroups.map(group => {
+                    return uniqSeries.map((series, seriesIndex) => {
                         return this.getGroupedDataSet(series, series, group, seriesIndex);
                     })
                 }).flat()
@@ -70,9 +81,9 @@ export default class MyChart {
             // the data has no group by -> show the Series in the y-axis
             this.chart.data = {
                 datasets: [
-                    this.getDataSet()
+                    this.getDataSet(uniqSeries)
                 ],
-                labels: this.data.Series
+                labels: uniqSeries
             }
             // hide the Series legend title
             this.chart.options.plugins.legend.display = false;
@@ -103,22 +114,24 @@ export default class MyChart {
             parsing: {
                 yAxisKey: yAxisKey,
                 xAxisKey: xAxisKey
-            }
+            },
+            order: Object.keys(this.data.DataSet[0]).indexOf(label) - 1
         }
     }
 
     /**
      * This function returns a dataset object for a chart.js chart.
      */
-    getDataSet() {
-        const colors = this.data.Series.map((serie, index) => this.colors[index]);
+    getDataSet(series) {
+        debugger
+        const colors = series.map((serie, index) => this.colors[index]);
         return {
-            data: this.data.Series.map(Series => {
+            data: series.map(Series => {
                 return this.data.DataSet[0][Series];
             }),
             borderColor: colors.map(color => `rgb(${color})`),
             backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
-            borderWidth: 1
+            borderWidth: 1,
         }
     }
 
@@ -140,7 +153,7 @@ export default class MyChart {
     /**
      * This function returns a chart.js configuration object. 
      */
-    getChartJSConfiguration(label) {
+    getChartJSConfiguration() {
         return {
             type: 'bar',
             options: {
@@ -153,16 +166,6 @@ export default class MyChart {
                     }]
                 },
                 plugins: {
-                    title: {
-                        display: true,
-                        text: label,
-                        align: 'start',
-                        padding: 10,
-                        font: {
-                            size: 24,
-                            lineHeight: 2
-                        },
-                    },
                     legend: {
                         labels: {
                             color: '#00000075',

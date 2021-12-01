@@ -41,7 +41,7 @@ export default class MyChart {
         const canvas = element.querySelector('canvas');
 
         // retrieve a chart.js configuration using the label from the embedder configuration
-        const conf = this.getChartJSConfiguration(configuration.label);
+        const conf = this.getChartJSConfiguration();
 
         // create a chart.js Chart element on the canvas with the configuration
         this.chart = new Chart(canvas, conf);
@@ -53,7 +53,18 @@ export default class MyChart {
      */
     update() {
 
-        const colorsToAdd = this.data.Series.length - this.colors.length;
+        const groups = this.data.MetaData.map((data) => data.Groups)[0];
+        const series = this.data.MetaData.map((data) => data.Series)[0];
+        
+        const uniqGroups = groups.filter(function (elem, index, self) {
+            return index === self.indexOf(elem);
+        });
+        const uniqSeries = series.filter(function (elem, index, self) {
+            return index === self.indexOf(elem);
+        });
+
+
+        const colorsToAdd = uniqSeries.length - this.colors.length;
         if (colorsToAdd > 0) {
             this.addRandomColors(colorsToAdd);
         }
@@ -72,9 +83,9 @@ export default class MyChart {
         // the data has no group by -> show the series in the x-axis
         this.chart.data = {
             datasets: [
-                this.getDataSet()
+                this.getDataSet(uniqSeries)
             ],
-            labels: this.data.Series
+            labels: uniqSeries
         }
         //				// hide the series legend title
         //				this.chart.options.plugins.legend.display = false;
@@ -105,11 +116,11 @@ export default class MyChart {
     /**
      * This function returns a dataset object for a chart.js chart.
      */
-    getDataSet() {
-        const colors = this.data.Series.map((serie, index) => this.colors[index]);
+    getDataSet(series) {
+        const colors = series.map((serie, index) => this.colors[index]);
         return {
             label: '',
-            data: this.data.Series.map(series => {
+            data: series.map(series => {
                 return this.data.DataSet[0][series];
             }),
             borderColor: colors.map(color => 'rgb(' + color + ')'),
@@ -137,7 +148,7 @@ export default class MyChart {
     /**
      * This function returns a chart.js configuration object. 
      */
-    getChartJSConfiguration(label) {
+    getChartJSConfiguration() {
         return {
             type: 'pie',
             options: {
@@ -149,16 +160,6 @@ export default class MyChart {
                     }]
                 },
                 plugins: {
-                    title: {
-                        display: true,
-                        text: label,
-                        align: 'start',
-                        padding: 10,
-                        font: {
-                            size: 24,
-                            lineHeight: 2
-                        },
-                    },
                     legend: {
                         labels: {
                             color: '#00000075',

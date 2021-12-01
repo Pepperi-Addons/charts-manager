@@ -23,14 +23,15 @@ export async function install(client: Client, request: Request): Promise<any> {
     const service = new ChartService(client)
     try {
 
-        await service.papiClient.addons.data.schemes.post(chartsTableScheme);
+        const resFromAdal = await service.papiClient.addons.data.schemes.post(chartsTableScheme);
         await upsertCharts(client,request, service, charts);
 
         return res;
 
     }
-    catch (err) {    
-        return handleException(err);
+    catch (err) {   
+        console.log('Failed to install charts addon', err)
+         return handleException(err);
     }
 }
 
@@ -41,6 +42,7 @@ export async function uninstall(client: Client, request: Request): Promise<any> 
         return { success: true, resultObject: {} }
     }
     catch(err){
+        console.log('Failed to uninstall charts addon', err)
         return handleException(err);
 
     }
@@ -74,6 +76,7 @@ async function upsertCharts(client: Client, request: Request,service, charts) {
             chart.ScriptURI = `${client.AssetsBaseUrl}/assets/ChartsTemplates/${chart.Name.toLowerCase()}.js`
             console.log(`chart ScriptURI: ${chart.ScriptURI}`)
             await service.upsert({ body: chart });
+            
         }
         return {
             success: true,
@@ -81,6 +84,7 @@ async function upsertCharts(client: Client, request: Request,service, charts) {
         }
     }
     catch (err) {
+        console.log('Failed to upsert charts templates files',err)
         throw new Error('Failed to upsert charts templates files');
 
     }
