@@ -60,6 +60,9 @@ export default class MyChart {
         const uniqSeries = series.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
+        const dataSet = this.data.DataSet;
+
+        this.removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet);
 
         const colorsToAdd = uniqSeries.length - this.colors.length;
         if (colorsToAdd > 0) {
@@ -70,7 +73,7 @@ export default class MyChart {
             this.chart.data = {
                 datasets: uniqGroups.map(group => {
                     return uniqSeries.map((series, serieIndex) => {
-                        return this.getGroupedDataSet(series, group, series, serieIndex);
+                        return this.getGroupedDataSet(series, group, series, serieIndex,dataSet);
                     })
                 }).flat()
             }
@@ -79,7 +82,7 @@ export default class MyChart {
             // the data has no group by -> show the Series in the x-axis
             this.chart.data = {
                 datasets: [
-                    this.getDataSet(uniqSeries)
+                    this.getDataSet(uniqSeries,dataSet)
                 ],
                 labels: uniqSeries
             }
@@ -94,7 +97,7 @@ export default class MyChart {
     /**
      * This function returns a dataset object array for a chart.js chart.
      */
-    getGroupedDataSet(label, xAxisKey, yAxisKey, serieIndex) {
+    getGroupedDataSet(label, xAxisKey, yAxisKey, serieIndex, dataset) {
         const color = this.colors[serieIndex];
         return {
             label: label,
@@ -106,7 +109,7 @@ export default class MyChart {
                 yAxisKey: yAxisKey,
                 xAxisKey: xAxisKey
             },
-            order: Object.keys(this.data.DataSet[0]).indexOf(label) - 1
+            order: Object.keys(dataset[0]).indexOf(label) - 1
 
         }
     }
@@ -121,12 +124,12 @@ export default class MyChart {
     /**
      * This function returns a dataset object for a chart.js chart.
      */
-    getDataSet(series) {
+    getDataSet(series,dataset) {
         const colors = series.map((serie, index) => this.colors[index]);
         return {
             label: '',
             data: series.map(Series => {
-                return this.data.DataSet[0][Series];
+                return dataset[0][Series];
             }),
             borderColor: colors.map(color => `rgb(${color})`),
             backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
@@ -172,6 +175,41 @@ export default class MyChart {
                 }
             }
         };
+    }
+
+    removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet) {
+
+        let foundGroupWithDot = false;
+        for (let i = 0; i < uniqGroups.length; i++) {
+            if (uniqGroups[i].indexOf('.') > -1) {
+                foundGroupWithDot = true;
+                uniqGroups[i] = uniqGroups[i].replace('.', '');
+            }
+        };
+
+        let founSeriesWithDot = false;
+        for (let i = 0; i < uniqSeries.length; i++) {
+            if (uniqSeries[i].indexOf('.') > -1) {
+                founSeriesWithDot = true;
+                uniqSeries[i] = uniqSeries[i].replace('.', '');
+            }
+        };
+
+        if (founSeriesWithDot || foundGroupWithDot) {
+            for (let i = 0; i < dataSet.length; i++) {
+                dataSet[i] = this.transformKeys(dataSet[i]);
+            };
+        }
+    }
+
+    transformKeys(obj) {
+        debugger;
+        return Object.keys(obj).reduce(function (o, prop) {
+            var value = obj[prop];
+            var newProp = prop.replace('.', '');
+            o[newProp] = value;
+            return o;
+        }, {});
     }
 }
 

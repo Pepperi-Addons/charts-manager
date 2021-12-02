@@ -53,16 +53,15 @@ export default class MyChart {
      */
     update() {
 
-        const groups = this.data.MetaData.map((data) => data.Groups)[0];
         const series = this.data.MetaData.map((data) => data.Series)[0];
-        
-        const uniqGroups = groups.filter(function (elem, index, self) {
-            return index === self.indexOf(elem);
-        });
+
+    
         const uniqSeries = series.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
 
+        const dataSet = this.data.DataSet;
+        this.removeUnsupportedCharacters(uniqSeries, dataSet);
 
         const colorsToAdd = uniqSeries.length - this.colors.length;
         if (colorsToAdd > 0) {
@@ -83,7 +82,7 @@ export default class MyChart {
         // the data has no group by -> show the series in the x-axis
         this.chart.data = {
             datasets: [
-                this.getDataSet(uniqSeries)
+                this.getDataSet(uniqSeries, dataSet)
             ],
             labels: uniqSeries
         }
@@ -116,12 +115,12 @@ export default class MyChart {
     /**
      * This function returns a dataset object for a chart.js chart.
      */
-    getDataSet(series) {
+    getDataSet(series, dataset) {
         const colors = series.map((serie, index) => this.colors[index]);
         return {
             label: '',
             data: series.map(series => {
-                return this.data.DataSet[0][series];
+                return dataset[0][series];
             }),
             borderColor: colors.map(color => 'rgb(' + color + ')'),
             backgroundColor: colors.map(color => 'rgba(' + color + ', 0.2)',),
@@ -173,6 +172,34 @@ export default class MyChart {
             }
         };
     }
+
+    removeUnsupportedCharacters(uniqSeries, dataSet) {
+
+        let founSeriesWithDot = false;
+        for (let i = 0; i < uniqSeries.length; i++) {
+            if (uniqSeries[i].indexOf('.') > -1) {
+                founSeriesWithDot = true;
+                uniqSeries[i] = uniqSeries[i].replace('.', '');
+            }
+        };
+
+        if (founSeriesWithDot) {
+            for (let i = 0; i < dataSet.length; i++) {
+                dataSet[i] = this.transformKeys(dataSet[i]);
+            };
+        }
+    }
+
+    transformKeys(obj) {
+        debugger;
+        return Object.keys(obj).reduce(function (o, prop) {
+            var value = obj[prop];
+            var newProp = prop.replace('.', '');
+            o[newProp] = value;
+            return o;
+        }, {});
+    }
+
 
     colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
 }

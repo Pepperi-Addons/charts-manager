@@ -50,17 +50,21 @@ export default class MyChart {
      * the embedder calls this function when there are changes to the chart data
      */
     update() {
-        debugger;
+
         const groups = this.data.MetaData.map((data) => data.Groups)[0];
         const series = this.data.MetaData.map((data) => data.Series)[0];
 
         const uniqGroups = groups.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
+
         const uniqSeries = series.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
 
+        const dataSet = this.data.DataSet;
+
+        this.removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet);
 
         const colorsToAdd = uniqSeries.length - this.colors.length;
         if (colorsToAdd > 0) {
@@ -69,19 +73,21 @@ export default class MyChart {
 
         // the data has multiple group by DataSet -> show them in the y-axis
         if (uniqGroups.length > 0) {
+
             this.chart.data = {
                 datasets: uniqGroups.map(group => {
                     return uniqSeries.map((series, seriesIndex) => {
-                        return this.getGroupedDataSet(series, series, group, seriesIndex);
+                        return this.getGroupedDataSet(series, series, group, seriesIndex, dataSet);
                     })
                 }).flat()
             }
+
 
         } else {
             // the data has no group by -> show the Series in the y-axis
             this.chart.data = {
                 datasets: [
-                    this.getDataSet(uniqSeries)
+                    this.getDataSet(uniqSeries, dataSet)
                 ],
                 labels: uniqSeries
             }
@@ -91,6 +97,31 @@ export default class MyChart {
 
         // update the chart.js chart
         this.chart.update();
+    }
+
+    removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet) {
+
+        let foundGroupWithDot = false;
+        for (let i = 0; i < uniqGroups.length; i++) {
+            if (uniqGroups[i].indexOf('.') > -1) {
+                foundGroupWithDot = true;
+                uniqGroups[i] = uniqGroups[i].replace('.', '');
+            }
+        };
+
+        let founSeriesWithDot = false;
+        for (let i = 0; i < uniqSeries.length; i++) {
+            if (uniqSeries[i].indexOf('.') > -1) {
+                founSeriesWithDot = true;
+                uniqSeries[i] = uniqSeries[i].replace('.', '');
+            }
+        };
+
+        if (founSeriesWithDot || foundGroupWithDot) {
+            for (let i = 0; i < dataSet.length; i++) {
+                dataSet[i] = this.transformKeys(dataSet[i]);
+            };
+        }
     }
 
     addRandomColors(numberOfColorsToAdd) {
@@ -103,31 +134,29 @@ export default class MyChart {
     /**
      * This function returns a dataset object array for a chart.js chart.
      */
-    getGroupedDataSet(label, xAxisKey, yAxisKey, seriesIndex) {
+    getGroupedDataSet(label, xAxisKey, yAxisKey, seriesIndex, dataSet) {
         const color = this.colors[seriesIndex];
         return {
             label: label,
-            data: this.data.DataSet,
+            data: dataSet,
             borderColor: 'rgb(' + color + ')',
             backgroundColor: 'rgba(' + color + ', 0.33)',
             borderWidth: 1,
             parsing: {
                 yAxisKey: yAxisKey,
                 xAxisKey: xAxisKey
-            },
-            order: Object.keys(this.data.DataSet[0]).indexOf(label) - 1
+            }
         }
     }
 
     /**
      * This function returns a dataset object for a chart.js chart.
      */
-    getDataSet(series) {
-        debugger
+    getDataSet(series, dataset) {
         const colors = series.map((serie, index) => this.colors[index]);
         return {
             data: series.map(Series => {
-                return this.data.DataSet[0][Series];
+                return dataset[0][Series];
             }),
             borderColor: colors.map(color => `rgb(${color})`),
             backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
@@ -178,6 +207,16 @@ export default class MyChart {
                 }
             }
         };
+    }
+
+    transformKeys(obj) {
+        debugger;
+        return Object.keys(obj).reduce(function (o, prop) {
+            var value = obj[prop];
+            var newProp = prop.replace('.', '');
+            o[newProp] = value;
+            return o;
+        }, {});
     }
 }
 
