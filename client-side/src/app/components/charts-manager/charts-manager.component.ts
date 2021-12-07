@@ -34,35 +34,27 @@ export class ChartsManagerComponent implements OnInit {
   key: string;
   chartInstance = undefined;
   seedData = {
-    "MetaData": [
+    DataQueries:[
       {
-        "Name": "grefgrtg",
-        "Groups": [
-          "Action.DateTime"
-        ],
-        "Series": [
-         "test.",
-         "Hadar"
-        ]
-      }
-    ],
-    "DataSet": [
-      {
-        "Action.DateTime": "1",
-        "test.": 704000,
-        "Hadar": 608000
+        Name: "Data1",
+        Groups:["ActionDate"],
+        Series: ["Series 1", "Series 2"]
       },
       {
-        "Action.DateTime": "2",
-        "Hadar": 608000,
-        "test.": 304000,
-        "moshe":204000
-        
+        Name: "Data2",
+        Groups:["ActionDate"],
+        Series: ["Series 3"]
       }
-      
+    ],
+    DataSet: [
+      { "ActionDate": "Jan", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber(), "Series 3":this.getRandomNumber()},
+      { "ActionDate": "Feb", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
+      { "ActionDate": "Mar", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
+      { "ActionDate": "Apr", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
+      { "ActionDate": "May", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
+      { "ActionDate": "Jun", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()}
     ]
   }
-  
   constructor(
     public addonService: AddonService,
     public layoutService: PepLayoutService,
@@ -166,7 +158,6 @@ export class ChartsManagerComponent implements OnInit {
       this.chart.ScriptURI='';
     }
     else {
-      debugger;
       this.loaderService.show();
       this.cd.detectChanges();
       let fileStr = event.fileStr;
@@ -203,10 +194,9 @@ export class ChartsManagerComponent implements OnInit {
     let promises = [];
 
     imports.forEach(src => {
-      promises.push(new Promise<void>((resolve) => {
-        debugger
+      promises.push(new Promise<void>((resolve) => {    
         const existing = document.getElementById(src);
-        debugger;
+  
         if (!existing) {
           // hack - solve the conflict betweem js files
           let _oldDefine = window['define'];

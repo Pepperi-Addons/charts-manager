@@ -53,8 +53,7 @@ export default class MyChart {
      */
     update() {
 
-        const series = this.data.MetaData.map((data) => data.Series)[0];
-
+        const series = this.data.DataQueries.map((data) => data.Series).flat();
     
         const uniqSeries = series.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
@@ -86,9 +85,7 @@ export default class MyChart {
             ],
             labels: uniqSeries
         }
-        //				// hide the series legend title
-        //				this.chart.options.plugins.legend.display = false;
-        //			}
+      
 
         // update the chart.js chart
         this.chart.update();
@@ -168,7 +165,8 @@ export default class MyChart {
                         position: 'bottom',
                         align: 'start',
                     }
-                }
+                },
+                responsive:false
             }
         };
     }
@@ -191,7 +189,6 @@ export default class MyChart {
     }
 
     transformKeys(obj) {
-        debugger;
         return Object.keys(obj).reduce(function (o, prop) {
             var value = obj[prop];
             var newProp = prop.replace('.', '');

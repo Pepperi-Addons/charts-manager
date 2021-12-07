@@ -4,35 +4,42 @@ import {Chart} from './models/chart'
 export const charts: Chart[] = [
     {
         Name: "Line",
-        Description: "Template line",
+        Description: "Default line",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
-        Name: "Horizontal bar",
-        Description: "Template horizontal bar",
+        Name: "Column",
+        Description: "Default Column",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
         Name: "Pie",
-        Description: "Template pie",
+        Description: "Default pie",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
-        Name: "Single values",
-        Description: "Template single values",
+        Name: "Bar",
+        Description: "Default bar",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
-        Name: "Vertical bar",
-        Description: "Template vertical bar",
+        Name: "Stacked column",
+        Description: "Default stacked column",
+        ScriptURI: '',
+        Hidden: false,
+        ReadOnly: true
+    },
+    {
+        Name: "Stacked bar",
+        Description: "Default stacked bar",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true

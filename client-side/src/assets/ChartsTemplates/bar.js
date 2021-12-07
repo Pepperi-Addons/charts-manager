@@ -1,4 +1,3 @@
-// some JSDoc comments for IDE intellisense
 
 /**
  * @typedef Configuration A configuration object supplied to the chart by the embedder
@@ -51,15 +50,18 @@ export default class MyChart {
      * the embedder calls this function when there are changes to the chart data
      */
     update() {
-        const groups = this.data.MetaData.map((data) => data.Groups)[0];
-        const series = this.data.MetaData.map((data) => data.Series)[0];
+
+        const groups = this.data.DataQueries.map((data) => data.Groups).flat();
+        const series = this.data.DataQueries.map((data) => data.Series).flat();
 
         const uniqGroups = groups.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
+
         const uniqSeries = series.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
+
         const dataSet = this.data.DataSet;
 
         this.removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet);
@@ -68,21 +70,24 @@ export default class MyChart {
         if (colorsToAdd > 0) {
             this.addRandomColors(colorsToAdd);
         }
-        // the data has multiple group by DataSet -> show them in the x-axis
+
+        // the data has multiple group by DataSet -> show them in the y-axis
         if (uniqGroups.length > 0) {
+
             this.chart.data = {
-                datasets: uniqGroups.map(group => {
-                    return uniqSeries.map((series, serieIndex) => {
-                        return this.getGroupedDataSet(series, group, series, serieIndex,dataSet);
+                datasets: uniqGroups.map(groupName => {
+                    return uniqSeries.map((seriesName, seriesIndex) => {
+                        return this.getGroupedDataSet(seriesName, seriesName, groupName, seriesIndex, dataSet);
                     })
                 }).flat()
             }
 
+
         } else {
-            // the data has no group by -> show the Series in the x-axis
+            // the data has no group by -> show the Series in the y-axis
             this.chart.data = {
                 datasets: [
-                    this.getDataSet(uniqSeries,dataSet)
+                    this.getDataSet(uniqSeries, dataSet)
                 ],
                 labels: uniqSeries
             }
@@ -92,89 +97,6 @@ export default class MyChart {
 
         // update the chart.js chart
         this.chart.update();
-    }
-
-    /**
-     * This function returns a dataset object array for a chart.js chart.
-     */
-    getGroupedDataSet(label, xAxisKey, yAxisKey, serieIndex, dataset) {
-        const color = this.colors[serieIndex];
-        return {
-            label: label,
-            data: this.data.DataSet,
-            borderColor: 'rgb(' + color + ')',
-            backgroundColor: 'rgba(' + color + ', 0.33)',
-            borderWidth: 1,
-            parsing: {
-                yAxisKey: yAxisKey,
-                xAxisKey: xAxisKey
-            },
-            order: Object.keys(dataset[0]).indexOf(label) - 1
-
-        }
-    }
-
-    addRandomColors(numberOfColorsToAdd) {
-        for (var i = 0; i < numberOfColorsToAdd; i++) {
-            const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
-            this.colors.push(color);
-        }
-    }
-
-    /**
-     * This function returns a dataset object for a chart.js chart.
-     */
-    getDataSet(series,dataset) {
-        const colors = series.map((serie, index) => this.colors[index]);
-        return {
-            label: '',
-            data: series.map(Series => {
-                return dataset[0][Series];
-            }),
-            borderColor: colors.map(color => `rgb(${color})`),
-            backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
-            borderWidth: 1
-        }
-    }
-
-    colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
-
-    /**
-     * This function returns an html which will be created in the embedder. 
-     */
-    getHTML() {
-        return `<div >
-                <canvas></canvas>
-                </div>`;
-    }
-
-    /**
-     * This function returns a chart.js configuration object. 
-     */
-    getChartJSConfiguration() {
-        return {
-            type: 'bar',
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#00000075',
-                            boxHeight: 15,
-                            padding: 10,
-                        },
-                        position: 'bottom',
-                        align: 'start',
-                    }
-                }
-            }
-        };
     }
 
     removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet) {
@@ -202,8 +124,92 @@ export default class MyChart {
         }
     }
 
+    addRandomColors(numberOfColorsToAdd) {
+        for (var i = 0; i < numberOfColorsToAdd; i++) {
+            const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
+            this.colors.push(color);
+        }
+    }
+
+    /**
+     * This function returns a dataset object array for a chart.js chart.
+     */
+    getGroupedDataSet(label, xAxisKey, yAxisKey, seriesIndex, dataSet) {
+        const color = this.colors[seriesIndex];
+        return {
+            label: label,
+            data: dataSet,
+            borderColor: 'rgb(' + color + ')',
+            backgroundColor: 'rgba(' + color + ', 0.33)',
+            borderWidth: 1,
+            parsing: {
+                yAxisKey: yAxisKey,
+                xAxisKey: xAxisKey
+            }
+        }
+    }
+
+    /**
+     * This function returns a dataset object for a chart.js chart.
+     */
+    getDataSet(series, dataset) {
+        const colors = series.map((serie, index) => this.colors[index]);
+        return {
+            data: series.map(Series => {
+                return dataset[0][Series];
+            }),
+            borderColor: colors.map(color => `rgb(${color})`),
+            backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
+            borderWidth: 1,
+        }
+    }
+
+    /**
+     * This function returns a random color. 
+     */
+    colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
+
+
+    /**
+     * This function returns an html which will be created in the embedder. 
+     */
+    getHTML() {
+        return `<div >
+                <canvas></canvas>
+                </div>`;
+    }
+
+    /**
+     * This function returns a chart.js configuration object. 
+     */
+    getChartJSConfiguration() {
+        return {
+            type: 'bar',
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#00000075',
+                            boxHeight: 15,
+                            padding: 10,
+                        },
+                        position: 'bottom',
+                        align: 'start',
+                    }
+                }
+            }
+        };
+    }
+
     transformKeys(obj) {
-        debugger;
         return Object.keys(obj).reduce(function (o, prop) {
             var value = obj[prop];
             var newProp = prop.replace('.', '');
@@ -217,4 +223,3 @@ export default class MyChart {
 export const deps = [
     'https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js'
 ];
-

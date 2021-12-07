@@ -23,35 +23,42 @@ var crypto__default = /*#__PURE__*/_interopDefaultLegacy(crypto);
 const charts = [
     {
         Name: "Line",
-        Description: "Template line",
+        Description: "Default line",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
-        Name: "Horizontal bar",
-        Description: "Template horizontal bar",
+        Name: "Column",
+        Description: "Default Column",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
         Name: "Pie",
-        Description: "Template pie",
+        Description: "Default pie",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
-        Name: "Single values",
-        Description: "Template single values",
+        Name: "Bar",
+        Description: "Default bar",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
     },
     {
-        Name: "Vertical bar",
-        Description: "Template vertical bar",
+        Name: "Stacked column",
+        Description: "Default stacked column",
+        ScriptURI: '',
+        Hidden: false,
+        ReadOnly: true
+    },
+    {
+        Name: "Stacked bar",
+        Description: "Default stacked bar",
         ScriptURI: '',
         Hidden: false,
         ReadOnly: true
@@ -2897,7 +2904,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.39";
+var AddonVersion = "0.0.52";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -3270,11 +3277,12 @@ async function install(client, request) {
     };
     const service = new ChartService(client);
     try {
-        await service.papiClient.addons.data.schemes.post(chartsTableScheme);
+        const resFromAdal = await service.papiClient.addons.data.schemes.post(chartsTableScheme);
         await upsertCharts(client, request, service, charts);
         return res;
     }
     catch (err) {
+        console.log('Failed to install charts addon', err);
         return handleException(err);
     }
 }
@@ -3285,6 +3293,7 @@ async function uninstall(client, request) {
         return { success: true, resultObject: {} };
     }
     catch (err) {
+        console.log('Failed to uninstall charts addon', err);
         return handleException(err);
     }
 }
@@ -3307,8 +3316,6 @@ function handleException(err) {
 }
 async function upsertCharts(client, request, service, charts) {
     try {
-        // https://cdn.pepperi.com/Addon/Public/3d118baf-f576-4cdb-a81e-c2cc9af4d7ad/0.0.33/ChartsTemplates/Line.js
-        //https://cdn.pepperi.com/Addon/Public/3d118baf-f576-4cdb-a81e-c2cc9af4d7ad/0.0.31/assets/ChartsTemplates/horizontal%20bar.js
         for (let chart of charts) {
             chart.Key = C__Users_hadar_l_Documents_New_Framwork_Hadar_Tests_chartsManager_serverSide_node_modules_uuid.v4();
             chart.ScriptURI = `${client.AssetsBaseUrl}/assets/ChartsTemplates/${chart.Name.toLowerCase()}.js`;
@@ -3321,6 +3328,7 @@ async function upsertCharts(client, request, service, charts) {
         };
     }
     catch (err) {
+        console.log('Failed to upsert charts templates files', err);
         throw new Error('Failed to upsert charts templates files');
     }
 }

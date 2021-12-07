@@ -53,8 +53,8 @@ export default class MyChart {
      */
     update() {
 
-        const groups = this.data.MetaData.map((data) => data.Groups)[0];
-        const series = this.data.MetaData.map((data) => data.Series)[0];
+        const groups = this.data.DataQueries.map((data) => data.Groups).flat();
+        const series = this.data.DataQueries.map((data) => data.Series).flat();
 
         const uniqGroups = groups.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
@@ -75,9 +75,9 @@ export default class MyChart {
         // the data has multiple group by DataSet -> show them in the x-axis
         if (uniqGroups.length > 0) {
             this.chart.data = {
-                datasets: uniqGroups.map(group => {
-                    return uniqSeries.map((series, serieIndex) => {
-                        return this.getGroupedDataSet(series, group, series, serieIndex, dataSet);
+                datasets: uniqGroups.map(groupName => {
+                    return uniqSeries.map((seriesName, serieIndex) => {
+                        return this.getGroupedDataSet(seriesName, groupName, seriesName, serieIndex, dataSet);
                     })
                 }).flat()
             }
@@ -205,7 +205,6 @@ export default class MyChart {
     }
 
     transformKeys(obj) {
-        debugger;
         return Object.keys(obj).reduce(function (o, prop) {
             var value = obj[prop];
             var newProp = prop.replace('.', '');

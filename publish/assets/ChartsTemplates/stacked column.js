@@ -1,4 +1,3 @@
-// some JSDoc comments for IDE intellisense
 
 /**
  * @typedef Configuration A configuration object supplied to the chart by the embedder
@@ -9,9 +8,9 @@
 /**
  * @typedef ChartData A data object supplied to the chart by the embedder containing the chart data
  * @type {object}
- * @property {string[]} Series The chart data groups
- * @property {string[]} groups The chart data series
- * @property {object[]} DataSet The chart data values
+ * @property {string[]} Series The chart data Groups
+ * @property {string[]} Groups The chart data Series
+ * @property {object[]} DataSet The chart data DataSet
  */
 
 /**
@@ -19,7 +18,6 @@
  * In this file we will use a chart from chart.js
  */
 export default class MyChart {
-
 
     /**
      * The chart constructor.
@@ -53,75 +51,83 @@ export default class MyChart {
      */
     update() {
 
+        const groups = this.data.DataQueries.map((data) => data.Groups).flat();
         const series = this.data.DataQueries.map((data) => data.Series).flat();
-    
+
+        const uniqGroups = groups.filter(function (elem, index, self) {
+            return index === self.indexOf(elem);
+        });
         const uniqSeries = series.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
-
         const dataSet = this.data.DataSet;
-        this.removeUnsupportedCharacters(uniqSeries, dataSet);
+
+        this.removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet);
 
         const colorsToAdd = uniqSeries.length - this.colors.length;
         if (colorsToAdd > 0) {
             this.addRandomColors(colorsToAdd);
         }
-        // the pie chart does not know how to handle multiple group values, so the first value is always used.
-        //          // the data has multiple group by values -> show them in the x-axis
-        //			if (this.data.groups.length > 0) {  
-        //				this.chart.data = {
-        //					datasets: this.data.groups.map(group => {
-        //	                    return this.data.series.map(series => {
-        //	                        return this.getGroupedDataSet(series, group, series);
-        //	                    })
-        //	                }).flat()
-        //				}
-        //			
-        //			} else { 
-        // the data has no group by -> show the series in the x-axis
-        this.chart.data = {
-            datasets: [
-                this.getDataSet(uniqSeries, dataSet)
-            ],
-            labels: uniqSeries
+
+        // the data has multiple group by DataSet -> show them in the x-axis
+        if (uniqGroups.length > 0) {
+            this.chart.data = {
+                datasets: uniqGroups.map(groupName => {
+                    return uniqSeries.map((seriesName, seriesIndex) => {
+						//find the stack
+						let stack = '';
+						const result = this.data.DataQueries.filter(el => {
+							return el['Series']
+							.map(x=>x.replace('.',''))
+							.includes(seriesName);
+						});
+						if(result && result.length){
+							stack = result[0].Name;
+						}
+                        return this.getGroupedDataSet(seriesName, groupName, seriesName, seriesIndex, dataSet, stack);
+                    })
+                }).flat()
+            }
+
+
+        } else {
+            // the data has no group by -> show the Series in the x-axis
+            this.chart.data = {
+                datasets: [
+                    this.getDataSet(uniqSeries, dataSet)
+                ],
+                labels: uniqSeries
+            }
+            // hide the Series legend title
+            this.chart.options.plugins.legend.display = false;
         }
-      
 
         // update the chart.js chart
         this.chart.update();
     }
 
-    /**
-     * This function returns a dataset object array for a chart.js chart.
-     */
-    // getGroupedDataSet(label, xAxisKey, yAxisKey) {
-    //     const color = this.getRandomColorFromArray();
-    //     return {
-    //         label: label,
-    //         data: this.data.DataSet,               
-    //         borderColor: 'rgb(' + color + ')',
-    //         backgroundColor: 'rgba(' + color + ', 0.33)',
-    //         borderWidth: 1,
-    //         parsing: {
-    //             yAxisKey: yAxisKey,
-    //             xAxisKey: xAxisKey
-    //         }
-    //     }
-    // }
+    removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet) {
 
-    /**
-     * This function returns a dataset object for a chart.js chart.
-     */
-    getDataSet(series, dataset) {
-        const colors = series.map((serie, index) => this.colors[index]);
-        return {
-            label: '',
-            data: series.map(series => {
-                return dataset[0][series];
-            }),
-            borderColor: colors.map(color => 'rgb(' + color + ')'),
-            backgroundColor: colors.map(color => 'rgba(' + color + ', 0.2)',),
-            borderWidth: 1
+        let foundGroupWithDot = false;
+        for (let i = 0; i < uniqGroups.length; i++) {
+            if (uniqGroups[i].indexOf('.') > -1) {
+                foundGroupWithDot = true;
+                uniqGroups[i] = uniqGroups[i].replace('.', '');
+            }
+        };
+
+        let founSeriesWithDot = false;
+        for (let i = 0; i < uniqSeries.length; i++) {
+            if (uniqSeries[i].indexOf('.') > -1) {
+                founSeriesWithDot = true;
+                uniqSeries[i] = uniqSeries[i].replace('.', '');
+            }
+        };
+
+        if (founSeriesWithDot || foundGroupWithDot) {
+            for (let i = 0; i < dataSet.length; i++) {
+                dataSet[i] = this.transformKeys(dataSet[i]);
+            };
         }
     }
 
@@ -131,6 +137,46 @@ export default class MyChart {
             this.colors.push(color);
         }
     }
+
+    /**
+     * This function returns a dataset object array for a chart.js chart.
+     */
+    getGroupedDataSet(label, xAxisKey, yAxisKey, seriesIndex, dataSet, stack) {
+        const color = this.colors[seriesIndex];
+        return {
+            label: label,
+            data: dataSet,
+            borderColor: 'rgb(' + color + ')',
+            backgroundColor: 'rgba(' + color + ', 0.33)',
+            borderWidth: 1,
+            parsing: {
+                yAxisKey: yAxisKey,
+                xAxisKey: xAxisKey
+            },
+			stack: stack
+        }
+    }
+
+    /**
+     * This function returns a dataset object for a chart.js chart.
+     */
+    getDataSet(series, dataset) {
+        const colors = series.map((serie, index) => this.colors[index]);
+        return {
+            data: series.map(Series => {
+                return dataset[0][Series];
+            }),
+            borderColor: colors.map(color => `rgb(${color})`),
+            backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
+            borderWidth: 1
+        }
+    }
+
+    /**
+     * This function returns a random color. 
+     */
+    colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
+
 
     /**
      * This function returns an html which will be created in the embedder. 
@@ -146,7 +192,7 @@ export default class MyChart {
      */
     getChartJSConfiguration() {
         return {
-            type: 'pie',
+            type: 'bar',
             options: {
                 scales: {
                     yAxes: [{
@@ -170,34 +216,14 @@ export default class MyChart {
         };
     }
 
-    removeUnsupportedCharacters(uniqSeries, dataSet) {
-
-        let founSeriesWithDot = false;
-        for (let i = 0; i < uniqSeries.length; i++) {
-            if (uniqSeries[i].indexOf('.') > -1) {
-                founSeriesWithDot = true;
-                uniqSeries[i] = uniqSeries[i].replace('.', '');
-            }
-        };
-
-        if (founSeriesWithDot) {
-            for (let i = 0; i < dataSet.length; i++) {
-                dataSet[i] = this.transformKeys(dataSet[i]);
-            };
-        }
-    }
-
     transformKeys(obj) {
         return Object.keys(obj).reduce(function (o, prop) {
-            var value = obj[prop];
-            var newProp = prop.replace('.', '');
-            o[newProp] = value;
-            return o;
+			var value = obj[prop];
+			var newProp = prop.replace('.', '');
+			o[newProp] = value;
+			return o;
         }, {});
     }
-
-
-    colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
 }
 
 // defines the dependencies required for the chart

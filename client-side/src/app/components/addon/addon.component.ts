@@ -48,7 +48,8 @@ export class AddonComponent implements OnInit {
         getList: (state) => {
             let res: Chart[] = [];
             return this.addonService.papiClient.addons.data.uuid(this.addonService.addonUUID).table(CHARTS_TABLE_NAME).iter().toArray().then((charts) => {
-                for (let chart of charts) {
+                const orderedCharts = charts.sort((a, b) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0));
+                for (let chart of orderedCharts) {
                     res.push({
                         Type: chart.ReadOnly? this.translate.instant("System"): this.translate.instant("UserDefined"),
                         Name: chart.Name,
