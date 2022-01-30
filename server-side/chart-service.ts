@@ -28,10 +28,12 @@ class ChartService {
         this.validatePostData(request);
         await this.validateName(body,adal);
 
-        const chartFile = await this.upsertChartFile(body);
+        //const chartFile = await this.upsertChartFile(body);
+        const chartFile = await this.upsertChartToPFS(body);
+
 
         body.ReadOnly = body.ReadOnly ?? false;
-        body.FileID = chartFile.InternalID;
+        //body.FileID = body.FileID ? body.FileID : chartFile.InternalID;
         body.ScriptURI = chartFile.URL;
 
         if (!body.Key){
@@ -80,11 +82,36 @@ class ChartService {
                 }
             }     
             return await this.papiClient.fileStorage.upsert(fileStorage)
+            let chart
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);
         }
     }
+
+    private async upsertChartToPFS(body) {
+
+        try {
+            const file: any = {
+                Key: `${body.Name}.js`,
+                MIME: "text/javascript",
+                IsSync:false,
+            }
+
+            if (body.Hidden){
+                file.Hidden = true;
+            }       
+            else{
+                file.URI = body.ScriptURI
+            }     
+            return await this.papiClient.post(`/addons/files/${this.client.AddonUUID}`,file);
+        }
+        catch (e) {
+            throw new Error(`Failed upsert file storage. error: ${e}`);
+        }
+    }
+
+
 
     private validatePostData(request: Request) {
         const body = request.body;
