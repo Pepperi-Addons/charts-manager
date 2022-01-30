@@ -1,4 +1,3 @@
-
 /**
  * @typedef Configuration A configuration object supplied to the chart by the embedder
  * @type {object}
@@ -15,13 +14,13 @@
 
 /**
  * This is the class the embedder will use to render the chart
- * In this file we will use a chart from chart.js
+ * In this file we will use a chart from apexcharts
  */
 export default class MyChart {
 
     /**
      * The chart constructor.
-     * 
+     *
      * @param {HTMLElement} element The embedder supplies this HTMLElement which can be used to render UI
      * @param {Configuration} configuration a JSON object that holds the chart specific configuration
      */
@@ -30,19 +29,21 @@ export default class MyChart {
          * The embedder of this chart will insert the chart data to this property
          * @type {ChartData}
          */
+
         this.data = {};
 
-        // first we create a canvas on the HTML element
+        // first we create a div on the HTML element
         element.innerHTML = this.getHTML();
 
         // retrieve the canvas element from the element
-        const canvas = element.querySelector('canvas');
+        const canvas = element.querySelector('#canvas');
 
-        // retrieve a chart.js configuration using the label from the embedder configuration
-        const conf = this.getChartJSConfiguration();
+        // retrieve the chart configuration
+        const conf = this.getConfiguration();
 
-        // create a chart.js Chart element on the canvas with the configuration
-        this.chart = new Chart(canvas, conf);
+        // create a chart element on the canvas with the configuration
+        this.chart = new ApexCharts(canvas, conf);
+        this.chart.render();
     }
 
     /**
@@ -50,184 +51,176 @@ export default class MyChart {
      * the embedder calls this function when there are changes to the chart data
      */
     update() {
-
         const groups = this.data.DataQueries.map((data) => data.Groups).flat();
         const series = this.data.DataQueries.map((data) => data.Series).flat();
 
         const uniqGroups = groups.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
+
         const uniqSeries = series.filter(function (elem, index, self) {
             return index === self.indexOf(elem);
         });
+
         const dataSet = this.data.DataSet;
 
-        this.removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet);
-
-        const colorsToAdd = uniqSeries.length - this.colors.length;
-        if (colorsToAdd > 0) {
-            this.addRandomColors(colorsToAdd);
-        }
-
+        let ser = [];
         // the data has multiple group by DataSet -> show them in the y-axis
         if (uniqGroups.length > 0) {
-            this.chart.data = {
-                datasets: uniqGroups.map(groupName => {
-                    return uniqSeries.map((seriesName, seriesIndex) => {
-						//find the stack
-						let stack = '';
-						const result = this.data.DataQueries.filter(el => {
-							return el['Series']
-							.map(x=>x.replace('.',''))
-							.includes(seriesName);
-						});
-						if(result && result.length){
-							stack = result[0].Name;
-						}
-                        return this.getGroupedDataSet(seriesName, seriesName, groupName, seriesIndex, dataSet, stack);
-                    })
-                }).flat()
-            }
-
-
+            ser = uniqSeries.map(seriesName => {
+                return {
+                    "name": seriesName,
+                    "data": uniqGroups.map(groupName => {
+                        return [
+                            dataSet.map(ds => {
+                                return {
+                                    "x": ds[groupName],
+                                    "y": ds[seriesName] || null
+                                }
+                            })
+                        ]
+                    }).flat(2)
+                }
+            });
         } else {
             // the data has no group by -> show the Series in the y-axis
-            this.chart.data = {
-                datasets: [
-                    this.getDataSet(uniqSeries, dataSet)
-                ],
+            const flattened = uniqSeries.map(seriesName => dataSet[0][seriesName]);
+            ser = [{
+                    "data": flattened
+                }
+            ];
+            this.chart.updateOptions({
                 labels: uniqSeries
-            }
-            // hide the Series legend title
-            this.chart.options.plugins.legend.display = false;
-        }
-
-        // update the chart.js chart
-        this.chart.update();
-    }
-
-    removeUnsupportedCharacters(uniqGroups, uniqSeries, dataSet) {
-
-        let foundGroupWithDot = false;
-        for (let i = 0; i < uniqGroups.length; i++) {
-            if (uniqGroups[i].indexOf('.') > -1) {
-                foundGroupWithDot = true;
-                uniqGroups[i] = uniqGroups[i].replace('.', '');
-            }
-        };
-
-        let founSeriesWithDot = false;
-        for (let i = 0; i < uniqSeries.length; i++) {
-            if (uniqSeries[i].indexOf('.') > -1) {
-                founSeriesWithDot = true;
-                uniqSeries[i] = uniqSeries[i].replace('.', '');
-            }
-        };
-
-        if (founSeriesWithDot || foundGroupWithDot) {
-            for (let i = 0; i < dataSet.length; i++) {
-                dataSet[i] = this.transformKeys(dataSet[i]);
-            };
-        }
-    }
-
-    addRandomColors(numberOfColorsToAdd) {
-        for (var i = 0; i < numberOfColorsToAdd; i++) {
-            const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
-            this.colors.push(color);
-        }
-    }
-
-    /**
-     * This function returns a dataset object array for a chart.js chart.
-     */
-    getGroupedDataSet(label, xAxisKey, yAxisKey, seriesIndex, dataSet, stack) {
-        const color = this.colors[seriesIndex];
-        return {
-            label: label,
-            data: dataSet,
-            borderColor: 'rgb(' + color + ')',
-            backgroundColor: 'rgba(' + color + ', 0.33)',
-            borderWidth: 1,
-            parsing: {
-                yAxisKey: yAxisKey,
-                xAxisKey: xAxisKey
-            },
-			stack: stack
-        }
-    }
-
-    /**
-     * This function returns a dataset object for a chart.js chart.
-     */
-    getDataSet(series, dataset) {
-        const colors = series.map((serie, index) => this.colors[index]);
-        return {
-            data: series.map(Series => {
-                return dataset[0][Series];
-            }),
-            borderColor: colors.map(color => `rgb(${color})`),
-            backgroundColor: colors.map(color => `rgba(${color}, 0.33)`),
-            borderWidth: 1
-        }
-    }
-
-    /**
-     * This function returns a random color. 
-     */
-    colors = ['23, 102,166', '255, 152,0', '254,80,0', '131,179,12'];
-
-
-    /**
-     * This function returns an html which will be created in the embedder. 
-     */
-    getHTML() {
-        return `<div >
-                <canvas></canvas>
-                </div>`;
-    }
-
-    /**
-     * This function returns a chart.js configuration object. 
-     */
-    getChartJSConfiguration() {
-        return {
-            type: 'bar',
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#00000075',
-                            boxHeight: 15,
-                            padding: 10,
-                        },
-                        position: 'bottom',
-                        align: 'start',
+            });
+            // set the colors to be distributed
+            this.chart.updateOptions({
+                plotOptions: {
+                    bar: {
+                        distributed: true
                     }
                 }
+            });
+            // hide the legend (since the series name is on the x axis)
+            this.chart.updateOptions({
+                legend: {
+                    show: false
+                }
+            });
+        }
+
+        // update the chart
+        this.chart.updateSeries(ser);
+
+        // add colors (if there are more colors then defined in the chart)
+        this.addRandomColors(uniqSeries.length);
+		
+		// calculate the optimal bar height (using f(x) = c / (1 + a*exp(-x*b)) -> LOGISTIC GROWTH MODEL)
+		// 20: minimum should be close to 20 (when only one item)
+		// 20+60: maximum should be close 80
+		// 10 and 2: the a and b from the function
+		const seriesLength = ser.reduce((sum, curr) => Math.max(sum, (curr.data.length ||0)),0);
+		const optimalPercent = 20 + (60 / (1 + 10*Math.exp(-seriesLength /2)));
+        this.chart.updateOptions({
+            plotOptions: {
+				bar: {
+					barHeight: optimalPercent + "%"
+				}
+			}
+        });
+
+        // update the initial message to be seen if there is no data
+        this.chart.updateOptions({
+            noData: {
+                text: 'No data'
             }
-        };
+        });
     }
 
-    transformKeys(obj) {
-        return Object.keys(obj).reduce(function (o, prop) {
-			var value = obj[prop];
-			var newProp = prop.replace('.', '');
-			o[newProp] = value;
-			return o;
-        }, {});
+    /**
+     * This function adds a random color to the pre-defined colors list.
+     */
+    addRandomColors(numberOfColor) {
+        let colors = this.chart.w.config.colors;
+        const numberOfColorsToAdd = numberOfColor - colors.length;
+        if (numberOfColorsToAdd > 0) {
+            for (var i = 0; i < numberOfColorsToAdd; i++) {
+                const color = `${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)}`;
+                colors.push(color);
+            }
+            this.chart.updateOptions({
+                colors: colors
+            });
+        }
+    }
+
+    /**
+     * This function returns an html which will be created in the embedder.
+     */
+    getHTML() {
+        return `<div id="canvas"></div>`;
+    }
+
+    /**
+     * This function returns a chart configuration object.
+     */
+    getConfiguration() {
+        const colors = ['#1766A6', '#FF9800', '#FE5000', '#83B30C'];
+        return {
+            chart: {
+                type: 'bar',
+                height: 300,
+                width: "100%",
+                toolbar: {
+                    show: true
+                },
+                stacked: true
+            },
+            colors: colors,
+            dataLabels: {
+                style: {
+                    colors: ['#000000']
+                },
+                //  offsetX: +20
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    dataLabels: {
+                        //position: 'top',
+                    },
+                    borderRadius: 4
+                }
+            },
+            legend: {
+                horizontalAlign: 'left',
+                onItemClick: {
+                    toggleDataSeries: true
+                },
+                labels: {
+                    useSeriesColors: true
+                }
+            },
+			grid: {
+                xaxis: {
+                    lines: {
+                        show: true
+                    }
+                },
+                yaxis: {
+                    lines: {
+                        show: false
+                    }
+                }
+            },
+            noData: {
+                text: 'Loading...'
+            },
+            series: []
+        };
     }
 }
 
 // defines the dependencies required for the chart
 export const deps = [
-    'https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js'
+    'https://cdn.jsdelivr.net/npm/apexcharts'
 ];

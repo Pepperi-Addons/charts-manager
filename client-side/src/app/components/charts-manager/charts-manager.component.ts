@@ -179,7 +179,7 @@ export class ChartsManagerComponent implements OnInit {
         this.chartInstance.data = this.seedData;
         this.chartInstance.update();
         this.loaderService.hide();
-
+        window.dispatchEvent(new Event('resize'));
       }).catch(err => {
         this.handleErrorDialog(this.translate.instant("FailedExecuteFile"));
       })
@@ -187,6 +187,8 @@ export class ChartsManagerComponent implements OnInit {
       this.handleErrorDialog(this.translate.instant("FailedExecuteFile"));
     });
   }
+
+
 
 
   loadSrcJSFiles(imports) {

@@ -2904,7 +2904,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.52";
+var AddonVersion = "0.0.60";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -3165,7 +3165,7 @@ var uuid = v4_1;
 uuid.v1 = v1_1;
 uuid.v4 = v4_1;
 
-var C__Users_hadar_l_Documents_New_Framwork_Hadar_Tests_chartsManager_serverSide_node_modules_uuid = uuid;
+var C__Shir_chartsManager_serverSide_node_modules_uuid = uuid;
 
 class Constants {
 }
@@ -3188,12 +3188,13 @@ class ChartService {
         const body = request.body;
         this.validatePostData(request);
         await this.validateName(body, adal);
-        const chartFile = await this.upsertChartFile(body);
+        //const chartFile = await this.upsertChartFile(body);
+        const chartFile = await this.upsertChartToPFS(body);
         body.ReadOnly = (_a = body.ReadOnly) !== null && _a !== void 0 ? _a : false;
-        body.FileID = chartFile.InternalID;
+        //body.FileID = body.FileID ? body.FileID : chartFile.InternalID;
         body.ScriptURI = chartFile.URL;
         if (!body.Key) {
-            body.Key = C__Users_hadar_l_Documents_New_Framwork_Hadar_Tests_chartsManager_serverSide_node_modules_uuid.v4();
+            body.Key = C__Shir_chartsManager_serverSide_node_modules_uuid.v4();
         }
         const chart = await adal.upsert(body);
         return ChartMap.toDTO(chart);
@@ -3231,6 +3232,26 @@ class ChartService {
                 }
             }
             return await this.papiClient.fileStorage.upsert(fileStorage);
+            let chart;
+        }
+        catch (e) {
+            throw new Error(`Failed upsert file storage. error: ${e}`);
+        }
+    }
+    async upsertChartToPFS(body) {
+        try {
+            const file = {
+                Key: `${body.Name}.js`,
+                MIME: "text/javascript",
+                IsSync: false,
+            };
+            if (body.Hidden) {
+                file.Hidden = true;
+            }
+            else {
+                file.URI = body.ScriptURI;
+            }
+            return await this.papiClient.post(`/addons/files/${this.client.AddonUUID}`, file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);
@@ -3317,7 +3338,7 @@ function handleException(err) {
 async function upsertCharts(client, request, service, charts) {
     try {
         for (let chart of charts) {
-            chart.Key = C__Users_hadar_l_Documents_New_Framwork_Hadar_Tests_chartsManager_serverSide_node_modules_uuid.v4();
+            chart.Key = C__Shir_chartsManager_serverSide_node_modules_uuid.v4();
             chart.ScriptURI = `${client.AssetsBaseUrl}/assets/ChartsTemplates/${chart.Name.toLowerCase()}.js`;
             console.log(`chart ScriptURI: ${chart.ScriptURI}`);
             await service.upsert({ body: chart });
