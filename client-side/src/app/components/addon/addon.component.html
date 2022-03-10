@@ -1,4 +1,4 @@
-<div class="addon-page-container">
+<!-- <div class="addon-page-container">
     <pep-top-bar [title]="'Charts Manager' | translate">
     </pep-top-bar>
     <div class="main-content">
@@ -8,4 +8,18 @@
                 </div>
             </generic-list>    
     </div>
-</div>
+</div> -->
+
+<pep-page-layout>
+    <ng-container pep-top-area>
+        <pep-top-bar [title]="'Charts Manager' | translate">
+        </pep-top-bar>
+    </ng-container>
+    <ng-container pep-main-area>
+        <generic-list [allowMultipleSelection]="false" [inline]="true" [dataSource]="listDataSource">
+            <div right-buttons>
+                <pep-button [value]="'Add' | translate" [iconName]="'number_plus'" [iconPosition]="'end'" [sizeType]="'sm'" [styleType]="'strong'" [classNames]="'pep-spacing-element'" (buttonClick)="add()"></pep-button>
+            </div>
+        </generic-list>    
+    </ng-container>
+</pep-page-layout>

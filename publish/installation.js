@@ -2904,7 +2904,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.60";
+var AddonVersion = "0.0.63";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -3242,6 +3242,7 @@ class ChartService {
         try {
             const file = {
                 Key: `${body.Name}.js`,
+                Description: body.Description,
                 MIME: "text/javascript",
                 IsSync: false,
             };
