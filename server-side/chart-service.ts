@@ -95,7 +95,7 @@ class ChartService {
             const file: any = {
                 Key: `${body.Name}.js`,
                 MIME: "text/javascript",
-                IsSync:false,
+                Description: body.Description
             }
 
             if (body.Hidden){
@@ -103,15 +103,13 @@ class ChartService {
             }       
             else{
                 file.URI = body.ScriptURI
-            }     
+            }
             return await this.papiClient.post(`/addons/files/${this.client.AddonUUID}`,file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);
         }
     }
-
-
 
     private validatePostData(request: Request) {
         const body = request.body;
