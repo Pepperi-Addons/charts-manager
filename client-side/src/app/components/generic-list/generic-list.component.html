@@ -1,4 +1,4 @@
-<div class="addon-page-container" style="max-width: 80rem;">
+<!-- <div style="max-width: 80rem;">
     <div [ngClass]="{ 'inline-top-bar-container' : inline }">
         <pep-top-bar [title]="title" [inline]="inline">
             <div header-start-content>
@@ -30,10 +30,35 @@
     <ng-template #listTemplate>
         <div class="list-wrapper" #listContainer id="listContainer">
             <pep-list [supportSorting]="false" [supportResizing]="true"
-            [parentScroll]="listContainer" 
+            viewType="table"
              [selectionTypeForActions]="allowMultipleSelection ? 'multi' : (allowSelection ? 'single' : 'none')"
               [noDataFoundMsg]="'No data' | translate" (fieldClick)="onCustomizeFieldClick($event)" (selectedItemsChange)="selectedRowsChanged($event)">
             </pep-list>
         </div>
     </ng-template>
-</div>
+</div> -->
+
+<pep-page-layout style="max-width: 80rem;">
+    <div [ngClass]="{ 'inline-top-bar-container' : inline }" pep-top-area>
+        <pep-top-bar [title]="title" [inline]="inline">
+            <div header-start-content>
+                <ng-content select="[left-buttons]"></ng-content>
+            </div>
+            <div header-end-content>
+                <ng-content select="[right-buttons]"></ng-content>
+            </div>
+            <pep-list-actions [sizeType]="inline ? 'sm' : 'md'" [actions]="menuActions" (actionClick)="onMenuItemClicked($event)"></pep-list-actions>
+            <pep-list-total [totalRows]="customList ? customList.totalRows : -1"></pep-list-total>
+
+            <pep-search [sizeType]="inline ? 'sm' : 'md'" *ngIf="showSearch" (search)="onSearchChanged($event)">
+            </pep-search>
+        </pep-top-bar>
+    </div>
+    <ng-container pep-main-area>
+            <pep-list [supportSorting]="false" [supportResizing]="true"
+                viewType="table"
+                [selectionTypeForActions]="allowMultipleSelection ? 'multi' : (allowSelection ? 'single' : 'none')"
+                [noDataFoundMsg]="'No data' | translate" (fieldClick)="onCustomizeFieldClick($event)" (selectedItemsChange)="selectedRowsChanged($event)">
+            </pep-list>
+    </ng-container>
+</pep-page-layout>

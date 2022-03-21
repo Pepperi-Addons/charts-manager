@@ -1,5 +1,14 @@
+:host{
+ display: block;
+ height: inherit;   
+}
+
 ::ng-deep {
     header .main-content, main .main-content{
         padding-top: 0%!important;
     }
+}
+
+.addon-page-container{
+    height: inherit;
 }
