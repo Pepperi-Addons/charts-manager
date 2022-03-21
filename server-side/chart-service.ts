@@ -95,8 +95,7 @@ class ChartService {
             const file: any = {
                 Key: `${body.Name}.js`,
                 Description: body.Description,
-                MIME: "text/javascript",
-                Description: body.Description
+                MIME: "text/javascript"
             }
 
             if (body.Hidden){
