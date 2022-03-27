@@ -20,51 +20,6 @@ var zlib__default = /*#__PURE__*/_interopDefaultLegacy(zlib);
 var perf_hooks__default = /*#__PURE__*/_interopDefaultLegacy(perf_hooks);
 var crypto__default = /*#__PURE__*/_interopDefaultLegacy(crypto);
 
-const charts = [
-    {
-        Name: "Line",
-        Description: "Default line",
-        ScriptURI: '',
-        Hidden: false,
-        ReadOnly: true
-    },
-    {
-        Name: "Column",
-        Description: "Default Column",
-        ScriptURI: '',
-        Hidden: false,
-        ReadOnly: true
-    },
-    {
-        Name: "Pie",
-        Description: "Default pie",
-        ScriptURI: '',
-        Hidden: false,
-        ReadOnly: true
-    },
-    {
-        Name: "Bar",
-        Description: "Default bar",
-        ScriptURI: '',
-        Hidden: false,
-        ReadOnly: true
-    },
-    {
-        Name: "Stacked column",
-        Description: "Default stacked column",
-        ScriptURI: '',
-        Hidden: false,
-        ReadOnly: true
-    },
-    {
-        Name: "Stacked bar",
-        Description: "Default stacked bar",
-        ScriptURI: '',
-        Hidden: false,
-        ReadOnly: true
-    }
-];
-
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function unwrapExports (x) {
@@ -2725,12 +2680,12 @@ fetch.isRedirect = function (code) {
 fetch.Promise = global.Promise;
 
 var lib = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': fetch,
-    Headers: Headers,
-    Request: Request,
-    Response: Response,
-    FetchError: FetchError
+	__proto__: null,
+	'default': fetch,
+	Headers: Headers,
+	Request: Request,
+	Response: Response,
+	FetchError: FetchError
 });
 
 var require$$0 = getCjsExportFromNamespace(lib);
@@ -2904,7 +2859,7 @@ __exportStar(papiClient, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.63";
+var AddonVersion = "0.0.71";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -2929,6 +2884,8 @@ var PublishConfig = {
 		}
 	],
 	Dependencies: {
+		pfs: "0.0.86",
+		adal: "1.0.196"
 	},
 	CPISide: [
 	]
@@ -3243,8 +3200,7 @@ class ChartService {
             const file = {
                 Key: `${body.Name}.js`,
                 Description: body.Description,
-                MIME: "text/javascript",
-                IsSync: false,
+                MIME: "text/javascript"
             };
             if (body.Hidden) {
                 file.Hidden = true;
@@ -3300,7 +3256,6 @@ async function install(client, request) {
     const service = new ChartService(client);
     try {
         const resFromAdal = await service.papiClient.addons.data.schemes.post(chartsTableScheme);
-        await upsertCharts(client, request, service, charts);
         return res;
     }
     catch (err) {
@@ -3335,24 +3290,6 @@ function handleException(err) {
         errorMessage: errorMessage,
         resultObject: {}
     };
-}
-async function upsertCharts(client, request, service, charts) {
-    try {
-        for (let chart of charts) {
-            chart.Key = C__Shir_chartsManager_serverSide_node_modules_uuid.v4();
-            chart.ScriptURI = `${client.AssetsBaseUrl}/assets/ChartsTemplates/${chart.Name.toLowerCase()}.js`;
-            console.log(`chart ScriptURI: ${chart.ScriptURI}`);
-            await service.upsert({ body: chart });
-        }
-        return {
-            success: true,
-            errorMessage: ""
-        };
-    }
-    catch (err) {
-        console.log('Failed to upsert charts templates files', err);
-        throw new Error('Failed to upsert charts templates files');
-    }
 }
 
 exports.downgrade = downgrade;
