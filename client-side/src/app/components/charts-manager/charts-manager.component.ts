@@ -84,6 +84,7 @@ export class ChartsManagerComponent implements OnInit {
     if (history.state.data) {
       this.chart = history.state.data;
       this.mode = 'Update'
+      this.chart.ScriptURI+=`?${Math.random()}`
       this.importChartFileAndExecute();
     }
   }
