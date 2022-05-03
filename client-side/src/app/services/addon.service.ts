@@ -2,7 +2,6 @@ import { Observable } from 'rxjs';
 import jwt from 'jwt-decode';
 import { PapiClient } from '@pepperi-addons/papi-sdk';
 import { Injectable } from '@angular/core';
-
 import { PepHttpService, PepDataConvertorService, PepSessionService } from '@pepperi-addons/ngx-lib';
 import { PepDialogActionButton, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 
@@ -68,5 +67,9 @@ export class AddonService {
 
         });
         this.dialogService.openDefaultDialog(dialogData, dialogConfig);
+    }
+
+    async getTypesFromRelation(relationName: string = 'ChartType'){
+        this.papiClient.get(`/addons/data/relations?where=RelationName='${relationName}'`)
     }
 }

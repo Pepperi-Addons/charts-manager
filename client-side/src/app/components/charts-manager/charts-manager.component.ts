@@ -29,6 +29,7 @@ export class ChartsManagerComponent implements OnInit {
   chartHtml: SafeHtml = undefined;
   chartCustomJS: any = undefined;
   mode: 'Add' | 'Update' = 'Add';
+  chartTypeOptions = [{key:'Charts',value:'Charts'}] // next step - take the options from the relation
 
   loading: boolean = true
   key: string;
@@ -169,7 +170,6 @@ export class ChartsManagerComponent implements OnInit {
   }
 
   private importChartFileAndExecute() {
-
     System.import(this.chart.ScriptURI).then((res) => {
       const configuration = {
         label: 'Sales'

@@ -51,7 +51,7 @@ export class AddonComponent implements OnInit {
                 const orderedCharts = charts.sort((a, b) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0));
                 for (let chart of orderedCharts) {
                     res.push({
-                        Type: chart.ReadOnly? this.translate.instant("System"): this.translate.instant("UserDefined"),
+                        Type: chart.Type ? chart.Type : 'Charts',
                         Name: chart.Name,
                         Description: chart.Description,
                         Key: chart.Key,
@@ -74,13 +74,6 @@ export class AddonComponent implements OnInit {
                 Type: 'Grid',
                 Title: '',
                 Fields: [
-                    // {
-                    //     FieldID: 'Type',
-                    //     Type: 'TextBox',
-                    //     Title: this.translate.instant("Component"),
-                    //     Mandatory: false,
-                    //     ReadOnly: true
-                    // },
                     {
                         FieldID: 'Name',
                         Type: 'TextBox',
@@ -101,6 +94,13 @@ export class AddonComponent implements OnInit {
                         Title: this.translate.instant("Type"),
                         Mandatory: false,
                         ReadOnly: true
+                    },
+                    {
+                        FieldID: 'System',
+                        Type: 'Boolean',
+                        Title: this.translate.instant("System"),
+                        Mandatory: false,
+                        ReadOnly: true
                     }
                 ],
                 Columns: [
@@ -108,7 +108,10 @@ export class AddonComponent implements OnInit {
                         Width: 25
                     },
                     {
-                        Width: 50
+                        Width: 25
+                    },
+                    {
+                        Width: 25
                     },
                     {
                         Width: 25
