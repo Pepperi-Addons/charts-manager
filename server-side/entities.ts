@@ -13,10 +13,14 @@ export const chartsTableScheme: AddonDataScheme = {
             Type: "String"
         },
         URI: {
-            Type: "String",
+            Type: "String"
         },
         FileID: {
-            Type: "Integer",
+            Type: "Integer"
+        },
+        Type: {
+            Type: "String",
+            Indexed: true
         },
     },
 }
