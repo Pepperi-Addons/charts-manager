@@ -56,7 +56,8 @@ export class AddonComponent implements OnInit {
                         Description: chart.Description,
                         Key: chart.Key,
                         ScriptURI: chart.ScriptURI,
-                        ReadOnly: chart.ReadOnly
+                        ReadOnly: chart.ReadOnly,
+                        System: chart.ReadOnly
                     })
                 }
                 return res;
@@ -89,9 +90,9 @@ export class AddonComponent implements OnInit {
                         ReadOnly: true
                     },
                     {
-                        FieldID: 'Type',
-                        Type: 'TextBox',
-                        Title: this.translate.instant("Type"),
+                        FieldID: 'System',
+                        Type: 'Boolean',
+                        Title: this.translate.instant("System"),
                         Mandatory: false,
                         ReadOnly: true
                     },
