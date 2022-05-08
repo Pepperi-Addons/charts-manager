@@ -69,7 +69,4 @@ export class AddonService {
         this.dialogService.openDefaultDialog(dialogData, dialogConfig);
     }
 
-    async getTypesFromRelation(relationName: string = 'ChartType'){
-        this.papiClient.get(`/addons/data/relations?where=RelationName='${relationName}'`)
-    }
 }

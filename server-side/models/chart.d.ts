@@ -6,6 +6,7 @@ export interface Chart extends AddonData {
     ReadOnly?: Boolean;
     Description?: string;
     FileID?: number;
+    Type: string;
     Hidden?: boolean;
     CreationDateTime?: string;
     ModificationDateTime?: string;
