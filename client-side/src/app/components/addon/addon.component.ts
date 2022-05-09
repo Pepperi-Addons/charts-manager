@@ -90,9 +90,9 @@ export class AddonComponent implements OnInit {
                         ReadOnly: true
                     },
                     {
-                        FieldID: 'System',
-                        Type: 'Boolean',
-                        Title: this.translate.instant("System"),
+                        FieldID: 'Type',
+                        Type: 'TextBox',
+                        Title: this.translate.instant("Type"),
                         Mandatory: false,
                         ReadOnly: true
                     },

@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, SystemJsNgModuleLoader, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { IPepOption, PepAddonService, PepFileService, PepLayoutService, PepLoaderService, PepScreenSizeType, PepSessionService } from '@pepperi-addons/ngx-lib';
+import { IPepOption, KeyValuePair, PepAddonService, PepLayoutService, PepLoaderService, PepScreenSizeType } from '@pepperi-addons/ngx-lib';
 import { AddonService } from 'src/app/services/addon.service';
-import { FakeMissingTranslationHandler, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PepDialogActionButton, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
-import { Chart, ChartTypes } from '../../../../../server-side/models/chart';
+import { Chart } from '../../../../../server-side/models/chart';
 import 'systemjs';
 import 'systemjs-babel';
 
@@ -25,17 +25,16 @@ export class ChartsManagerComponent implements OnInit {
   }
 
   screenSize: PepScreenSizeType;
-  chartsTypes: IPepOption[] = [];
   chartHtml: SafeHtml = undefined;
   chartCustomJS: any = undefined;
   mode: 'Add' | 'Update' = 'Add';
-  chartTypeOptions = [{key:'Charts',value:'Charts'}] // next step - take the options from the relation
+  chartTypeOptions: IPepOption[] = []
 
   loading: boolean = true
   key: string;
   chartInstance = undefined;
-  seedData = {
-    DataQueries:[
+  seedData = {'Charts':
+    { DataQueries:[
       {
         Name: "Data1",
         Groups:["ActionDate"],
@@ -54,7 +53,7 @@ export class ChartsManagerComponent implements OnInit {
       { "ActionDate": "Apr", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
       { "ActionDate": "May", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
       { "ActionDate": "Jun", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()}
-    ]
+    ]}
   }
   constructor(
     public addonService: AddonService,
@@ -75,13 +74,13 @@ export class ChartsManagerComponent implements OnInit {
     });
     this.key = this.activatedRoute.snapshot.params["chart_uuid"];
     this.loading = false;
-    ChartTypes.forEach((chartType) => {
-      this.chartsTypes.push({ key: chartType, value: chartType })
-    })
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.addonService.addonUUID = this.route.snapshot.params['addon_uuid'];
+    for (const typeName in this.seedData)
+      this.chartTypeOptions.push({ key: typeName, value: typeName })
+
     if (history.state.data) {
       this.chart = history.state.data;
       this.mode = 'Update'
@@ -177,7 +176,7 @@ export class ChartsManagerComponent implements OnInit {
       this.loadSrcJSFiles(res.deps).then(() => {
         const previewDiv = document.getElementById("previewArea");
         this.chartInstance = new res.default(previewDiv, configuration);
-        this.chartInstance.data = this.seedData;
+        this.chartInstance.data = this.seedData[this.chart.Type];
         this.chartInstance.update();
         this.loaderService.hide();
         window.dispatchEvent(new Event('resize'));
