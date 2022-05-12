@@ -20,7 +20,7 @@ export class ChartsManagerComponent implements OnInit {
     Name: '',
     Description: '',
     ReadOnly: false,
-    Type: undefined,
+    Type: 'Chart',
     ScriptURI: ''
   }
 
@@ -33,8 +33,9 @@ export class ChartsManagerComponent implements OnInit {
   loading: boolean = true
   key: string;
   chartInstance = undefined;
-  seedData = {'Charts':
-    { DataQueries:[
+  seedData = 
+  {'Chart': {
+     DataQueries:[
       {
         Name: "Data1",
         Groups:["ActionDate"],
@@ -53,7 +54,29 @@ export class ChartsManagerComponent implements OnInit {
       { "ActionDate": "Apr", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
       { "ActionDate": "May", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()},
       { "ActionDate": "Jun", "Series 1": this.getRandomNumber(), "Series 2": this.getRandomNumber() , "Series 3":this.getRandomNumber()}
-    ]}
+    ]},
+   'Benchmark chart': {
+      DataQueries:[
+        {
+          Name: "Series1",
+          Groups:["ActionDateTime"],
+          Series: ["AccountA", "AccountB"]
+        }
+      ],
+      DataSet: [
+        { "ActionDateTime": "January", "AccountA": 121, "AccountB": 242}
+      ],
+      BenchmarkQueries:[
+        {
+          Name: "Series1",
+          Groups:["ActionDateTime"],
+          Series: ["Average"]
+        }
+      ],
+      BenchmarkSet:[
+        { "ActionDateTime": "January", "Average": 240}
+      ]
+    }
   }
   constructor(
     public addonService: AddonService,

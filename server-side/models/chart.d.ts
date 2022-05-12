@@ -16,6 +16,7 @@ export interface Chart extends AddonData {
 export interface ChartDTO {
     Key?: string;
     Name: string;
+    Type: string;
     ScriptURI: string;
     ReadOnly?: Boolean;
     Description?: string;

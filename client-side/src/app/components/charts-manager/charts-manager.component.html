@@ -21,7 +21,7 @@
                     <pep-textbox [label]="'Description' | translate" [(value)]="chart.Description" [disabled]="chart.ReadOnly" [type]="'text'" (valueChange)="onValueChanged('Descriptoin', $event)"></pep-textbox>
                     <pep-select [label]="'Type'| translate" [disabled]="mode =='Update'" [emptyOption]="false" [value]="chart.Type" [xAlignment]="'left'" [options]='chartTypeOptions' (valueChange)="onValueChanged('Type',$event)">
                     </pep-select>
-                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [disabled]="chart.ReadOnly || !chart.Type" [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
+                    <pep-attachment rowSpan="2" [key]="'attachment1'" label="{{ 'Template file' | translate }}" [disabled]="chart.ReadOnly" [src]="chart.ScriptURI" [mandatory]="true" (fileChange)="onFileSelect($event)">
                     </pep-attachment>
                 </div>
                 <div style="width: 47rem;">

@@ -6,6 +6,7 @@ export class ChartMap {
       return {
         Key: chart.Key,
         Name: chart.Name,
+        Type: chart.Type,
         ScriptURI: chart.ScriptURI,
         Description: chart.Description,
         Hidden: chart.Hidden,
