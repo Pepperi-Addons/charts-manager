@@ -17,7 +17,7 @@
         <div *ngIf="!loading" class="form">
             <div class="flex-container">
                 <div style="width: 30rem;">
-                    <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'" [disabled]="chart.ReadOnly" [mandatory]="true" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
+                    <pep-textbox [label]="'Name' | translate" [(value)]="chart.Name" [type]="'text'" [disabled]="chart.ReadOnly || mode == 'Update'" [mandatory]="true" (valueChange)="onValueChanged('Name', $event)"></pep-textbox>
                     <pep-textbox [label]="'Description' | translate" [(value)]="chart.Description" [disabled]="chart.ReadOnly" [type]="'text'" (valueChange)="onValueChanged('Descriptoin', $event)"></pep-textbox>
                     <pep-select [label]="'Type'| translate" [disabled]="mode =='Update'" [emptyOption]="false" [value]="chart.Type" [xAlignment]="'left'" [options]='chartTypeOptions' (valueChange)="onValueChanged('Type',$event)">
                     </pep-select>
