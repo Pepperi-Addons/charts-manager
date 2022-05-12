@@ -51,7 +51,7 @@ export class AddonComponent implements OnInit {
                 const orderedCharts = charts.sort((a, b) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0));
                 for (let chart of orderedCharts) {
                     res.push({
-                        Type: chart.Type ? chart.Type : 'Charts',
+                        Type: chart.Type,
                         Name: chart.Name,
                         Description: chart.Description,
                         Key: chart.Key,
