@@ -76,6 +76,45 @@ export class ChartsManagerComponent implements OnInit {
       BenchmarkSet:[
         { "ActionDateTime": "January", "Average": 240}
       ]
+    },
+    'Value scorecard': {
+      DataQueries:[
+        {
+          Name: "Series1",
+          Groups:[],
+          Series: ["Series1"]
+        }
+      ],
+      DataSet: [
+        {"Series1": 152}
+      ],
+      BenchmarkQueries:[
+        {
+          Name: "Series1",
+          Groups:[],
+          Series: ["Series1"]
+        }
+      ],
+      BenchmarkSet:[
+        {"Series1": 183}
+      ]
+    },
+    'Series scorecard': {
+      DataQueries:[
+        {
+          Name: "Data1",
+          Groups:["ActionDate"],
+          Series: ["Series 1"]
+        }
+      ],
+      DataSet: [
+        { "ActionDate": "Jan", "Series 1": this.getRandomNumber()},
+        { "ActionDate": "Feb", "Series 1": this.getRandomNumber()},
+        { "ActionDate": "Mar", "Series 1": this.getRandomNumber()},
+        { "ActionDate": "Apr", "Series 1": this.getRandomNumber()},
+        { "ActionDate": "May", "Series 1": this.getRandomNumber()},
+        { "ActionDate": "Jun", "Series 1": this.getRandomNumber()}
+      ]
     }
   }
   constructor(
