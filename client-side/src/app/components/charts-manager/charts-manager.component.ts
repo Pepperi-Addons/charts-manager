@@ -233,7 +233,7 @@ export class ChartsManagerComponent implements OnInit {
   private importChartFileAndExecute() {
     System.import(this.chart.ScriptURI).then((res) => {
       const configuration = {
-        label: 'Sales'
+        Title: "Title"
       }
       this.loadSrcJSFiles(res.deps).then(() => {
         const previewDiv = document.getElementById("previewArea");

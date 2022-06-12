@@ -105,7 +105,7 @@ class ChartService {
             else{
                 file.URI = body.ScriptURI
             }
-            return await this.papiClient.post(`/addons/files/${this.client.AddonUUID}`,file);
+            return await this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_TABLE_NAME}`,file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);

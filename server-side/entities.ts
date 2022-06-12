@@ -25,6 +25,11 @@ export const chartsTableScheme: AddonDataScheme = {
     },
 }
 
+export const chartsPfsScheme = {
+    Name: CHARTS_TABLE_NAME,
+    Type: 'pfs'
+}
+
 
 
 
