@@ -1,6 +1,6 @@
 {
   "AddonUUID": "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad",
-  "AddonVersion": "0.6.15",
+  "AddonVersion": "0.6.19",
   "DebugPort": 4500,
   "WebappBaseUrl": "https://app.sandbox.pepperi.com",
   "DefaultEditor": "main",
@@ -25,8 +25,8 @@
       }
     ],
     "Dependencies": {
-      "pfs": "0.0.106",
-      "adal": "1.0.197"
+      "pfs": "0.5.34",
+      "adal": "1.0.205"
     },
     "CPISide": []
   }
