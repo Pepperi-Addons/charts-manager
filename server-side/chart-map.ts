@@ -1,18 +1,19 @@
-import { Chart, ChartDTO } from "./models/chart";
+import { AddonData, AddonFile } from "@pepperi-addons/papi-sdk";
+import { ChartDTO } from "./models/chart";
 
 export class ChartMap {
   
-    public static toDTO (chart: Chart): ChartDTO {
+    public static toDTO (chartFromPFS: AddonFile, chartMetaData: AddonData): ChartDTO {
       return {
-        Key: chart.Key,
-        Name: chart.Name,
-        Type: chart.Type,
-        ScriptURI: chart.ScriptURI,
-        Description: chart.Description,
-        Hidden: chart.Hidden,
-        ReadOnly: chart.ReadOnly,
-        CreationDateTime: chart.CreationDateTime,
-        ModificationDateTime: chart.ModificationDateTime
+        Key: chartFromPFS.Key,
+        Name: chartFromPFS.Name?.substring(0,chartFromPFS.Name.length-3) ?? '',
+        Type: chartMetaData.Type,
+        ScriptURI: chartFromPFS.URL ?? '',
+        Description: chartFromPFS.Description,
+        Hidden: chartFromPFS.Hidden,
+        System: chartMetaData.System,
+        CreationDateTime: chartMetaData.CreationDateTime,
+        ModificationDateTime: chartMetaData.ModificationDateTime
       }
     }
   }

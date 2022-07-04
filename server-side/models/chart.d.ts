@@ -7,6 +7,7 @@ export interface Chart extends AddonData {
     Description?: string;
     FileID?: number;
     Type: string;
+    System: boolean;
     Hidden?: boolean;
     CreationDateTime?: string;
     ModificationDateTime?: string;
@@ -18,6 +19,7 @@ export interface ChartDTO {
     Name: string;
     Type: string;
     ScriptURI: string;
+    System: boolean;
     ReadOnly?: Boolean;
     Description?: string;
     Hidden?: boolean;

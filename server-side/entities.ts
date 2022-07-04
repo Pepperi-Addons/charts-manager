@@ -1,11 +1,33 @@
 import { AddonDataScheme } from "@pepperi-addons/papi-sdk";
 
 export const CHARTS_TABLE_NAME = 'Charts';
+export const CHARTS_PFS_TABLE_NAME = 'ChartsPFS';
+
 
 export const chartsTableScheme: AddonDataScheme = {
     Name: CHARTS_TABLE_NAME,
     Type: 'data',
     Fields: {
+        Key: {
+            Type: "String"
+        },
+        Type: {
+            Type: "String",
+            Indexed: true
+        },
+        System: {
+            Type: "Bool"
+        }
+    },
+}
+
+export const chartsPfsScheme = {
+    Name: CHARTS_PFS_TABLE_NAME,
+    Type: 'pfs',
+    Fields: {
+        Key: {
+            Type: "String"
+        },
         Name: {
             Type: "String"
         },
@@ -14,20 +36,8 @@ export const chartsTableScheme: AddonDataScheme = {
         },
         URI: {
             Type: "String"
-        },
-        FileID: {
-            Type: "Integer"
-        },
-        Type: {
-            Type: "String",
-            Indexed: true
-        },
-    },
-}
-
-export const chartsPfsScheme = {
-    Name: CHARTS_TABLE_NAME,
-    Type: 'pfs'
+        }
+    }
 }
 
 

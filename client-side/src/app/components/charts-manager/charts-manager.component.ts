@@ -21,7 +21,8 @@ export class ChartsManagerComponent implements OnInit {
     Description: '',
     ReadOnly: false,
     Type: 'Chart',
-    ScriptURI: ''
+    ScriptURI: '',
+    System: false
   }
 
   screenSize: PepScreenSizeType;
