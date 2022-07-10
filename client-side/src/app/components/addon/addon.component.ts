@@ -43,7 +43,8 @@ export class AddonComponent implements OnInit {
     listDataSource: GenericListDataSource = {
         getList: async (state) => {
             let res: Chart[] = [];
-            return this.pepAddonService.getAddonApiCall(this.addonService.addonUUID, 'api', 'charts', {}).toPromise().then((charts) => {
+            return this.addonService.get('/charts').then((charts) => {
+            //return this.pepAddonService.getAddonApiCall(this.addonService.addonUUID, 'api', 'charts', {}).toPromise().then((charts) => {
                 const orderedCharts = charts.sort((a, b) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0));
                 for (let chart of orderedCharts) {
                     res.push({
@@ -191,7 +192,8 @@ export class AddonComponent implements OnInit {
 
     deleteChart(chart) {
         chart.Hidden = true;
-        this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', chart).toPromise().then((res) => {
+        this.addonService.post('/charts',chart).then((res) => {
+        //this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', chart).toPromise().then((res) => {
             this.loaderService.hide();
             this.chartsList.reload();
         }).catch(ex => {

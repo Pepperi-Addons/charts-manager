@@ -11,6 +11,12 @@ export const chartsTableScheme: AddonDataScheme = {
         Key: {
             Type: "String"
         },
+        Name: {
+            Type: "String"
+        },
+        Description: {
+            Type: "String"
+        },
         Type: {
             Type: "String",
             Indexed: true

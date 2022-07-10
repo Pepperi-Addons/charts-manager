@@ -1,10 +1,9 @@
-import { PapiClient, InstalledAddon, AddonData, FileStorage, Addon } from '@pepperi-addons/papi-sdk'
+import { PapiClient } from '@pepperi-addons/papi-sdk'
 import { Client, Request } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
 import { chartsTableScheme, CHARTS_PFS_TABLE_NAME, CHARTS_TABLE_NAME } from './entities';
 import { Chart, ChartDTO, ChartTypes } from './models/chart'
 import { ChartMap } from './chart-map';
-import { v4 as uuid } from 'uuid';
 import { Constants } from './constants';
 
 class ChartService {
@@ -25,7 +24,6 @@ class ChartService {
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
 
-
         const body = request.body;
         body.Key = `${body.Name}.js`
         this.validatePostData(request);
@@ -34,6 +32,8 @@ class ChartService {
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
             Key: body.Key,
+            Name: body.Name,
+            Description: body.Description,
             Type: body.Type,
             System: body.System ?? false,
             Hidden: body.Hidden ?? false
