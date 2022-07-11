@@ -21,7 +21,8 @@ export class ChartsManagerComponent implements OnInit {
     Description: '',
     ReadOnly: false,
     Type: 'Chart',
-    ScriptURI: ''
+    ScriptURI: '',
+    System: false
   }
 
   screenSize: PepScreenSizeType;
@@ -164,7 +165,8 @@ export class ChartsManagerComponent implements OnInit {
 
   saveClicked() {
     this.loaderService.show();
-    this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', this.chart).toPromise().then((res) => {
+    this.addonService.post('/charts',this.chart).then((res) => {
+    // this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', this.chart).toPromise().then((res) => {
       this.loaderService.hide();
       this.goBack();
     }).catch(ex => {

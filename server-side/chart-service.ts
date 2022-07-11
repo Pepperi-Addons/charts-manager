@@ -1,10 +1,9 @@
-import { PapiClient, InstalledAddon, AddonData, FileStorage, Addon } from '@pepperi-addons/papi-sdk'
+import { PapiClient } from '@pepperi-addons/papi-sdk'
 import { Client, Request } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
-import { chartsTableScheme, CHARTS_TABLE_NAME } from './entities';
-import { Chart, ChartTypes } from './models/chart'
+import { chartsTableScheme, CHARTS_PFS_TABLE_NAME, CHARTS_TABLE_NAME } from './entities';
+import { Chart, ChartDTO, ChartTypes } from './models/chart'
 import { ChartMap } from './chart-map';
-import { v4 as uuid } from 'uuid';
 import { Constants } from './constants';
 
 class ChartService {
@@ -22,90 +21,63 @@ class ChartService {
 
     async upsert(request: Request) {
 
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
 
         const body = request.body;
+        body.Key = `${body.Name}.js`
         this.validatePostData(request);
-        await this.validateName(body,adal);
+        await this.validateName(body,chartsPfsTable);
 
-        //const chartFile = await this.upsertChartFile(body);
-        const chartFile = await this.upsertChartToPFS(body);
-
-
-        body.ReadOnly = body.ReadOnly ?? false;
-        //body.FileID = body.FileID ? body.FileID : chartFile.InternalID;
-        body.ScriptURI = chartFile.URL;
-
-        if (!body.Key){
-            body.Key = uuid()
+        const pfsChart = await this.upsertChartToPFS(body);
+        const metaDataFields = {
+            Key: body.Key,
+            Name: body.Name,
+            Description: body.Description,
+            Type: body.Type,
+            System: body.System ?? false,
+            Hidden: body.Hidden ?? false
         }
-
-        const chart = await adal.upsert(body);
-        return ChartMap.toDTO(<Chart>chart);
-
+        const chart = await chartsTable.upsert(metaDataFields);
+        return ChartMap.toDTO(pfsChart,chart);
     }
 
     async find(query: any) {
-
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const metaDataTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const pfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
 
         if (query.key) {
-            const chart = await adal.key(query.key).get();
-            return ChartMap.toDTO(<Chart>chart);
+            const chartMetaData = await metaDataTable.key(query.key).get();
+            const chartPfsObject = await pfsTable.key(query.key).get();
+            return ChartMap.toDTO(chartPfsObject,chartMetaData);
         }
         else {
-            const charts = await adal.find(query);
-            return charts.map(chart => ChartMap.toDTO(<Chart>chart))
-        }
-    }
-
-    private async upsertChartFile(body) {
-
-        try {
-            const fileStorage: FileStorage = {
-                FileName: `${body.Name}.js`,
-                Title: body.Name,
-                IsSync:false
+            const chartMetaDatas = await metaDataTable.find(query);
+            let charts: ChartDTO[] = [];
+            for (let chart of chartMetaDatas) {
+                const pfsChart = await pfsTable.key(chart.Key ?? '').get();
+                charts.push(ChartMap.toDTO(pfsChart,chart))
             }
-            if (body.FileID) {
-                fileStorage.InternalID = body.FileID;
-            }
-            if (body.Hidden){
-                fileStorage.Hidden = true;
-            }       
-            else{
-                if (this.isDataURL(body.ScriptURI)) {
-                    fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
-                }
-                else {
-                    fileStorage.URL = body.ScriptURI
-                }
-            }     
-            return await this.papiClient.fileStorage.upsert(fileStorage)
-            let chart
-        }
-        catch (e) {
-            throw new Error(`Failed upsert file storage. error: ${e}`);
+            return charts
         }
     }
 
     private async upsertChartToPFS(body) {
-
         try {
-            const file: any = {
+            let file: any = {
                 Key: `${body.Name}.js`,
+                Name: body.Name,
                 Description: body.Description,
                 MIME: "text/javascript",
+                URI: body.ScriptURI,
                 Cache: false
             }
 
             if (body.Hidden){
                 file.Hidden = true;
-            }       
-            else{
-                file.URI = body.ScriptURI
             }
-            return await this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_TABLE_NAME}`,file);
+        
+            return await this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_PFS_TABLE_NAME}`,file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);
@@ -119,8 +91,8 @@ class ChartService {
        
     }
 
-    async validateName(body: any, adal: any) {
-        const existingName = await adal.find({where:`Name='${body.Name}'`});
+    async validateName(body: any, table: any) {
+        const existingName = await table.find({where:`Name='${body.Name}'`});
         if (existingName.length >0 && existingName[0].Key!=body.Key){
             throw new Error(`A chart with this name already exist.`);
         }

@@ -10,48 +10,34 @@ The error Message is importent! it will be written in the audit log and help the
 
 import { Client, Request } from '@pepperi-addons/debug-server'
 import ChartService from './chart-service';
-import { chartsPfsScheme, chartsTableScheme } from './entities';
+import { chartsPfsScheme, chartsTableScheme, CHARTS_TABLE_NAME } from './entities';
 import { AddonVersion, AddonUUID } from '../addon.config.json'
+import semver from 'semver';
 
 export async function install(client: Client, request: Request): Promise<any> {
-    const res={
-        success: true,
-        errorMessage: '',
-    }
     const service = new ChartService(client)
     try {
         await service.papiClient.addons.data.schemes.post(chartsTableScheme);
-        await service.papiClient.post(`/addons/data/schemes/${AddonUUID}/create`,chartsPfsScheme);
-        return res;
+        await service.papiClient.post(`/addons/data/schemes/${AddonUUID}`,chartsPfsScheme);
+        return { success: true, resultObject: {} }
     }
-    catch (err) {   
+    catch (err) {
         console.log('Failed to install charts addon', err)
          return handleException(err);
     }
 }
 
 export async function uninstall(client: Client, request: Request): Promise<any> {
-    try{
-        const service = new ChartService(client)
-        await service.papiClient.post(`/addons/data/schemes/${chartsTableScheme.Name}/purge`);
-        return { success: true, resultObject: {} }
-    }
-    catch(err){
-        console.log('Failed to uninstall charts addon', err)
-        return handleException(err);
-
-    }
+    return { success: true, resultObject: {} }
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
-    // if(AddonVersion < "0.6.18") {
-    //     console.log('Failed to upgrade Charts addon');
-    //     return {
-    //         success: false,
-    //         resultObject: {}
-    //     }
-    // }
-    return { success: true, resultObject: {} }
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '0.6.50') < 0) 
+	{
+		throw new Error('Upgarding from versions earlier than 0.6.50 is not supported. Please uninstall the addon and install it again.');
+	}
+
+	return { success: true, resultObject: {} }
 }
 
 export async function downgrade(client: Client, request: Request): Promise<any> {

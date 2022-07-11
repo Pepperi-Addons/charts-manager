@@ -2,12 +2,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { PepAddonService, PepFileService, PepLayoutService, PepLoaderService, PepScreenSizeType } from '@pepperi-addons/ngx-lib';
 import { AddonService } from '../../services/addon.service';
-import { PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 import { GenericListComponent, GenericListDataSource } from '../generic-list/generic-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Chart, } from '../../../../../server-side/models/chart'
-import { Console } from 'console';
-import { CHARTS_TABLE_NAME } from '../../../../../server-side/entities';
+import { Chart } from '../../../../../server-side/models/chart'
 
 
 @Component({
@@ -29,7 +26,6 @@ export class AddonComponent implements OnInit {
         public translate: TranslateService,
         public router: Router,
         public route: ActivatedRoute,
-        private fileService: PepFileService,
         private pepAddonService: PepAddonService,
         public loaderService: PepLoaderService
     ) {
@@ -45,9 +41,10 @@ export class AddonComponent implements OnInit {
     }
 
     listDataSource: GenericListDataSource = {
-        getList: (state) => {
+        getList: async (state) => {
             let res: Chart[] = [];
-            return this.addonService.papiClient.addons.data.uuid(this.addonService.addonUUID).table(CHARTS_TABLE_NAME).iter().toArray().then((charts) => {
+            return this.addonService.get('/charts').then((charts) => {
+            //return this.pepAddonService.getAddonApiCall(this.addonService.addonUUID, 'api', 'charts', {}).toPromise().then((charts) => {
                 const orderedCharts = charts.sort((a, b) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0));
                 for (let chart of orderedCharts) {
                     res.push({
@@ -57,7 +54,7 @@ export class AddonComponent implements OnInit {
                         Key: chart.Key,
                         ScriptURI: chart.ScriptURI,
                         ReadOnly: chart.ReadOnly,
-                        System: chart.ReadOnly
+                        System: chart.System
                     })
                 }
                 return res;
@@ -195,7 +192,8 @@ export class AddonComponent implements OnInit {
 
     deleteChart(chart) {
         chart.Hidden = true;
-        this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', chart).toPromise().then((res) => {
+        this.addonService.post('/charts',chart).then((res) => {
+        //this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', chart).toPromise().then((res) => {
             this.loaderService.hide();
             this.chartsList.reload();
         }).catch(ex => {
