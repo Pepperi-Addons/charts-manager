@@ -53,7 +53,7 @@ export class AddonComponent implements OnInit {
                         Description: chart.Description,
                         Key: chart.Key,
                         ScriptURI: chart.ScriptURI,
-                        ReadOnly: chart.ReadOnly,
+                        ReadOnly: chart.System,
                         System: chart.System
                     })
                 }
