@@ -8,7 +8,6 @@ var Url = require('url');
 var https = require('https');
 var zlib = require('zlib');
 var perf_hooks = require('perf_hooks');
-var crypto = require('crypto');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -18,7 +17,6 @@ var Url__default = /*#__PURE__*/_interopDefaultLegacy(Url);
 var https__default = /*#__PURE__*/_interopDefaultLegacy(https);
 var zlib__default = /*#__PURE__*/_interopDefaultLegacy(zlib);
 var perf_hooks__default = /*#__PURE__*/_interopDefaultLegacy(perf_hooks);
-var crypto__default = /*#__PURE__*/_interopDefaultLegacy(crypto);
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -46,9 +44,21 @@ function commonjsRequire () {
 
 var addons$1 = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SchemeFieldTypes = void 0;
+exports.SchemeFieldTypes = [
+    'String',
+    'MultipleStringValues',
+    'Bool',
+    'Integer',
+    'Double',
+    'Object',
+    'Array',
+    'DateTime',
+];
 });
 
 unwrapExports(addons$1);
+addons$1.SchemeFieldTypes;
 
 var userDefinedTables = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -186,6 +196,7 @@ exports.ResourceTypes = [
     'contacts',
     'lists',
     'catalogs',
+    'types',
 ];
 exports.ResoursePrefixes = ['GA', 'OA', 'CP', 'AT', 'GL', 'CA'];
 exports.VerticalAlignments = {
@@ -326,7 +337,8 @@ unwrapExports(subscription);
 
 var page = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SplitTypes = void 0;
+exports.SplitTypes = exports.PageSizeTypes = void 0;
+exports.PageSizeTypes = ['sm', 'md', 'lg'];
 exports.SplitTypes = [
     '1/4 3/4',
     '1/3 2/3',
@@ -343,6 +355,16 @@ exports.SplitTypes = [
 
 unwrapExports(page);
 page.SplitTypes;
+page.PageSizeTypes;
+
+var user_defined_collections = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DocumentKeyTypes = void 0;
+exports.DocumentKeyTypes = ['AutoGenerate', 'Composite', 'Key'];
+});
+
+unwrapExports(user_defined_collections);
+user_defined_collections.DocumentKeyTypes;
 
 var entities = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -384,6 +406,7 @@ __exportStar(contact, exports);
 __exportStar(image, exports);
 __exportStar(subscription, exports);
 __exportStar(page, exports);
+__exportStar(user_defined_collections, exports);
 // need something here that can be transpiled to js
 // all the other entities are interfaces
 class Entities {
@@ -702,6 +725,19 @@ class AddonEndpoint extends endpoint_1.default {
         // data = new AddonDataEndpoint(this.service);
         this.data = {
             schemes: {
+                get: async (params) => {
+                    let url = '/addons/data/schemes';
+                    const query = endpoint_1.default.encodeQueryParams(params);
+                    url = query ? url + '?' + query : url;
+                    return await this.service.get(url);
+                },
+                name: (name) => {
+                    return {
+                        get: async () => {
+                            return await this.service.get(`/addons/data/schemes/${name}`);
+                        },
+                    };
+                },
                 post: async (body) => {
                     return await this.service.post('/addons/data/schemes', body);
                 },
@@ -714,6 +750,32 @@ class AddonEndpoint extends endpoint_1.default {
                 };
             },
             relations: new endpoint_1.default(this.service, '/addons/data/relations'),
+        };
+        this.pfs = {
+            uuid: (addonUUID) => {
+                return {
+                    schema: (schemaName) => {
+                        return {
+                            key: (keyName) => {
+                                return {
+                                    get: async () => {
+                                        return await this.service.get(`/addons/pfs/${addonUUID}/${schemaName}/${keyName}`);
+                                    },
+                                };
+                            },
+                            find: async (params) => {
+                                let url = `/addons/pfs/${addonUUID}/${schemaName}`;
+                                const query = endpoint_1.default.encodeQueryParams(params);
+                                url = `${url}?${query}`;
+                                return await this.service.get(url);
+                            },
+                            post: async (body) => {
+                                return await this.service.post(`/addons/pfs/${addonUUID}/${schemaName}`, body);
+                            },
+                        };
+                    },
+                };
+            },
         };
     }
 }
@@ -1025,6 +1087,32 @@ exports.NotificationEndpoint = NotificationEndpoint;
 unwrapExports(notification);
 notification.NotificationEndpoint;
 
+var userDefinedCollections = createCommonjsModule(function (module, exports) {
+var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SchemesEndpoint = void 0;
+const endpoint_1 = __importDefault(endpoint);
+class SchemesEndpoint extends endpoint_1.default {
+    constructor(service) {
+        super(service, '/user_defined_collections/schemes');
+        this.service = service;
+    }
+    name(schemeName) {
+        return {
+            get: async () => {
+                return await this.service.get(`/user_defined_collections/schemes/${schemeName}`);
+            },
+        };
+    }
+}
+exports.SchemesEndpoint = SchemesEndpoint;
+});
+
+unwrapExports(userDefinedCollections);
+userDefinedCollections.SchemesEndpoint;
+
 var endpoints = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1045,6 +1133,7 @@ __exportStar(auditLogs, exports);
 __exportStar(sync, exports);
 __exportStar(fileStorage, exports);
 __exportStar(notification, exports);
+__exportStar(userDefinedCollections, exports);
 });
 
 unwrapExports(endpoints);
@@ -2782,6 +2871,12 @@ class PapiClient {
         this.images = new endpoint_1.default(this, '/images');
         this.notification = new endpoints.NotificationEndpoint(this);
         this.pages = new endpoint_1.default(this, '/pages');
+        this.userDefinedCollections = {
+            schemes: new endpoints.SchemesEndpoint(this),
+            documents: (collectionName) => {
+                return new endpoint_1.default(this, `/user_defined_collections/${collectionName}`);
+            },
+        };
     }
     async get(url) {
         return this.apiCall('GET', url)
@@ -2840,6 +2935,24 @@ exports.PapiClient = PapiClient;
 unwrapExports(papiClient);
 papiClient.PapiClient;
 
+var helper = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Helper = void 0;
+class Helper {
+    normalizeHeaders(requestHeaders) {
+        const headers = {};
+        for (const key in requestHeaders) {
+            headers[key.toLowerCase()] = requestHeaders[key];
+        }
+        return headers;
+    }
+}
+exports.Helper = Helper;
+});
+
+unwrapExports(helper);
+helper.Helper;
+
 var dist = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -2854,12 +2967,13 @@ var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(entities, exports);
 __exportStar(papiClient, exports);
+__exportStar(helper, exports);
 });
 
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.71";
+var AddonVersion = "1.0.1";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -2884,8 +2998,8 @@ var PublishConfig = {
 		}
 	],
 	Dependencies: {
-		pfs: "0.0.86",
-		adal: "1.0.196"
+		pfs: "1.0.2",
+		adal: "1.0.229"
 	},
 	CPISide: [
 	]
@@ -2903,6 +3017,7 @@ var config = {
 };
 
 const CHARTS_TABLE_NAME = 'Charts';
+const CHARTS_PFS_TABLE_NAME = 'ChartsPFS';
 
 var chart = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -2918,193 +3033,21 @@ unwrapExports(chart);
 var chart_1 = chart.ChartTypes;
 
 class ChartMap {
-    static toDTO(chart) {
+    static toDTO(chartFromPFS, chartMetaData) {
+        var _a, _b, _c;
         return {
-            Key: chart.Key,
-            Name: chart.Name,
-            ScriptURI: chart.ScriptURI,
-            Description: chart.Description,
-            Hidden: chart.Hidden,
-            ReadOnly: chart.ReadOnly,
-            CreationDateTime: chart.CreationDateTime,
-            ModificationDateTime: chart.ModificationDateTime
+            Key: chartFromPFS.Key,
+            Name: (_b = (_a = chartFromPFS.Name) === null || _a === void 0 ? void 0 : _a.substring(0, chartFromPFS.Name.length - 3)) !== null && _b !== void 0 ? _b : '',
+            Type: chartMetaData.Type,
+            ScriptURI: (_c = chartFromPFS.URL) !== null && _c !== void 0 ? _c : '',
+            Description: chartFromPFS.Description,
+            Hidden: chartFromPFS.Hidden,
+            System: chartMetaData.System,
+            CreationDateTime: chartMetaData.CreationDateTime,
+            ModificationDateTime: chartMetaData.ModificationDateTime
         };
     }
 }
-
-// Unique ID creation requires a high quality random # generator.  In node.js
-// this is pretty straight-forward - we use the crypto API.
-
-
-
-var rng = function nodeRNG() {
-  return crypto__default['default'].randomBytes(16);
-};
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-var byteToHex = [];
-for (var i = 0; i < 256; ++i) {
-  byteToHex[i] = (i + 0x100).toString(16).substr(1);
-}
-
-function bytesToUuid(buf, offset) {
-  var i = offset || 0;
-  var bth = byteToHex;
-  // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
-  return ([bth[buf[i++]], bth[buf[i++]], 
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]]]).join('');
-}
-
-var bytesToUuid_1 = bytesToUuid;
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-
-var _nodeId;
-var _clockseq;
-
-// Previous uuid creation time
-var _lastMSecs = 0;
-var _lastNSecs = 0;
-
-// See https://github.com/broofa/node-uuid for API details
-function v1(options, buf, offset) {
-  var i = buf && offset || 0;
-  var b = buf || [];
-
-  options = options || {};
-  var node = options.node || _nodeId;
-  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
-
-  // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-  if (node == null || clockseq == null) {
-    var seedBytes = rng();
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [
-        seedBytes[0] | 0x01,
-        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
-      ];
-    }
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  }
-
-  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
-
-  // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
-
-  // Time since last uuid creation (in msecs)
-  var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
-
-  // Per 4.2.1.2, Bump clockseq on clock regression
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  }
-
-  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  }
-
-  // Per 4.2.1.2 Throw error if too many uuids are requested
-  if (nsecs >= 10000) {
-    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq;
-
-  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-  msecs += 12219292800000;
-
-  // `time_low`
-  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff;
-
-  // `time_mid`
-  var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff;
-
-  // `time_high_and_version`
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-  b[i++] = tmh >>> 16 & 0xff;
-
-  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-  b[i++] = clockseq >>> 8 | 0x80;
-
-  // `clock_seq_low`
-  b[i++] = clockseq & 0xff;
-
-  // `node`
-  for (var n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf ? buf : bytesToUuid_1(b);
-}
-
-var v1_1 = v1;
-
-function v4(options, buf, offset) {
-  var i = buf && offset || 0;
-
-  if (typeof(options) == 'string') {
-    buf = options === 'binary' ? new Array(16) : null;
-    options = null;
-  }
-  options = options || {};
-
-  var rnds = options.random || (options.rng || rng)();
-
-  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-  rnds[6] = (rnds[6] & 0x0f) | 0x40;
-  rnds[8] = (rnds[8] & 0x3f) | 0x80;
-
-  // Copy bytes to buffer, if provided
-  if (buf) {
-    for (var ii = 0; ii < 16; ++ii) {
-      buf[i + ii] = rnds[ii];
-    }
-  }
-
-  return buf || bytesToUuid_1(rnds);
-}
-
-var v4_1 = v4;
-
-var uuid = v4_1;
-uuid.v1 = v1_1;
-uuid.v4 = v4_1;
-
-var C__Shir_chartsManager_serverSide_node_modules_uuid = uuid;
 
 class Constants {
 }
@@ -3122,75 +3065,58 @@ class ChartService {
         });
     }
     async upsert(request) {
-        var _a;
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        var _a, _b;
+        const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         const body = request.body;
+        body.Key = `${body.Name}.js`;
         this.validatePostData(request);
-        await this.validateName(body, adal);
-        //const chartFile = await this.upsertChartFile(body);
-        const chartFile = await this.upsertChartToPFS(body);
-        body.ReadOnly = (_a = body.ReadOnly) !== null && _a !== void 0 ? _a : false;
-        //body.FileID = body.FileID ? body.FileID : chartFile.InternalID;
-        body.ScriptURI = chartFile.URL;
-        if (!body.Key) {
-            body.Key = C__Shir_chartsManager_serverSide_node_modules_uuid.v4();
-        }
-        const chart = await adal.upsert(body);
-        return ChartMap.toDTO(chart);
+        await this.validateName(body, chartsPfsTable);
+        const pfsChart = await this.upsertChartToPFS(body);
+        const metaDataFields = {
+            Key: body.Key,
+            Name: body.Name,
+            Description: body.Description,
+            Type: body.Type,
+            System: (_a = body.System) !== null && _a !== void 0 ? _a : false,
+            Hidden: (_b = body.Hidden) !== null && _b !== void 0 ? _b : false
+        };
+        const chart = await chartsTable.upsert(metaDataFields);
+        return ChartMap.toDTO(pfsChart, chart);
     }
     async find(query) {
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        var _a;
+        const metaDataTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const pfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         if (query.key) {
-            const chart = await adal.key(query.key).get();
-            return ChartMap.toDTO(chart);
+            const chartMetaData = await metaDataTable.key(query.key).get();
+            const chartPfsObject = await pfsTable.key(query.key).get();
+            return ChartMap.toDTO(chartPfsObject, chartMetaData);
         }
         else {
-            const charts = await adal.find(query);
-            return charts.map(chart => ChartMap.toDTO(chart));
-        }
-    }
-    async upsertChartFile(body) {
-        try {
-            const fileStorage = {
-                FileName: `${body.Name}.js`,
-                Title: body.Name,
-                IsSync: false
-            };
-            if (body.FileID) {
-                fileStorage.InternalID = body.FileID;
+            const chartMetaDatas = await metaDataTable.find(query);
+            let charts = [];
+            for (let chart of chartMetaDatas) {
+                const pfsChart = await pfsTable.key((_a = chart.Key) !== null && _a !== void 0 ? _a : '').get();
+                charts.push(ChartMap.toDTO(pfsChart, chart));
             }
-            if (body.Hidden) {
-                fileStorage.Hidden = true;
-            }
-            else {
-                if (this.isDataURL(body.ScriptURI)) {
-                    fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
-                }
-                else {
-                    fileStorage.URL = body.ScriptURI;
-                }
-            }
-            return await this.papiClient.fileStorage.upsert(fileStorage);
-            let chart;
-        }
-        catch (e) {
-            throw new Error(`Failed upsert file storage. error: ${e}`);
+            return charts;
         }
     }
     async upsertChartToPFS(body) {
         try {
-            const file = {
+            let file = {
                 Key: `${body.Name}.js`,
+                Name: body.Name,
                 Description: body.Description,
-                MIME: "text/javascript"
+                MIME: "text/javascript",
+                URI: body.ScriptURI,
+                Cache: false
             };
             if (body.Hidden) {
                 file.Hidden = true;
             }
-            else {
-                file.URI = body.ScriptURI;
-            }
-            return await this.papiClient.post(`/addons/files/${this.client.AddonUUID}`, file);
+            return await this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_PFS_TABLE_NAME}`, file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);
@@ -3201,8 +3127,8 @@ class ChartService {
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
     }
-    async validateName(body, adal) {
-        const existingName = await adal.find({ where: `Name='${body.Name}'` });
+    async validateName(body, table) {
+        const existingName = await table.find({ where: `Name='${body.Name}'` });
         if (existingName.length > 0 && existingName[0].Key != body.Key) {
             throw new Error(`A chart with this name already exist.`);
         }

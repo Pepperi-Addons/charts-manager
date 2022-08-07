@@ -8,7 +8,6 @@ var Url = require('url');
 var https = require('https');
 var zlib = require('zlib');
 var perf_hooks = require('perf_hooks');
-var crypto = require('crypto');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -18,7 +17,6 @@ var Url__default = /*#__PURE__*/_interopDefaultLegacy(Url);
 var https__default = /*#__PURE__*/_interopDefaultLegacy(https);
 var zlib__default = /*#__PURE__*/_interopDefaultLegacy(zlib);
 var perf_hooks__default = /*#__PURE__*/_interopDefaultLegacy(perf_hooks);
-var crypto__default = /*#__PURE__*/_interopDefaultLegacy(crypto);
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -46,9 +44,21 @@ function commonjsRequire () {
 
 var addons$1 = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SchemeFieldTypes = void 0;
+exports.SchemeFieldTypes = [
+    'String',
+    'MultipleStringValues',
+    'Bool',
+    'Integer',
+    'Double',
+    'Object',
+    'Array',
+    'DateTime',
+];
 });
 
 unwrapExports(addons$1);
+addons$1.SchemeFieldTypes;
 
 var userDefinedTables = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -186,6 +196,7 @@ exports.ResourceTypes = [
     'contacts',
     'lists',
     'catalogs',
+    'types',
 ];
 exports.ResoursePrefixes = ['GA', 'OA', 'CP', 'AT', 'GL', 'CA'];
 exports.VerticalAlignments = {
@@ -326,7 +337,8 @@ unwrapExports(subscription);
 
 var page = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SplitTypes = void 0;
+exports.SplitTypes = exports.PageSizeTypes = void 0;
+exports.PageSizeTypes = ['sm', 'md', 'lg'];
 exports.SplitTypes = [
     '1/4 3/4',
     '1/3 2/3',
@@ -343,6 +355,16 @@ exports.SplitTypes = [
 
 unwrapExports(page);
 page.SplitTypes;
+page.PageSizeTypes;
+
+var user_defined_collections = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DocumentKeyTypes = void 0;
+exports.DocumentKeyTypes = ['AutoGenerate', 'Composite', 'Key'];
+});
+
+unwrapExports(user_defined_collections);
+user_defined_collections.DocumentKeyTypes;
 
 var entities = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -384,6 +406,7 @@ __exportStar(contact, exports);
 __exportStar(image, exports);
 __exportStar(subscription, exports);
 __exportStar(page, exports);
+__exportStar(user_defined_collections, exports);
 // need something here that can be transpiled to js
 // all the other entities are interfaces
 class Entities {
@@ -702,6 +725,19 @@ class AddonEndpoint extends endpoint_1.default {
         // data = new AddonDataEndpoint(this.service);
         this.data = {
             schemes: {
+                get: async (params) => {
+                    let url = '/addons/data/schemes';
+                    const query = endpoint_1.default.encodeQueryParams(params);
+                    url = query ? url + '?' + query : url;
+                    return await this.service.get(url);
+                },
+                name: (name) => {
+                    return {
+                        get: async () => {
+                            return await this.service.get(`/addons/data/schemes/${name}`);
+                        },
+                    };
+                },
                 post: async (body) => {
                     return await this.service.post('/addons/data/schemes', body);
                 },
@@ -714,6 +750,32 @@ class AddonEndpoint extends endpoint_1.default {
                 };
             },
             relations: new endpoint_1.default(this.service, '/addons/data/relations'),
+        };
+        this.pfs = {
+            uuid: (addonUUID) => {
+                return {
+                    schema: (schemaName) => {
+                        return {
+                            key: (keyName) => {
+                                return {
+                                    get: async () => {
+                                        return await this.service.get(`/addons/pfs/${addonUUID}/${schemaName}/${keyName}`);
+                                    },
+                                };
+                            },
+                            find: async (params) => {
+                                let url = `/addons/pfs/${addonUUID}/${schemaName}`;
+                                const query = endpoint_1.default.encodeQueryParams(params);
+                                url = `${url}?${query}`;
+                                return await this.service.get(url);
+                            },
+                            post: async (body) => {
+                                return await this.service.post(`/addons/pfs/${addonUUID}/${schemaName}`, body);
+                            },
+                        };
+                    },
+                };
+            },
         };
     }
 }
@@ -1025,6 +1087,32 @@ exports.NotificationEndpoint = NotificationEndpoint;
 unwrapExports(notification);
 notification.NotificationEndpoint;
 
+var userDefinedCollections = createCommonjsModule(function (module, exports) {
+var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SchemesEndpoint = void 0;
+const endpoint_1 = __importDefault(endpoint);
+class SchemesEndpoint extends endpoint_1.default {
+    constructor(service) {
+        super(service, '/user_defined_collections/schemes');
+        this.service = service;
+    }
+    name(schemeName) {
+        return {
+            get: async () => {
+                return await this.service.get(`/user_defined_collections/schemes/${schemeName}`);
+            },
+        };
+    }
+}
+exports.SchemesEndpoint = SchemesEndpoint;
+});
+
+unwrapExports(userDefinedCollections);
+userDefinedCollections.SchemesEndpoint;
+
 var endpoints = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1045,6 +1133,7 @@ __exportStar(auditLogs, exports);
 __exportStar(sync, exports);
 __exportStar(fileStorage, exports);
 __exportStar(notification, exports);
+__exportStar(userDefinedCollections, exports);
 });
 
 unwrapExports(endpoints);
@@ -2782,6 +2871,12 @@ class PapiClient {
         this.images = new endpoint_1.default(this, '/images');
         this.notification = new endpoints.NotificationEndpoint(this);
         this.pages = new endpoint_1.default(this, '/pages');
+        this.userDefinedCollections = {
+            schemes: new endpoints.SchemesEndpoint(this),
+            documents: (collectionName) => {
+                return new endpoint_1.default(this, `/user_defined_collections/${collectionName}`);
+            },
+        };
     }
     async get(url) {
         return this.apiCall('GET', url)
@@ -2840,6 +2935,24 @@ exports.PapiClient = PapiClient;
 unwrapExports(papiClient);
 papiClient.PapiClient;
 
+var helper = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Helper = void 0;
+class Helper {
+    normalizeHeaders(requestHeaders) {
+        const headers = {};
+        for (const key in requestHeaders) {
+            headers[key.toLowerCase()] = requestHeaders[key];
+        }
+        return headers;
+    }
+}
+exports.Helper = Helper;
+});
+
+unwrapExports(helper);
+helper.Helper;
+
 var dist = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -2854,12 +2967,13 @@ var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(entities, exports);
 __exportStar(papiClient, exports);
+__exportStar(helper, exports);
 });
 
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "0.0.71";
+var AddonVersion = "1.0.1";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -2884,8 +2998,8 @@ var PublishConfig = {
 		}
 	],
 	Dependencies: {
-		pfs: "0.0.86",
-		adal: "1.0.196"
+		pfs: "1.0.2",
+		adal: "1.0.229"
 	},
 	CPISide: [
 	]
@@ -2903,10 +3017,36 @@ var config = {
 };
 
 const CHARTS_TABLE_NAME = 'Charts';
+const CHARTS_PFS_TABLE_NAME = 'ChartsPFS';
 const chartsTableScheme = {
     Name: CHARTS_TABLE_NAME,
     Type: 'data',
     Fields: {
+        Key: {
+            Type: "String"
+        },
+        Name: {
+            Type: "String"
+        },
+        Description: {
+            Type: "String"
+        },
+        Type: {
+            Type: "String",
+            Indexed: true
+        },
+        System: {
+            Type: "Bool"
+        }
+    },
+};
+const chartsPfsScheme = {
+    Name: CHARTS_PFS_TABLE_NAME,
+    Type: 'pfs',
+    Fields: {
+        Key: {
+            Type: "String"
+        },
         Name: {
             Type: "String"
         },
@@ -2914,12 +3054,9 @@ const chartsTableScheme = {
             Type: "String"
         },
         URI: {
-            Type: "String",
-        },
-        FileID: {
-            Type: "Integer",
-        },
-    },
+            Type: "String"
+        }
+    }
 };
 
 var chart = createCommonjsModule(function (module, exports) {
@@ -2936,193 +3073,21 @@ unwrapExports(chart);
 var chart_1 = chart.ChartTypes;
 
 class ChartMap {
-    static toDTO(chart) {
+    static toDTO(chartFromPFS, chartMetaData) {
+        var _a, _b, _c;
         return {
-            Key: chart.Key,
-            Name: chart.Name,
-            ScriptURI: chart.ScriptURI,
-            Description: chart.Description,
-            Hidden: chart.Hidden,
-            ReadOnly: chart.ReadOnly,
-            CreationDateTime: chart.CreationDateTime,
-            ModificationDateTime: chart.ModificationDateTime
+            Key: chartFromPFS.Key,
+            Name: (_b = (_a = chartFromPFS.Name) === null || _a === void 0 ? void 0 : _a.substring(0, chartFromPFS.Name.length - 3)) !== null && _b !== void 0 ? _b : '',
+            Type: chartMetaData.Type,
+            ScriptURI: (_c = chartFromPFS.URL) !== null && _c !== void 0 ? _c : '',
+            Description: chartFromPFS.Description,
+            Hidden: chartFromPFS.Hidden,
+            System: chartMetaData.System,
+            CreationDateTime: chartMetaData.CreationDateTime,
+            ModificationDateTime: chartMetaData.ModificationDateTime
         };
     }
 }
-
-// Unique ID creation requires a high quality random # generator.  In node.js
-// this is pretty straight-forward - we use the crypto API.
-
-
-
-var rng = function nodeRNG() {
-  return crypto__default['default'].randomBytes(16);
-};
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-var byteToHex = [];
-for (var i = 0; i < 256; ++i) {
-  byteToHex[i] = (i + 0x100).toString(16).substr(1);
-}
-
-function bytesToUuid(buf, offset) {
-  var i = offset || 0;
-  var bth = byteToHex;
-  // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
-  return ([bth[buf[i++]], bth[buf[i++]], 
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]]]).join('');
-}
-
-var bytesToUuid_1 = bytesToUuid;
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-
-var _nodeId;
-var _clockseq;
-
-// Previous uuid creation time
-var _lastMSecs = 0;
-var _lastNSecs = 0;
-
-// See https://github.com/broofa/node-uuid for API details
-function v1(options, buf, offset) {
-  var i = buf && offset || 0;
-  var b = buf || [];
-
-  options = options || {};
-  var node = options.node || _nodeId;
-  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
-
-  // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-  if (node == null || clockseq == null) {
-    var seedBytes = rng();
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [
-        seedBytes[0] | 0x01,
-        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
-      ];
-    }
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  }
-
-  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
-
-  // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
-
-  // Time since last uuid creation (in msecs)
-  var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
-
-  // Per 4.2.1.2, Bump clockseq on clock regression
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  }
-
-  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  }
-
-  // Per 4.2.1.2 Throw error if too many uuids are requested
-  if (nsecs >= 10000) {
-    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq;
-
-  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-  msecs += 12219292800000;
-
-  // `time_low`
-  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff;
-
-  // `time_mid`
-  var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff;
-
-  // `time_high_and_version`
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-  b[i++] = tmh >>> 16 & 0xff;
-
-  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-  b[i++] = clockseq >>> 8 | 0x80;
-
-  // `clock_seq_low`
-  b[i++] = clockseq & 0xff;
-
-  // `node`
-  for (var n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf ? buf : bytesToUuid_1(b);
-}
-
-var v1_1 = v1;
-
-function v4(options, buf, offset) {
-  var i = buf && offset || 0;
-
-  if (typeof(options) == 'string') {
-    buf = options === 'binary' ? new Array(16) : null;
-    options = null;
-  }
-  options = options || {};
-
-  var rnds = options.random || (options.rng || rng)();
-
-  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-  rnds[6] = (rnds[6] & 0x0f) | 0x40;
-  rnds[8] = (rnds[8] & 0x3f) | 0x80;
-
-  // Copy bytes to buffer, if provided
-  if (buf) {
-    for (var ii = 0; ii < 16; ++ii) {
-      buf[i + ii] = rnds[ii];
-    }
-  }
-
-  return buf || bytesToUuid_1(rnds);
-}
-
-var v4_1 = v4;
-
-var uuid = v4_1;
-uuid.v1 = v1_1;
-uuid.v4 = v4_1;
-
-var C__Shir_chartsManager_serverSide_node_modules_uuid = uuid;
 
 class Constants {
 }
@@ -3140,75 +3105,58 @@ class ChartService {
         });
     }
     async upsert(request) {
-        var _a;
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        var _a, _b;
+        const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         const body = request.body;
+        body.Key = `${body.Name}.js`;
         this.validatePostData(request);
-        await this.validateName(body, adal);
-        //const chartFile = await this.upsertChartFile(body);
-        const chartFile = await this.upsertChartToPFS(body);
-        body.ReadOnly = (_a = body.ReadOnly) !== null && _a !== void 0 ? _a : false;
-        //body.FileID = body.FileID ? body.FileID : chartFile.InternalID;
-        body.ScriptURI = chartFile.URL;
-        if (!body.Key) {
-            body.Key = C__Shir_chartsManager_serverSide_node_modules_uuid.v4();
-        }
-        const chart = await adal.upsert(body);
-        return ChartMap.toDTO(chart);
+        await this.validateName(body, chartsPfsTable);
+        const pfsChart = await this.upsertChartToPFS(body);
+        const metaDataFields = {
+            Key: body.Key,
+            Name: body.Name,
+            Description: body.Description,
+            Type: body.Type,
+            System: (_a = body.System) !== null && _a !== void 0 ? _a : false,
+            Hidden: (_b = body.Hidden) !== null && _b !== void 0 ? _b : false
+        };
+        const chart = await chartsTable.upsert(metaDataFields);
+        return ChartMap.toDTO(pfsChart, chart);
     }
     async find(query) {
-        const adal = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        var _a;
+        const metaDataTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
+        const pfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         if (query.key) {
-            const chart = await adal.key(query.key).get();
-            return ChartMap.toDTO(chart);
+            const chartMetaData = await metaDataTable.key(query.key).get();
+            const chartPfsObject = await pfsTable.key(query.key).get();
+            return ChartMap.toDTO(chartPfsObject, chartMetaData);
         }
         else {
-            const charts = await adal.find(query);
-            return charts.map(chart => ChartMap.toDTO(chart));
-        }
-    }
-    async upsertChartFile(body) {
-        try {
-            const fileStorage = {
-                FileName: `${body.Name}.js`,
-                Title: body.Name,
-                IsSync: false
-            };
-            if (body.FileID) {
-                fileStorage.InternalID = body.FileID;
+            const chartMetaDatas = await metaDataTable.find(query);
+            let charts = [];
+            for (let chart of chartMetaDatas) {
+                const pfsChart = await pfsTable.key((_a = chart.Key) !== null && _a !== void 0 ? _a : '').get();
+                charts.push(ChartMap.toDTO(pfsChart, chart));
             }
-            if (body.Hidden) {
-                fileStorage.Hidden = true;
-            }
-            else {
-                if (this.isDataURL(body.ScriptURI)) {
-                    fileStorage.Content = body.ScriptURI.match(Constants.DataURLRegex)[4];
-                }
-                else {
-                    fileStorage.URL = body.ScriptURI;
-                }
-            }
-            return await this.papiClient.fileStorage.upsert(fileStorage);
-            let chart;
-        }
-        catch (e) {
-            throw new Error(`Failed upsert file storage. error: ${e}`);
+            return charts;
         }
     }
     async upsertChartToPFS(body) {
         try {
-            const file = {
+            let file = {
                 Key: `${body.Name}.js`,
+                Name: body.Name,
                 Description: body.Description,
-                MIME: "text/javascript"
+                MIME: "text/javascript",
+                URI: body.ScriptURI,
+                Cache: false
             };
             if (body.Hidden) {
                 file.Hidden = true;
             }
-            else {
-                file.URI = body.ScriptURI;
-            }
-            return await this.papiClient.post(`/addons/files/${this.client.AddonUUID}`, file);
+            return await this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_PFS_TABLE_NAME}`, file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);
@@ -3219,8 +3167,8 @@ class ChartService {
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
     }
-    async validateName(body, adal) {
-        const existingName = await adal.find({ where: `Name='${body.Name}'` });
+    async validateName(body, table) {
+        const existingName = await table.find({ where: `Name='${body.Name}'` });
         if (existingName.length > 0 && existingName[0].Key != body.Key) {
             throw new Error(`A chart with this name already exist.`);
         }
@@ -3240,6 +3188,1532 @@ class ChartService {
     }
 }
 
+var semver = createCommonjsModule(function (module, exports) {
+exports = module.exports = SemVer;
+
+var debug;
+/* istanbul ignore next */
+if (typeof process === 'object' &&
+    process.env &&
+    process.env.NODE_DEBUG &&
+    /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
+  debug = function () {
+    var args = Array.prototype.slice.call(arguments, 0);
+    args.unshift('SEMVER');
+    console.log.apply(console, args);
+  };
+} else {
+  debug = function () {};
+}
+
+// Note: this is the semver.org version of the spec that it implements
+// Not necessarily the package version of this code.
+exports.SEMVER_SPEC_VERSION = '2.0.0';
+
+var MAX_LENGTH = 256;
+var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
+  /* istanbul ignore next */ 9007199254740991;
+
+// Max safe segment length for coercion.
+var MAX_SAFE_COMPONENT_LENGTH = 16;
+
+// The actual regexps go on exports.re
+var re = exports.re = [];
+var src = exports.src = [];
+var R = 0;
+
+// The following Regular Expressions can be used for tokenizing,
+// validating, and parsing SemVer version strings.
+
+// ## Numeric Identifier
+// A single `0`, or a non-zero digit followed by zero or more digits.
+
+var NUMERICIDENTIFIER = R++;
+src[NUMERICIDENTIFIER] = '0|[1-9]\\d*';
+var NUMERICIDENTIFIERLOOSE = R++;
+src[NUMERICIDENTIFIERLOOSE] = '[0-9]+';
+
+// ## Non-numeric Identifier
+// Zero or more digits, followed by a letter or hyphen, and then zero or
+// more letters, digits, or hyphens.
+
+var NONNUMERICIDENTIFIER = R++;
+src[NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*';
+
+// ## Main Version
+// Three dot-separated numeric identifiers.
+
+var MAINVERSION = R++;
+src[MAINVERSION] = '(' + src[NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[NUMERICIDENTIFIER] + ')';
+
+var MAINVERSIONLOOSE = R++;
+src[MAINVERSIONLOOSE] = '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')';
+
+// ## Pre-release Version Identifier
+// A numeric identifier, or a non-numeric identifier.
+
+var PRERELEASEIDENTIFIER = R++;
+src[PRERELEASEIDENTIFIER] = '(?:' + src[NUMERICIDENTIFIER] +
+                            '|' + src[NONNUMERICIDENTIFIER] + ')';
+
+var PRERELEASEIDENTIFIERLOOSE = R++;
+src[PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[NUMERICIDENTIFIERLOOSE] +
+                                 '|' + src[NONNUMERICIDENTIFIER] + ')';
+
+// ## Pre-release Version
+// Hyphen, followed by one or more dot-separated pre-release version
+// identifiers.
+
+var PRERELEASE = R++;
+src[PRERELEASE] = '(?:-(' + src[PRERELEASEIDENTIFIER] +
+                  '(?:\\.' + src[PRERELEASEIDENTIFIER] + ')*))';
+
+var PRERELEASELOOSE = R++;
+src[PRERELEASELOOSE] = '(?:-?(' + src[PRERELEASEIDENTIFIERLOOSE] +
+                       '(?:\\.' + src[PRERELEASEIDENTIFIERLOOSE] + ')*))';
+
+// ## Build Metadata Identifier
+// Any combination of digits, letters, or hyphens.
+
+var BUILDIDENTIFIER = R++;
+src[BUILDIDENTIFIER] = '[0-9A-Za-z-]+';
+
+// ## Build Metadata
+// Plus sign, followed by one or more period-separated build metadata
+// identifiers.
+
+var BUILD = R++;
+src[BUILD] = '(?:\\+(' + src[BUILDIDENTIFIER] +
+             '(?:\\.' + src[BUILDIDENTIFIER] + ')*))';
+
+// ## Full Version String
+// A main version, followed optionally by a pre-release version and
+// build metadata.
+
+// Note that the only major, minor, patch, and pre-release sections of
+// the version string are capturing groups.  The build metadata is not a
+// capturing group, because it should not ever be used in version
+// comparison.
+
+var FULL = R++;
+var FULLPLAIN = 'v?' + src[MAINVERSION] +
+                src[PRERELEASE] + '?' +
+                src[BUILD] + '?';
+
+src[FULL] = '^' + FULLPLAIN + '$';
+
+// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
+// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
+// common in the npm registry.
+var LOOSEPLAIN = '[v=\\s]*' + src[MAINVERSIONLOOSE] +
+                 src[PRERELEASELOOSE] + '?' +
+                 src[BUILD] + '?';
+
+var LOOSE = R++;
+src[LOOSE] = '^' + LOOSEPLAIN + '$';
+
+var GTLT = R++;
+src[GTLT] = '((?:<|>)?=?)';
+
+// Something like "2.*" or "1.2.x".
+// Note that "x.x" is a valid xRange identifer, meaning "any version"
+// Only the first item is strictly required.
+var XRANGEIDENTIFIERLOOSE = R++;
+src[XRANGEIDENTIFIERLOOSE] = src[NUMERICIDENTIFIERLOOSE] + '|x|X|\\*';
+var XRANGEIDENTIFIER = R++;
+src[XRANGEIDENTIFIER] = src[NUMERICIDENTIFIER] + '|x|X|\\*';
+
+var XRANGEPLAIN = R++;
+src[XRANGEPLAIN] = '[v=\\s]*(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:' + src[PRERELEASE] + ')?' +
+                   src[BUILD] + '?' +
+                   ')?)?';
+
+var XRANGEPLAINLOOSE = R++;
+src[XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:' + src[PRERELEASELOOSE] + ')?' +
+                        src[BUILD] + '?' +
+                        ')?)?';
+
+var XRANGE = R++;
+src[XRANGE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAIN] + '$';
+var XRANGELOOSE = R++;
+src[XRANGELOOSE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAINLOOSE] + '$';
+
+// Coercion.
+// Extract anything that could conceivably be a part of a valid semver
+var COERCE = R++;
+src[COERCE] = '(?:^|[^\\d])' +
+              '(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '})' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:$|[^\\d])';
+
+// Tilde ranges.
+// Meaning is "reasonably at or greater than"
+var LONETILDE = R++;
+src[LONETILDE] = '(?:~>?)';
+
+var TILDETRIM = R++;
+src[TILDETRIM] = '(\\s*)' + src[LONETILDE] + '\\s+';
+re[TILDETRIM] = new RegExp(src[TILDETRIM], 'g');
+var tildeTrimReplace = '$1~';
+
+var TILDE = R++;
+src[TILDE] = '^' + src[LONETILDE] + src[XRANGEPLAIN] + '$';
+var TILDELOOSE = R++;
+src[TILDELOOSE] = '^' + src[LONETILDE] + src[XRANGEPLAINLOOSE] + '$';
+
+// Caret ranges.
+// Meaning is "at least and backwards compatible with"
+var LONECARET = R++;
+src[LONECARET] = '(?:\\^)';
+
+var CARETTRIM = R++;
+src[CARETTRIM] = '(\\s*)' + src[LONECARET] + '\\s+';
+re[CARETTRIM] = new RegExp(src[CARETTRIM], 'g');
+var caretTrimReplace = '$1^';
+
+var CARET = R++;
+src[CARET] = '^' + src[LONECARET] + src[XRANGEPLAIN] + '$';
+var CARETLOOSE = R++;
+src[CARETLOOSE] = '^' + src[LONECARET] + src[XRANGEPLAINLOOSE] + '$';
+
+// A simple gt/lt/eq thing, or just "" to indicate "any version"
+var COMPARATORLOOSE = R++;
+src[COMPARATORLOOSE] = '^' + src[GTLT] + '\\s*(' + LOOSEPLAIN + ')$|^$';
+var COMPARATOR = R++;
+src[COMPARATOR] = '^' + src[GTLT] + '\\s*(' + FULLPLAIN + ')$|^$';
+
+// An expression to strip any whitespace between the gtlt and the thing
+// it modifies, so that `> 1.2.3` ==> `>1.2.3`
+var COMPARATORTRIM = R++;
+src[COMPARATORTRIM] = '(\\s*)' + src[GTLT] +
+                      '\\s*(' + LOOSEPLAIN + '|' + src[XRANGEPLAIN] + ')';
+
+// this one has to use the /g flag
+re[COMPARATORTRIM] = new RegExp(src[COMPARATORTRIM], 'g');
+var comparatorTrimReplace = '$1$2$3';
+
+// Something like `1.2.3 - 1.2.4`
+// Note that these all use the loose form, because they'll be
+// checked against either the strict or loose comparator form
+// later.
+var HYPHENRANGE = R++;
+src[HYPHENRANGE] = '^\\s*(' + src[XRANGEPLAIN] + ')' +
+                   '\\s+-\\s+' +
+                   '(' + src[XRANGEPLAIN] + ')' +
+                   '\\s*$';
+
+var HYPHENRANGELOOSE = R++;
+src[HYPHENRANGELOOSE] = '^\\s*(' + src[XRANGEPLAINLOOSE] + ')' +
+                        '\\s+-\\s+' +
+                        '(' + src[XRANGEPLAINLOOSE] + ')' +
+                        '\\s*$';
+
+// Star ranges basically just allow anything at all.
+var STAR = R++;
+src[STAR] = '(<|>)?=?\\s*\\*';
+
+// Compile to actual regexp objects.
+// All are flag-free, unless they were created above with a flag.
+for (var i = 0; i < R; i++) {
+  debug(i, src[i]);
+  if (!re[i]) {
+    re[i] = new RegExp(src[i]);
+  }
+}
+
+exports.parse = parse;
+function parse (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    };
+  }
+
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  if (version.length > MAX_LENGTH) {
+    return null
+  }
+
+  var r = options.loose ? re[LOOSE] : re[FULL];
+  if (!r.test(version)) {
+    return null
+  }
+
+  try {
+    return new SemVer(version, options)
+  } catch (er) {
+    return null
+  }
+}
+
+exports.valid = valid;
+function valid (version, options) {
+  var v = parse(version, options);
+  return v ? v.version : null
+}
+
+exports.clean = clean;
+function clean (version, options) {
+  var s = parse(version.trim().replace(/^[=v]+/, ''), options);
+  return s ? s.version : null
+}
+
+exports.SemVer = SemVer;
+
+function SemVer (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    };
+  }
+  if (version instanceof SemVer) {
+    if (version.loose === options.loose) {
+      return version
+    } else {
+      version = version.version;
+    }
+  } else if (typeof version !== 'string') {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  if (version.length > MAX_LENGTH) {
+    throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
+  }
+
+  if (!(this instanceof SemVer)) {
+    return new SemVer(version, options)
+  }
+
+  debug('SemVer', version, options);
+  this.options = options;
+  this.loose = !!options.loose;
+
+  var m = version.trim().match(options.loose ? re[LOOSE] : re[FULL]);
+
+  if (!m) {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  this.raw = version;
+
+  // these are actually numbers
+  this.major = +m[1];
+  this.minor = +m[2];
+  this.patch = +m[3];
+
+  if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
+    throw new TypeError('Invalid major version')
+  }
+
+  if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
+    throw new TypeError('Invalid minor version')
+  }
+
+  if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
+    throw new TypeError('Invalid patch version')
+  }
+
+  // numberify any prerelease numeric ids
+  if (!m[4]) {
+    this.prerelease = [];
+  } else {
+    this.prerelease = m[4].split('.').map(function (id) {
+      if (/^[0-9]+$/.test(id)) {
+        var num = +id;
+        if (num >= 0 && num < MAX_SAFE_INTEGER) {
+          return num
+        }
+      }
+      return id
+    });
+  }
+
+  this.build = m[5] ? m[5].split('.') : [];
+  this.format();
+}
+
+SemVer.prototype.format = function () {
+  this.version = this.major + '.' + this.minor + '.' + this.patch;
+  if (this.prerelease.length) {
+    this.version += '-' + this.prerelease.join('.');
+  }
+  return this.version
+};
+
+SemVer.prototype.toString = function () {
+  return this.version
+};
+
+SemVer.prototype.compare = function (other) {
+  debug('SemVer.compare', this.version, this.options, other);
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options);
+  }
+
+  return this.compareMain(other) || this.comparePre(other)
+};
+
+SemVer.prototype.compareMain = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options);
+  }
+
+  return compareIdentifiers(this.major, other.major) ||
+         compareIdentifiers(this.minor, other.minor) ||
+         compareIdentifiers(this.patch, other.patch)
+};
+
+SemVer.prototype.comparePre = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options);
+  }
+
+  // NOT having a prerelease is > having one
+  if (this.prerelease.length && !other.prerelease.length) {
+    return -1
+  } else if (!this.prerelease.length && other.prerelease.length) {
+    return 1
+  } else if (!this.prerelease.length && !other.prerelease.length) {
+    return 0
+  }
+
+  var i = 0;
+  do {
+    var a = this.prerelease[i];
+    var b = other.prerelease[i];
+    debug('prerelease compare', i, a, b);
+    if (a === undefined && b === undefined) {
+      return 0
+    } else if (b === undefined) {
+      return 1
+    } else if (a === undefined) {
+      return -1
+    } else if (a === b) {
+      continue
+    } else {
+      return compareIdentifiers(a, b)
+    }
+  } while (++i)
+};
+
+// preminor will bump the version up to the next minor release, and immediately
+// down to pre-release. premajor and prepatch work the same way.
+SemVer.prototype.inc = function (release, identifier) {
+  switch (release) {
+    case 'premajor':
+      this.prerelease.length = 0;
+      this.patch = 0;
+      this.minor = 0;
+      this.major++;
+      this.inc('pre', identifier);
+      break
+    case 'preminor':
+      this.prerelease.length = 0;
+      this.patch = 0;
+      this.minor++;
+      this.inc('pre', identifier);
+      break
+    case 'prepatch':
+      // If this is already a prerelease, it will bump to the next version
+      // drop any prereleases that might already exist, since they are not
+      // relevant at this point.
+      this.prerelease.length = 0;
+      this.inc('patch', identifier);
+      this.inc('pre', identifier);
+      break
+    // If the input is a non-prerelease version, this acts the same as
+    // prepatch.
+    case 'prerelease':
+      if (this.prerelease.length === 0) {
+        this.inc('patch', identifier);
+      }
+      this.inc('pre', identifier);
+      break
+
+    case 'major':
+      // If this is a pre-major version, bump up to the same major version.
+      // Otherwise increment major.
+      // 1.0.0-5 bumps to 1.0.0
+      // 1.1.0 bumps to 2.0.0
+      if (this.minor !== 0 ||
+          this.patch !== 0 ||
+          this.prerelease.length === 0) {
+        this.major++;
+      }
+      this.minor = 0;
+      this.patch = 0;
+      this.prerelease = [];
+      break
+    case 'minor':
+      // If this is a pre-minor version, bump up to the same minor version.
+      // Otherwise increment minor.
+      // 1.2.0-5 bumps to 1.2.0
+      // 1.2.1 bumps to 1.3.0
+      if (this.patch !== 0 || this.prerelease.length === 0) {
+        this.minor++;
+      }
+      this.patch = 0;
+      this.prerelease = [];
+      break
+    case 'patch':
+      // If this is not a pre-release version, it will increment the patch.
+      // If it is a pre-release it will bump up to the same patch version.
+      // 1.2.0-5 patches to 1.2.0
+      // 1.2.0 patches to 1.2.1
+      if (this.prerelease.length === 0) {
+        this.patch++;
+      }
+      this.prerelease = [];
+      break
+    // This probably shouldn't be used publicly.
+    // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
+    case 'pre':
+      if (this.prerelease.length === 0) {
+        this.prerelease = [0];
+      } else {
+        var i = this.prerelease.length;
+        while (--i >= 0) {
+          if (typeof this.prerelease[i] === 'number') {
+            this.prerelease[i]++;
+            i = -2;
+          }
+        }
+        if (i === -1) {
+          // didn't increment anything
+          this.prerelease.push(0);
+        }
+      }
+      if (identifier) {
+        // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
+        // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
+        if (this.prerelease[0] === identifier) {
+          if (isNaN(this.prerelease[1])) {
+            this.prerelease = [identifier, 0];
+          }
+        } else {
+          this.prerelease = [identifier, 0];
+        }
+      }
+      break
+
+    default:
+      throw new Error('invalid increment argument: ' + release)
+  }
+  this.format();
+  this.raw = this.version;
+  return this
+};
+
+exports.inc = inc;
+function inc (version, release, loose, identifier) {
+  if (typeof (loose) === 'string') {
+    identifier = loose;
+    loose = undefined;
+  }
+
+  try {
+    return new SemVer(version, loose).inc(release, identifier).version
+  } catch (er) {
+    return null
+  }
+}
+
+exports.diff = diff;
+function diff (version1, version2) {
+  if (eq(version1, version2)) {
+    return null
+  } else {
+    var v1 = parse(version1);
+    var v2 = parse(version2);
+    var prefix = '';
+    if (v1.prerelease.length || v2.prerelease.length) {
+      prefix = 'pre';
+      var defaultResult = 'prerelease';
+    }
+    for (var key in v1) {
+      if (key === 'major' || key === 'minor' || key === 'patch') {
+        if (v1[key] !== v2[key]) {
+          return prefix + key
+        }
+      }
+    }
+    return defaultResult // may be undefined
+  }
+}
+
+exports.compareIdentifiers = compareIdentifiers;
+
+var numeric = /^[0-9]+$/;
+function compareIdentifiers (a, b) {
+  var anum = numeric.test(a);
+  var bnum = numeric.test(b);
+
+  if (anum && bnum) {
+    a = +a;
+    b = +b;
+  }
+
+  return a === b ? 0
+    : (anum && !bnum) ? -1
+    : (bnum && !anum) ? 1
+    : a < b ? -1
+    : 1
+}
+
+exports.rcompareIdentifiers = rcompareIdentifiers;
+function rcompareIdentifiers (a, b) {
+  return compareIdentifiers(b, a)
+}
+
+exports.major = major;
+function major (a, loose) {
+  return new SemVer(a, loose).major
+}
+
+exports.minor = minor;
+function minor (a, loose) {
+  return new SemVer(a, loose).minor
+}
+
+exports.patch = patch;
+function patch (a, loose) {
+  return new SemVer(a, loose).patch
+}
+
+exports.compare = compare;
+function compare (a, b, loose) {
+  return new SemVer(a, loose).compare(new SemVer(b, loose))
+}
+
+exports.compareLoose = compareLoose;
+function compareLoose (a, b) {
+  return compare(a, b, true)
+}
+
+exports.rcompare = rcompare;
+function rcompare (a, b, loose) {
+  return compare(b, a, loose)
+}
+
+exports.sort = sort;
+function sort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.compare(a, b, loose)
+  })
+}
+
+exports.rsort = rsort;
+function rsort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.rcompare(a, b, loose)
+  })
+}
+
+exports.gt = gt;
+function gt (a, b, loose) {
+  return compare(a, b, loose) > 0
+}
+
+exports.lt = lt;
+function lt (a, b, loose) {
+  return compare(a, b, loose) < 0
+}
+
+exports.eq = eq;
+function eq (a, b, loose) {
+  return compare(a, b, loose) === 0
+}
+
+exports.neq = neq;
+function neq (a, b, loose) {
+  return compare(a, b, loose) !== 0
+}
+
+exports.gte = gte;
+function gte (a, b, loose) {
+  return compare(a, b, loose) >= 0
+}
+
+exports.lte = lte;
+function lte (a, b, loose) {
+  return compare(a, b, loose) <= 0
+}
+
+exports.cmp = cmp;
+function cmp (a, op, b, loose) {
+  switch (op) {
+    case '===':
+      if (typeof a === 'object')
+        a = a.version;
+      if (typeof b === 'object')
+        b = b.version;
+      return a === b
+
+    case '!==':
+      if (typeof a === 'object')
+        a = a.version;
+      if (typeof b === 'object')
+        b = b.version;
+      return a !== b
+
+    case '':
+    case '=':
+    case '==':
+      return eq(a, b, loose)
+
+    case '!=':
+      return neq(a, b, loose)
+
+    case '>':
+      return gt(a, b, loose)
+
+    case '>=':
+      return gte(a, b, loose)
+
+    case '<':
+      return lt(a, b, loose)
+
+    case '<=':
+      return lte(a, b, loose)
+
+    default:
+      throw new TypeError('Invalid operator: ' + op)
+  }
+}
+
+exports.Comparator = Comparator;
+function Comparator (comp, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    };
+  }
+
+  if (comp instanceof Comparator) {
+    if (comp.loose === !!options.loose) {
+      return comp
+    } else {
+      comp = comp.value;
+    }
+  }
+
+  if (!(this instanceof Comparator)) {
+    return new Comparator(comp, options)
+  }
+
+  debug('comparator', comp, options);
+  this.options = options;
+  this.loose = !!options.loose;
+  this.parse(comp);
+
+  if (this.semver === ANY) {
+    this.value = '';
+  } else {
+    this.value = this.operator + this.semver.version;
+  }
+
+  debug('comp', this);
+}
+
+var ANY = {};
+Comparator.prototype.parse = function (comp) {
+  var r = this.options.loose ? re[COMPARATORLOOSE] : re[COMPARATOR];
+  var m = comp.match(r);
+
+  if (!m) {
+    throw new TypeError('Invalid comparator: ' + comp)
+  }
+
+  this.operator = m[1];
+  if (this.operator === '=') {
+    this.operator = '';
+  }
+
+  // if it literally is just '>' or '' then allow anything.
+  if (!m[2]) {
+    this.semver = ANY;
+  } else {
+    this.semver = new SemVer(m[2], this.options.loose);
+  }
+};
+
+Comparator.prototype.toString = function () {
+  return this.value
+};
+
+Comparator.prototype.test = function (version) {
+  debug('Comparator.test', version, this.options.loose);
+
+  if (this.semver === ANY) {
+    return true
+  }
+
+  if (typeof version === 'string') {
+    version = new SemVer(version, this.options);
+  }
+
+  return cmp(version, this.operator, this.semver, this.options)
+};
+
+Comparator.prototype.intersects = function (comp, options) {
+  if (!(comp instanceof Comparator)) {
+    throw new TypeError('a Comparator is required')
+  }
+
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    };
+  }
+
+  var rangeTmp;
+
+  if (this.operator === '') {
+    rangeTmp = new Range(comp.value, options);
+    return satisfies(this.value, rangeTmp, options)
+  } else if (comp.operator === '') {
+    rangeTmp = new Range(this.value, options);
+    return satisfies(comp.semver, rangeTmp, options)
+  }
+
+  var sameDirectionIncreasing =
+    (this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '>=' || comp.operator === '>');
+  var sameDirectionDecreasing =
+    (this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '<=' || comp.operator === '<');
+  var sameSemVer = this.semver.version === comp.semver.version;
+  var differentDirectionsInclusive =
+    (this.operator === '>=' || this.operator === '<=') &&
+    (comp.operator === '>=' || comp.operator === '<=');
+  var oppositeDirectionsLessThan =
+    cmp(this.semver, '<', comp.semver, options) &&
+    ((this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '<=' || comp.operator === '<'));
+  var oppositeDirectionsGreaterThan =
+    cmp(this.semver, '>', comp.semver, options) &&
+    ((this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '>=' || comp.operator === '>'));
+
+  return sameDirectionIncreasing || sameDirectionDecreasing ||
+    (sameSemVer && differentDirectionsInclusive) ||
+    oppositeDirectionsLessThan || oppositeDirectionsGreaterThan
+};
+
+exports.Range = Range;
+function Range (range, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    };
+  }
+
+  if (range instanceof Range) {
+    if (range.loose === !!options.loose &&
+        range.includePrerelease === !!options.includePrerelease) {
+      return range
+    } else {
+      return new Range(range.raw, options)
+    }
+  }
+
+  if (range instanceof Comparator) {
+    return new Range(range.value, options)
+  }
+
+  if (!(this instanceof Range)) {
+    return new Range(range, options)
+  }
+
+  this.options = options;
+  this.loose = !!options.loose;
+  this.includePrerelease = !!options.includePrerelease;
+
+  // First, split based on boolean or ||
+  this.raw = range;
+  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
+    return this.parseRange(range.trim())
+  }, this).filter(function (c) {
+    // throw out any that are not relevant for whatever reason
+    return c.length
+  });
+
+  if (!this.set.length) {
+    throw new TypeError('Invalid SemVer Range: ' + range)
+  }
+
+  this.format();
+}
+
+Range.prototype.format = function () {
+  this.range = this.set.map(function (comps) {
+    return comps.join(' ').trim()
+  }).join('||').trim();
+  return this.range
+};
+
+Range.prototype.toString = function () {
+  return this.range
+};
+
+Range.prototype.parseRange = function (range) {
+  var loose = this.options.loose;
+  range = range.trim();
+  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+  var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE];
+  range = range.replace(hr, hyphenReplace);
+  debug('hyphen replace', range);
+  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+  range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace);
+  debug('comparator trim', range, re[COMPARATORTRIM]);
+
+  // `~ 1.2.3` => `~1.2.3`
+  range = range.replace(re[TILDETRIM], tildeTrimReplace);
+
+  // `^ 1.2.3` => `^1.2.3`
+  range = range.replace(re[CARETTRIM], caretTrimReplace);
+
+  // normalize spaces
+  range = range.split(/\s+/).join(' ');
+
+  // At this point, the range is completely trimmed and
+  // ready to be split into comparators.
+
+  var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR];
+  var set = range.split(' ').map(function (comp) {
+    return parseComparator(comp, this.options)
+  }, this).join(' ').split(/\s+/);
+  if (this.options.loose) {
+    // in loose mode, throw out any that are not valid comparators
+    set = set.filter(function (comp) {
+      return !!comp.match(compRe)
+    });
+  }
+  set = set.map(function (comp) {
+    return new Comparator(comp, this.options)
+  }, this);
+
+  return set
+};
+
+Range.prototype.intersects = function (range, options) {
+  if (!(range instanceof Range)) {
+    throw new TypeError('a Range is required')
+  }
+
+  return this.set.some(function (thisComparators) {
+    return thisComparators.every(function (thisComparator) {
+      return range.set.some(function (rangeComparators) {
+        return rangeComparators.every(function (rangeComparator) {
+          return thisComparator.intersects(rangeComparator, options)
+        })
+      })
+    })
+  })
+};
+
+// Mostly just for testing and legacy API reasons
+exports.toComparators = toComparators;
+function toComparators (range, options) {
+  return new Range(range, options).set.map(function (comp) {
+    return comp.map(function (c) {
+      return c.value
+    }).join(' ').trim().split(' ')
+  })
+}
+
+// comprised of xranges, tildes, stars, and gtlt's at this point.
+// already replaced the hyphen ranges
+// turn into a set of JUST comparators.
+function parseComparator (comp, options) {
+  debug('comp', comp, options);
+  comp = replaceCarets(comp, options);
+  debug('caret', comp);
+  comp = replaceTildes(comp, options);
+  debug('tildes', comp);
+  comp = replaceXRanges(comp, options);
+  debug('xrange', comp);
+  comp = replaceStars(comp, options);
+  debug('stars', comp);
+  return comp
+}
+
+function isX (id) {
+  return !id || id.toLowerCase() === 'x' || id === '*'
+}
+
+// ~, ~> --> * (any, kinda silly)
+// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
+// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
+// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
+// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
+// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
+function replaceTildes (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceTilde(comp, options)
+  }).join(' ')
+}
+
+function replaceTilde (comp, options) {
+  var r = options.loose ? re[TILDELOOSE] : re[TILDE];
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('tilde', comp, _, M, m, p, pr);
+    var ret;
+
+    if (isX(M)) {
+      ret = '';
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
+    } else if (isX(p)) {
+      // ~1.2 == >=1.2.0 <1.3.0
+      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
+    } else if (pr) {
+      debug('replaceTilde pr', pr);
+      ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+            ' <' + M + '.' + (+m + 1) + '.0';
+    } else {
+      // ~1.2.3 == >=1.2.3 <1.3.0
+      ret = '>=' + M + '.' + m + '.' + p +
+            ' <' + M + '.' + (+m + 1) + '.0';
+    }
+
+    debug('tilde return', ret);
+    return ret
+  })
+}
+
+// ^ --> * (any, kinda silly)
+// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
+// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
+// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
+// ^1.2.3 --> >=1.2.3 <2.0.0
+// ^1.2.0 --> >=1.2.0 <2.0.0
+function replaceCarets (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceCaret(comp, options)
+  }).join(' ')
+}
+
+function replaceCaret (comp, options) {
+  debug('caret', comp, options);
+  var r = options.loose ? re[CARETLOOSE] : re[CARET];
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('caret', comp, _, M, m, p, pr);
+    var ret;
+
+    if (isX(M)) {
+      ret = '';
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
+    } else if (isX(p)) {
+      if (M === '0') {
+        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
+      } else {
+        ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0';
+      }
+    } else if (pr) {
+      debug('replaceCaret pr', pr);
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + m + '.' + (+p + 1);
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + (+m + 1) + '.0';
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+              ' <' + (+M + 1) + '.0.0';
+      }
+    } else {
+      debug('no pr');
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + m + '.' + (+p + 1);
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + (+m + 1) + '.0';
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p +
+              ' <' + (+M + 1) + '.0.0';
+      }
+    }
+
+    debug('caret return', ret);
+    return ret
+  })
+}
+
+function replaceXRanges (comp, options) {
+  debug('replaceXRanges', comp, options);
+  return comp.split(/\s+/).map(function (comp) {
+    return replaceXRange(comp, options)
+  }).join(' ')
+}
+
+function replaceXRange (comp, options) {
+  comp = comp.trim();
+  var r = options.loose ? re[XRANGELOOSE] : re[XRANGE];
+  return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
+    debug('xRange', comp, ret, gtlt, M, m, p, pr);
+    var xM = isX(M);
+    var xm = xM || isX(m);
+    var xp = xm || isX(p);
+    var anyX = xp;
+
+    if (gtlt === '=' && anyX) {
+      gtlt = '';
+    }
+
+    if (xM) {
+      if (gtlt === '>' || gtlt === '<') {
+        // nothing is allowed
+        ret = '<0.0.0';
+      } else {
+        // nothing is forbidden
+        ret = '*';
+      }
+    } else if (gtlt && anyX) {
+      // we know patch is an x, because we have any x at all.
+      // replace X with 0
+      if (xm) {
+        m = 0;
+      }
+      p = 0;
+
+      if (gtlt === '>') {
+        // >1 => >=2.0.0
+        // >1.2 => >=1.3.0
+        // >1.2.3 => >= 1.2.4
+        gtlt = '>=';
+        if (xm) {
+          M = +M + 1;
+          m = 0;
+          p = 0;
+        } else {
+          m = +m + 1;
+          p = 0;
+        }
+      } else if (gtlt === '<=') {
+        // <=0.7.x is actually <0.8.0, since any 0.7.x should
+        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
+        gtlt = '<';
+        if (xm) {
+          M = +M + 1;
+        } else {
+          m = +m + 1;
+        }
+      }
+
+      ret = gtlt + M + '.' + m + '.' + p;
+    } else if (xm) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0';
+    } else if (xp) {
+      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0';
+    }
+
+    debug('xRange return', ret);
+
+    return ret
+  })
+}
+
+// Because * is AND-ed with everything else in the comparator,
+// and '' means "any version", just remove the *s entirely.
+function replaceStars (comp, options) {
+  debug('replaceStars', comp, options);
+  // Looseness is ignored here.  star is always as loose as it gets!
+  return comp.trim().replace(re[STAR], '')
+}
+
+// This function is passed to string.replace(re[HYPHENRANGE])
+// M, m, patch, prerelease, build
+// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
+// 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
+// 1.2 - 3.4 => >=1.2.0 <3.5.0
+function hyphenReplace ($0,
+  from, fM, fm, fp, fpr, fb,
+  to, tM, tm, tp, tpr, tb) {
+  if (isX(fM)) {
+    from = '';
+  } else if (isX(fm)) {
+    from = '>=' + fM + '.0.0';
+  } else if (isX(fp)) {
+    from = '>=' + fM + '.' + fm + '.0';
+  } else {
+    from = '>=' + from;
+  }
+
+  if (isX(tM)) {
+    to = '';
+  } else if (isX(tm)) {
+    to = '<' + (+tM + 1) + '.0.0';
+  } else if (isX(tp)) {
+    to = '<' + tM + '.' + (+tm + 1) + '.0';
+  } else if (tpr) {
+    to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr;
+  } else {
+    to = '<=' + to;
+  }
+
+  return (from + ' ' + to).trim()
+}
+
+// if ANY of the sets match ALL of its comparators, then pass
+Range.prototype.test = function (version) {
+  if (!version) {
+    return false
+  }
+
+  if (typeof version === 'string') {
+    version = new SemVer(version, this.options);
+  }
+
+  for (var i = 0; i < this.set.length; i++) {
+    if (testSet(this.set[i], version, this.options)) {
+      return true
+    }
+  }
+  return false
+};
+
+function testSet (set, version, options) {
+  for (var i = 0; i < set.length; i++) {
+    if (!set[i].test(version)) {
+      return false
+    }
+  }
+
+  if (version.prerelease.length && !options.includePrerelease) {
+    // Find the set of versions that are allowed to have prereleases
+    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
+    // That should allow `1.2.3-pr.2` to pass.
+    // However, `1.2.4-alpha.notready` should NOT be allowed,
+    // even though it's within the range set by the comparators.
+    for (i = 0; i < set.length; i++) {
+      debug(set[i].semver);
+      if (set[i].semver === ANY) {
+        continue
+      }
+
+      if (set[i].semver.prerelease.length > 0) {
+        var allowed = set[i].semver;
+        if (allowed.major === version.major &&
+            allowed.minor === version.minor &&
+            allowed.patch === version.patch) {
+          return true
+        }
+      }
+    }
+
+    // Version has a -pre, but it's not one of the ones we like.
+    return false
+  }
+
+  return true
+}
+
+exports.satisfies = satisfies;
+function satisfies (version, range, options) {
+  try {
+    range = new Range(range, options);
+  } catch (er) {
+    return false
+  }
+  return range.test(version)
+}
+
+exports.maxSatisfying = maxSatisfying;
+function maxSatisfying (versions, range, options) {
+  var max = null;
+  var maxSV = null;
+  try {
+    var rangeObj = new Range(range, options);
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!max || maxSV.compare(v) === -1) {
+        // compare(max, v, true)
+        max = v;
+        maxSV = new SemVer(max, options);
+      }
+    }
+  });
+  return max
+}
+
+exports.minSatisfying = minSatisfying;
+function minSatisfying (versions, range, options) {
+  var min = null;
+  var minSV = null;
+  try {
+    var rangeObj = new Range(range, options);
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!min || minSV.compare(v) === 1) {
+        // compare(min, v, true)
+        min = v;
+        minSV = new SemVer(min, options);
+      }
+    }
+  });
+  return min
+}
+
+exports.minVersion = minVersion;
+function minVersion (range, loose) {
+  range = new Range(range, loose);
+
+  var minver = new SemVer('0.0.0');
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = new SemVer('0.0.0-0');
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = null;
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i];
+
+    comparators.forEach(function (comparator) {
+      // Clone to avoid manipulating the comparator's semver object.
+      var compver = new SemVer(comparator.semver.version);
+      switch (comparator.operator) {
+        case '>':
+          if (compver.prerelease.length === 0) {
+            compver.patch++;
+          } else {
+            compver.prerelease.push(0);
+          }
+          compver.raw = compver.format();
+          /* fallthrough */
+        case '':
+        case '>=':
+          if (!minver || gt(minver, compver)) {
+            minver = compver;
+          }
+          break
+        case '<':
+        case '<=':
+          /* Ignore maximum versions */
+          break
+        /* istanbul ignore next */
+        default:
+          throw new Error('Unexpected operation: ' + comparator.operator)
+      }
+    });
+  }
+
+  if (minver && range.test(minver)) {
+    return minver
+  }
+
+  return null
+}
+
+exports.validRange = validRange;
+function validRange (range, options) {
+  try {
+    // Return '*' instead of '' so that truthiness works.
+    // This will throw if it's invalid anyway
+    return new Range(range, options).range || '*'
+  } catch (er) {
+    return null
+  }
+}
+
+// Determine if version is less than all the versions possible in the range
+exports.ltr = ltr;
+function ltr (version, range, options) {
+  return outside(version, range, '<', options)
+}
+
+// Determine if version is greater than all the versions possible in the range.
+exports.gtr = gtr;
+function gtr (version, range, options) {
+  return outside(version, range, '>', options)
+}
+
+exports.outside = outside;
+function outside (version, range, hilo, options) {
+  version = new SemVer(version, options);
+  range = new Range(range, options);
+
+  var gtfn, ltefn, ltfn, comp, ecomp;
+  switch (hilo) {
+    case '>':
+      gtfn = gt;
+      ltefn = lte;
+      ltfn = lt;
+      comp = '>';
+      ecomp = '>=';
+      break
+    case '<':
+      gtfn = lt;
+      ltefn = gte;
+      ltfn = gt;
+      comp = '<';
+      ecomp = '<=';
+      break
+    default:
+      throw new TypeError('Must provide a hilo val of "<" or ">"')
+  }
+
+  // If it satisifes the range it is not outside
+  if (satisfies(version, range, options)) {
+    return false
+  }
+
+  // From now on, variable terms are as if we're in "gtr" mode.
+  // but note that everything is flipped for the "ltr" function.
+
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i];
+
+    var high = null;
+    var low = null;
+
+    comparators.forEach(function (comparator) {
+      if (comparator.semver === ANY) {
+        comparator = new Comparator('>=0.0.0');
+      }
+      high = high || comparator;
+      low = low || comparator;
+      if (gtfn(comparator.semver, high.semver, options)) {
+        high = comparator;
+      } else if (ltfn(comparator.semver, low.semver, options)) {
+        low = comparator;
+      }
+    });
+
+    // If the edge version comparator has a operator then our version
+    // isn't outside it
+    if (high.operator === comp || high.operator === ecomp) {
+      return false
+    }
+
+    // If the lowest version comparator has an operator and our version
+    // is less than it then it isn't higher than the range
+    if ((!low.operator || low.operator === comp) &&
+        ltefn(version, low.semver)) {
+      return false
+    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
+      return false
+    }
+  }
+  return true
+}
+
+exports.prerelease = prerelease;
+function prerelease (version, options) {
+  var parsed = parse(version, options);
+  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
+}
+
+exports.intersects = intersects;
+function intersects (r1, r2, options) {
+  r1 = new Range(r1, options);
+  r2 = new Range(r2, options);
+  return r1.intersects(r2)
+}
+
+exports.coerce = coerce;
+function coerce (version) {
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  var match = version.match(re[COERCE]);
+
+  if (match == null) {
+    return null
+  }
+
+  return parse(match[1] +
+    '.' + (match[2] || '0') +
+    '.' + (match[3] || '0'))
+}
+});
+semver.SEMVER_SPEC_VERSION;
+semver.re;
+semver.src;
+semver.parse;
+semver.valid;
+semver.clean;
+semver.SemVer;
+semver.inc;
+semver.diff;
+semver.compareIdentifiers;
+semver.rcompareIdentifiers;
+semver.major;
+semver.minor;
+semver.patch;
+semver.compare;
+semver.compareLoose;
+semver.rcompare;
+semver.sort;
+semver.rsort;
+semver.gt;
+semver.lt;
+semver.eq;
+semver.neq;
+semver.gte;
+semver.lte;
+semver.cmp;
+semver.Comparator;
+semver.Range;
+semver.toComparators;
+semver.satisfies;
+semver.maxSatisfying;
+semver.minSatisfying;
+semver.minVersion;
+semver.validRange;
+semver.ltr;
+semver.gtr;
+semver.outside;
+semver.prerelease;
+semver.intersects;
+semver.coerce;
+
 /*
 The return object format MUST contain the field 'success':
 {success:true}
@@ -3249,14 +4723,11 @@ If the result of your code is 'false' then return:
 The error Message is importent! it will be written in the audit log and help the user to understand what happen
 */
 async function install(client, request) {
-    const res = {
-        success: true,
-        errorMessage: '',
-    };
     const service = new ChartService(client);
     try {
-        const resFromAdal = await service.papiClient.addons.data.schemes.post(chartsTableScheme);
-        return res;
+        await service.papiClient.addons.data.schemes.post(chartsTableScheme);
+        await service.papiClient.post(`/addons/data/schemes/${AddonUUID}`, chartsPfsScheme);
+        return { success: true, resultObject: {} };
     }
     catch (err) {
         console.log('Failed to install charts addon', err);
@@ -3264,17 +4735,12 @@ async function install(client, request) {
     }
 }
 async function uninstall(client, request) {
-    try {
-        const service = new ChartService(client);
-        await service.papiClient.post(`/addons/data/schemes/${chartsTableScheme.Name}/purge`);
-        return { success: true, resultObject: {} };
-    }
-    catch (err) {
-        console.log('Failed to uninstall charts addon', err);
-        return handleException(err);
-    }
+    return { success: true, resultObject: {} };
 }
 async function upgrade(client, request) {
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '0.6.50') < 0) {
+        throw new Error('Upgarding from versions earlier than 0.6.50 is not supported. Please uninstall the addon and install it again.');
+    }
     return { success: true, resultObject: {} };
 }
 async function downgrade(client, request) {
