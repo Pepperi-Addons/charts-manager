@@ -41,7 +41,7 @@
             ],
             "scripts": [
               "node_modules/quill/dist/quill.core.js",
-              "node_modules/chart.js/dist/Chart.js"
+              "node_modules/chart.js/dist/chart.js"
 
             ],
             "customWebpackConfig": {
