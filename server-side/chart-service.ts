@@ -25,7 +25,7 @@ class ChartService {
         const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
 
         const body = request.body;
-        body.Key = `${body.Name}.js`
+        body.Key = `${body.Name.toLowerCase()}.js`
         this.validatePostData(request);
         await this.validateName(body,chartsPfsTable);
 
@@ -65,7 +65,7 @@ class ChartService {
     private async upsertChartToPFS(body) {
         try {
             let file: any = {
-                Key: `${body.Name}.js`,
+                Key: `${body.Name.toLowerCase()}.js`,
                 Name: body.Name,
                 Description: body.Description,
                 MIME: "text/javascript",
