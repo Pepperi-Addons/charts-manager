@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.0.1";
+var AddonVersion = "1.0.2";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -83310,7 +83310,7 @@ class ChartService {
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         const body = request.body;
-        body.Key = `${body.Name}.js`;
+        body.Key = `${body.Name.toLowerCase()}.js`;
         this.validatePostData(request);
         await this.validateName(body, chartsPfsTable);
         const pfsChart = await this.upsertChartToPFS(body);
@@ -83347,7 +83347,7 @@ class ChartService {
     async upsertChartToPFS(body) {
         try {
             let file = {
-                Key: `${body.Name}.js`,
+                Key: `${body.Name.toLowerCase()}.js`,
                 Name: body.Name,
                 Description: body.Description,
                 MIME: "text/javascript",
