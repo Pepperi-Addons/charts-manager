@@ -93,7 +93,7 @@ class ChartService {
 
     async validateName(body: any, table: any) {
         const existingName = await table.find({where:`Name='${body.Name}'`});
-        if (existingName.length >0 && existingName[0].Key!=body.Key){
+        if (existingName.length >0 && existingName[0].Key!=body.Key) {
             throw new Error(`A chart with this name already exist.`);
         }
     }

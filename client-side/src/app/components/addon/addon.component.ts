@@ -43,6 +43,7 @@ export class AddonComponent implements OnInit {
     listDataSource: GenericListDataSource = {
         getList: async (state) => {
             let res: Chart[] = [];
+            this.loaderService.show();
             return this.addonService.get('/charts').then((charts) => {
             //return this.pepAddonService.getAddonApiCall(this.addonService.addonUUID, 'api', 'charts', {}).toPromise().then((charts) => {
                 const orderedCharts = charts.sort((a, b) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0));
@@ -57,6 +58,7 @@ export class AddonComponent implements OnInit {
                         System: chart.System
                     })
                 }
+                this.loaderService.hide();
                 return res;
             })
 
@@ -192,11 +194,13 @@ export class AddonComponent implements OnInit {
 
     deleteChart(chart) {
         chart.Hidden = true;
+        this.loaderService.show();
         this.addonService.post('/charts',chart).then((res) => {
         //this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', chart).toPromise().then((res) => {
             this.loaderService.hide();
             this.chartsList.reload();
         }).catch(ex => {
+            this.loaderService.hide();
             console.log(ex);
             this.translate.instant("Preview")
             //this.openCustomDialog("Error", ex);
