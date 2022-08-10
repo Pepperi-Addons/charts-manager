@@ -23,7 +23,10 @@ export const chartsTableScheme: AddonDataScheme = {
         },
         System: {
             Type: "Bool"
-        }
+        },
+        ScriptURI: {
+            Type: "String"
+        },
     },
 }
 

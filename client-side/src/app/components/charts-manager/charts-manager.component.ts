@@ -26,8 +26,6 @@ export class ChartsManagerComponent implements OnInit {
   }
 
   screenSize: PepScreenSizeType;
-  chartHtml: SafeHtml = undefined;
-  chartCustomJS: any = undefined;
   mode: 'Add' | 'Update' = 'Add';
   chartTypeOptions: IPepOption[] = []
 
@@ -217,7 +215,6 @@ export class ChartsManagerComponent implements OnInit {
   }
 
   onFileSelect(event) {
-
     if (!event) {
       this.chartInstance = undefined;
       this.chart.ScriptURI='';
@@ -251,8 +248,6 @@ export class ChartsManagerComponent implements OnInit {
       this.handleErrorDialog(this.translate.instant("FailedExecuteFile"));
     });
   }
-
-
 
 
   loadSrcJSFiles(imports) {
@@ -293,28 +288,5 @@ export class ChartsManagerComponent implements OnInit {
   private handleErrorDialog(message: string) {
     this.loaderService.hide();
     this.addonService.openDialog(this.translate.instant("Error"), message);
-  }
-
-  preview() {
-    this.chartHtml = this.sanitizer.bypassSecurityTrustHtml(this.chartCustomJS.getHtml());
-
-    this.chartCustomJS.hello();
-    //this.chartCustomJS.initComponents();
-    const labels = ["Africa", "Asia", "Europe", "Latin America", "North America"];
-    const data = [2478, 5267, 734, 784, 433];
-    const label = 'Population (millions)';
-    setTimeout(() => this.chartCustomJS.initComponents(label, labels, data), 0);
-    this.loaderService.hide();
-
-    // this.chartHtml = this.sanitizer.bypassSecurityTrustHtml(window['pepChart'].getHtml());
-    // setTimeout(function () { window['pepChart'].initComponents(); }, 0);
-
-
-    //this.getData().then((res) => {
-    // this.chartHtml = this.sanitizer.bypassSecurityTrustHtml(window['pepChart'].getHtml());
-    // window['pepChart'].labels = res.map(x => x['Transaction.Status']);
-    // window['pepChart'].data = res.map(x => x['count_Item.ExternalID'])
-    // setTimeout(function () { window['pepChart'].initComponents(); }, 0);
-    //})
   }
 }
