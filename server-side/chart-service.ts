@@ -1,9 +1,8 @@
 import { PapiClient } from '@pepperi-addons/papi-sdk'
 import { Client, Request } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
-import { chartsTableScheme, CHARTS_PFS_TABLE_NAME, CHARTS_TABLE_NAME } from './entities';
-import { Chart, ChartDTO, ChartTypes } from './models/chart'
-import { ChartMap } from './chart-map';
+import { CHARTS_PFS_TABLE_NAME, CHARTS_TABLE_NAME } from './entities';
+import { ChartTypes } from './models/chart'
 import { Constants } from './constants';
 
 class ChartService {
@@ -35,30 +34,23 @@ class ChartService {
             Name: body.Name,
             Description: body.Description,
             Type: body.Type,
+            ScriptURI: pfsChart.URL,
             System: body.System ?? false,
             Hidden: body.Hidden ?? false
         }
         const chart = await chartsTable.upsert(metaDataFields);
-        return ChartMap.toDTO(pfsChart,chart);
+        return chart;
     }
 
     async find(query: any) {
         const metaDataTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
-        const pfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
-
         if (query.key) {
             const chartMetaData = await metaDataTable.key(query.key).get();
-            const chartPfsObject = await pfsTable.key(query.key).get();
-            return ChartMap.toDTO(chartPfsObject,chartMetaData);
+            return chartMetaData;
         }
         else {
             const chartMetaDatas = await metaDataTable.find(query);
-            let charts: ChartDTO[] = [];
-            for (let chart of chartMetaDatas) {
-                const pfsChart = await pfsTable.key(chart.Key ?? '').get();
-                charts.push(ChartMap.toDTO(pfsChart,chart))
-            }
-            return charts
+            return chartMetaDatas;
         }
     }
 
