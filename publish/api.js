@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.0.3";
+var AddonVersion = "1.0.5";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -83233,23 +83233,6 @@ exports.ChartTypes = [
 unwrapExports(chart);
 var chart_1 = chart.ChartTypes;
 
-class ChartMap {
-    static toDTO(chartFromPFS, chartMetaData) {
-        var _a, _b;
-        return {
-            Key: chartFromPFS.Key,
-            Name: (_a = chartMetaData.Name) !== null && _a !== void 0 ? _a : '',
-            Type: chartMetaData.Type,
-            ScriptURI: (_b = chartFromPFS.URL) !== null && _b !== void 0 ? _b : '',
-            Description: chartFromPFS.Description,
-            Hidden: chartFromPFS.Hidden,
-            System: chartMetaData.System,
-            CreationDateTime: chartMetaData.CreationDateTime,
-            ModificationDateTime: chartMetaData.ModificationDateTime
-        };
-    }
-}
-
 class Constants {
 }
 Constants.DataURLRegex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,([a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*)$/i;
@@ -83279,29 +83262,22 @@ class ChartService {
             Name: body.Name,
             Description: body.Description,
             Type: body.Type,
+            ScriptURI: pfsChart.URL,
             System: (_a = body.System) !== null && _a !== void 0 ? _a : false,
             Hidden: (_b = body.Hidden) !== null && _b !== void 0 ? _b : false
         };
         const chart = await chartsTable.upsert(metaDataFields);
-        return ChartMap.toDTO(pfsChart, chart);
+        return chart;
     }
     async find(query) {
-        var _a;
         const metaDataTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
-        const pfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         if (query.key) {
             const chartMetaData = await metaDataTable.key(query.key).get();
-            const chartPfsObject = await pfsTable.key(query.key).get();
-            return ChartMap.toDTO(chartPfsObject, chartMetaData);
+            return chartMetaData;
         }
         else {
             const chartMetaDatas = await metaDataTable.find(query);
-            let charts = [];
-            for (let chart of chartMetaDatas) {
-                const pfsChart = await pfsTable.key((_a = chart.Key) !== null && _a !== void 0 ? _a : '').get();
-                charts.push(ChartMap.toDTO(pfsChart, chart));
-            }
-            return charts;
+            return chartMetaDatas;
         }
     }
     async upsertChartToPFS(body) {
