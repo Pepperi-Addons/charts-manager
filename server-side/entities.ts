@@ -1,4 +1,5 @@
-import { AddonDataScheme } from "@pepperi-addons/papi-sdk";
+import { AddonDataScheme, Relation } from "@pepperi-addons/papi-sdk";
+import config from '../addon.config.json';
 
 export const CHARTS_TABLE_NAME = 'Charts';
 export const CHARTS_PFS_TABLE_NAME = 'ChartsPFS';
@@ -48,6 +49,23 @@ export const chartsPfsScheme = {
         }
     }
 }
+
+export const DimxRelations: Relation[] = [{
+    AddonUUID: config.AddonUUID,
+    Name: 'Charts',
+    RelationName: 'DataImportResource',
+    Type: 'AddonAPI',
+    Description: 'relation for importing charts to charts manager',
+    AddonRelativeURL: '/api/import_data_source'
+},
+{
+    AddonUUID: config.AddonUUID,
+    Name: 'Charts',
+    RelationName: 'DataExportResource',
+    Type: 'AddonAPI',
+    Description: 'relation for exporting charts from charts manager',
+    AddonRelativeURL: '/api/export_data_source'
+}]
 
 
 
