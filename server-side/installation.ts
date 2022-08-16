@@ -10,7 +10,7 @@ The error Message is importent! it will be written in the audit log and help the
 
 import { Client, Request } from '@pepperi-addons/debug-server'
 import ChartService from './chart-service';
-import { chartsPfsScheme, chartsTableScheme, CHARTS_TABLE_NAME } from './entities';
+import { chartsPfsScheme, chartsTableScheme, CHARTS_TABLE_NAME, DimxRelations } from './entities';
 import { AddonVersion, AddonUUID } from '../addon.config.json'
 import semver from 'semver';
 
@@ -19,6 +19,7 @@ export async function install(client: Client, request: Request): Promise<any> {
     try {
         await service.papiClient.addons.data.schemes.post(chartsTableScheme);
         await service.papiClient.post(`/addons/data/schemes/${AddonUUID}`,chartsPfsScheme);
+        await createDIMXRelations(client);
         return { success: true, resultObject: {} }
     }
     catch (err) {
@@ -32,9 +33,9 @@ export async function uninstall(client: Client, request: Request): Promise<any> 
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
-    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '0.6.50') < 0) 
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.6') < 0) 
 	{
-		throw new Error('Upgarding from versions earlier than 0.6.50 is not supported. Please uninstall the addon and install it again.');
+		throw new Error('Upgarding from versions earlier than 1.0.6 is not supported. Please uninstall the addon and install it again.');
 	}
 
 	return { success: true, resultObject: {} }
@@ -54,4 +55,11 @@ function handleException(err) {
         errorMessage: errorMessage,
         resultObject: {}
     };
+}
+
+async function createDIMXRelations(client: Client) {
+    const service = new ChartService(client)
+    await Promise.all(DimxRelations.map(async (singleRelation) => {
+        await service.papiClient.addons.data.relations.upsert(singleRelation);
+    }));
 }

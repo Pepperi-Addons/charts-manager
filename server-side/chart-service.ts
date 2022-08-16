@@ -4,6 +4,8 @@ import config from '../addon.config.json'
 import { CHARTS_PFS_TABLE_NAME, CHARTS_TABLE_NAME } from './entities';
 import { ChartTypes } from './models/chart'
 import { Constants } from './constants';
+import { Schema, validate, Validator } from 'jsonschema';
+
 
 class ChartService {
     papiClient: PapiClient
@@ -104,6 +106,51 @@ class ChartService {
 
     isDataURL(s) {
         return !!s.match(Constants.DataURLRegex);
+    }
+
+    //DIMX
+    // for the AddonRelativeURL of the relation
+    async importDataSource(body) {
+        console.log(`@@@@importing chart: ${JSON.stringify(body)}@@@@`);
+        body.DIMXObjects = await Promise.all(body.DIMXObjects.map(async (item) => {
+            const validator = new Validator();
+            const validSchema: Schema = {
+                properties: {
+                    Key: {
+                        type: "string",
+                        required: true
+                    },
+                    Name: {
+                        type: "string",
+                        required: true
+                    },
+                    Type: {
+                        type: "string",
+                        required: true
+                    },
+                    System: {
+                        type: "boolean"
+                    },
+                    ScriptURI: {
+                        type: "string"
+                    }
+                }
+            }
+            const validationResult = validator.validate(item.Object, validSchema);
+            if (!validationResult.valid) {
+                const errors = validationResult.errors.map(error => error.stack.replace("instance.", ""));
+                item.Status = 'Error';
+                item.Details = `chart validation failed.\n ${errors.join("\n")}`;
+            }
+            return item;
+        }));
+        console.log('returned object is:', JSON.stringify(body));
+        return body;
+    }
+
+    async exportDataSource(body) { 
+        console.log("exporting data")
+        return body;
     }
 }
 
