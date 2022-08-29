@@ -161,8 +161,16 @@ export class ChartsManagerComponent implements OnInit {
     this.goBack();
   }
 
-  saveClicked() {
+  async saveClicked() {
     this.loaderService.show();
+    if(this.mode == 'Add') {
+      const sameNameCharts = await this.addonService.get(`/charts?where=Name=${this.chart.Name}`);
+      if(sameNameCharts.length > 0) {
+        this.openCustomDialog("Given name is taken", "A resource with the same name already exists.");
+        this.loaderService.hide();
+        return;
+      }
+    }
     this.addonService.post('/charts',this.chart).then((res) => {
     // this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', this.chart).toPromise().then((res) => {
       this.loaderService.hide();
