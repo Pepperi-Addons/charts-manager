@@ -33,11 +33,11 @@ export async function uninstall(client: Client, request: Request): Promise<any> 
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
-    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.6') < 0) 
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.2') < 0) 
 	{
-		throw new Error('Upgarding from versions earlier than 1.0.6 is not supported. Please uninstall the addon and install it again.');
+		throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
 	}
-
+    await createDIMXRelations(client);
 	return { success: true, resultObject: {} }
 }
 
