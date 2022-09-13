@@ -116,6 +116,9 @@ MIT
 @angular/router
 MIT
 
+@hallysonh/ngx-imageviewer
+MIT
+
 @mat-datetimepicker/core
 MIT
 
