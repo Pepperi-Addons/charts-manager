@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.0.8";
+var AddonVersion = "1.0.6";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -86790,8 +86790,8 @@ async function uninstall(client, request) {
     return { success: true, resultObject: {} };
 }
 async function upgrade(client, request) {
-    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.2') < 0) {
-        throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.6') < 0) {
+        throw new Error('Upgarding from versions earlier than 1.0.6 is not supported. Please uninstall the addon and install it again.');
     }
     await createDIMXRelations(client);
     return { success: true, resultObject: {} };
