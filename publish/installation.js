@@ -86793,6 +86793,7 @@ async function upgrade(client, request) {
     if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.6') < 0) {
         throw new Error('Upgarding from versions earlier than 1.0.6 is not supported. Please uninstall the addon and install it again.');
     }
+    await createDIMXRelations(client);
     return { success: true, resultObject: {} };
 }
 async function downgrade(client, request) {
