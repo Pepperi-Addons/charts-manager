@@ -33,21 +33,7 @@ export const chartsTableScheme: AddonDataScheme = {
 
 export const chartsPfsScheme = {
     Name: CHARTS_PFS_TABLE_NAME,
-    Type: 'pfs',
-    Fields: {
-        Key: {
-            Type: "String"
-        },
-        Name: {
-            Type: "String"
-        },
-        Description: {
-            Type: "String"
-        },
-        URI: {
-            Type: "String"
-        }
-    }
+    Type: 'pfs'
 }
 
 export const DimxRelations: Relation[] = [{
