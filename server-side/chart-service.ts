@@ -24,11 +24,11 @@ class ChartService {
 
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
-
         const body = request.body;
-        body.Key = `${body.Name.toLowerCase()}.js`
+
+        //system charts keys will contain the addon uuid suffix
+        body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`; 
         this.validatePostData(request);
-        await this.validateName(body,chartsPfsTable);
 
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
@@ -59,7 +59,7 @@ class ChartService {
     private async upsertChartToPFS(body) {
         try {
             let file: any = {
-                Key: `${body.Name.toLowerCase()}.js`,
+                Key: body.Key,
                 Name: body.Name,
                 Description: body.Description,
                 MIME: "text/javascript",
@@ -85,13 +85,6 @@ class ChartService {
        
     }
 
-    async validateName(body: any, table: any) {
-        const existingName = await table.find({where:`Name='${body.Name}'`});
-        if (existingName.length >0 && existingName[0].Key!=body.Key) {
-            throw new Error(`A chart with this name already exist.`);
-        }
-    }
-
     validateParam(obj: any, paramName: string) {
         if (obj[paramName] == null) {
             throw new Error(`${paramName} is a required field`);
@@ -106,6 +99,11 @@ class ChartService {
 
     isDataURL(s) {
         return !!s.match(Constants.DataURLRegex);
+    }
+
+    // system charts keys will contain the addon uuid suffix
+    nameToKey(name, systemFlag) {
+        return systemFlag ? `${name}_c2cc9af4d7ad.js` : `${name}.js`;
     }
 
     //DIMX
