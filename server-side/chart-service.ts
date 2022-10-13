@@ -101,11 +101,6 @@ class ChartService {
         return !!s.match(Constants.DataURLRegex);
     }
 
-    // system charts keys will contain the addon uuid suffix
-    nameToKey(name, systemFlag) {
-        return systemFlag ? `${name}_c2cc9af4d7ad.js` : `${name}.js`;
-    }
-
     //DIMX
     // for the AddonRelativeURL of the relation
     async importDataSource(body) {
