@@ -27,7 +27,9 @@ class ChartService {
         const body = request.body;
 
         //system charts keys will contain the addon uuid suffix
-        body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`; 
+        if(body.Hidden == false)
+            body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`; 
+
         this.validatePostData(request);
 
         const pfsChart = await this.upsertChartToPFS(body);
@@ -71,7 +73,7 @@ class ChartService {
                 file.Hidden = true;
             }
         
-            return await this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_PFS_TABLE_NAME}`,file);
+            return this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_PFS_TABLE_NAME}`,file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);
