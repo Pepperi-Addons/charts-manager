@@ -69,18 +69,19 @@ export async function renameSystemCharts(client: Client) {
     const service = new ChartService(client)
     let systemCharts = await service.find({where: 'System=true'});
     if(systemCharts[0].Key.includes("c2cc9af4d7ad")) {
-        console.log("system charts already updated")
+        console.log("system charts already updated");
     }
     else {
         for(const chartIndex in systemCharts) {
             //deleting old chart, upsert will use the old key because hidden=true
             console.log(systemCharts[chartIndex])
             systemCharts[chartIndex].Hidden = true;
-            await service.papiClient.post('/charts',systemCharts[chartIndex]);
+            const request : any = {body: systemCharts[chartIndex]};
+            await service.upsert(request);
 
             // now it will be saved with the new key, because hidden=false
-            systemCharts[chartIndex].Hidden = false;
-            await service.papiClient.post('/charts',systemCharts[chartIndex]);
+            request.body.Hidden = false;
+            await service.upsert(request);
         }
         console.log("system charts successfully updated")
     }
