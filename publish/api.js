@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.1.1";
+var AddonVersion = "1.1.3";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -85063,11 +85063,11 @@ class ChartService {
     async upsert(request) {
         var _a, _b;
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
-        const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
+        this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         const body = request.body;
-        body.Key = `${body.Name.toLowerCase()}.js`;
+        //system charts keys will contain the addon uuid suffix
+        body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
         this.validatePostData(request);
-        await this.validateName(body, chartsPfsTable);
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
             Key: body.Key,
@@ -85095,7 +85095,7 @@ class ChartService {
     async upsertChartToPFS(body) {
         try {
             let file = {
-                Key: `${body.Name.toLowerCase()}.js`,
+                Key: body.Key,
                 Name: body.Name,
                 Description: body.Description,
                 MIME: "text/javascript",
@@ -85115,12 +85115,6 @@ class ChartService {
         const body = request.body;
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
-    }
-    async validateName(body, table) {
-        const existingName = await table.find({ where: `Name='${body.Name}'` });
-        if (existingName.length > 0 && existingName[0].Key != body.Key) {
-            throw new Error(`A chart with this name already exist.`);
-        }
     }
     validateParam(obj, paramName) {
         if (obj[paramName] == null) {
