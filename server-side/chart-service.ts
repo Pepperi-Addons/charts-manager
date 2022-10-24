@@ -73,7 +73,7 @@ class ChartService {
                 file.Hidden = true;
             }
         
-            return this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_PFS_TABLE_NAME}`,file);
+            return await this.papiClient.post(`/addons/pfs/${this.client.AddonUUID}/${CHARTS_PFS_TABLE_NAME}`,file);
         }
         catch (e) {
             throw new Error(`Failed upsert file storage. error: ${e}`);

@@ -73,14 +73,17 @@ export async function renameSystemCharts(client: Client) {
     }
     else {
         for(const chartIndex in systemCharts) {
-            //deleting old chart, upsert will use the old key because hidden=true
             console.log(systemCharts[chartIndex])
-            systemCharts[chartIndex].Hidden = true;
+            const oldKey = systemCharts[chartIndex].Key;
+
+            // chart will be saved with the new key, because hidden=false
             const request : any = {body: systemCharts[chartIndex]};
+            request.body.Hidden = false;
             await service.upsert(request);
 
-            // now it will be saved with the new key, because hidden=false
-            request.body.Hidden = false;
+            // deleting old chart, upsert will use the old key because hidden=true
+            request.body.Key = oldKey;
+            request.body.Hidden = true;
             await service.upsert(request);
         }
         console.log("system charts successfully updated")
