@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.1.3";
+var AddonVersion = "1.1.10";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -85111,7 +85111,8 @@ class ChartService {
         this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         const body = request.body;
         //system charts keys will contain the addon uuid suffix
-        body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
+        if (body.Hidden != true)
+            body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
         this.validatePostData(request);
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
@@ -86774,6 +86775,7 @@ async function upgrade(client, request) {
         throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
     }
     await createDIMXRelations(client);
+    await renameSystemCharts(client);
     return { success: true, resultObject: {} };
 }
 async function downgrade(client, request) {
@@ -86796,8 +86798,31 @@ async function createDIMXRelations(client) {
         await service.papiClient.addons.data.relations.upsert(singleRelation);
     }));
 }
+async function renameSystemCharts(client) {
+    const service = new ChartService(client);
+    let systemCharts = await service.find({ where: 'System=true' });
+    if (systemCharts[0].Key.includes("c2cc9af4d7ad")) {
+        console.log("system charts already updated");
+    }
+    else {
+        for (const chartIndex in systemCharts) {
+            console.log(systemCharts[chartIndex]);
+            const oldKey = systemCharts[chartIndex].Key;
+            // chart will be saved with the new key, because hidden=false
+            const request = { body: systemCharts[chartIndex] };
+            request.body.Hidden = false;
+            await service.upsert(request);
+            // deleting old chart, upsert will use the old key because hidden=true
+            request.body.Key = oldKey;
+            request.body.Hidden = true;
+            await service.upsert(request);
+        }
+        console.log("system charts successfully updated");
+    }
+}
 
 exports.downgrade = downgrade;
 exports.install = install;
+exports.renameSystemCharts = renameSystemCharts;
 exports.uninstall = uninstall;
 exports.upgrade = upgrade;

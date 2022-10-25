@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.1.3";
+var AddonVersion = "1.1.10";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -85066,7 +85066,8 @@ class ChartService {
         this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         const body = request.body;
         //system charts keys will contain the addon uuid suffix
-        body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
+        if (body.Hidden != true)
+            body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
         this.validatePostData(request);
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
