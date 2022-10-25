@@ -38,6 +38,7 @@ export async function upgrade(client: Client, request: Request): Promise<any> {
 		throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
 	}
     await createDIMXRelations(client);
+    await renameSystemCharts(client);
 	return { success: true, resultObject: {} }
 }
 
@@ -62,4 +63,30 @@ async function createDIMXRelations(client: Client) {
     await Promise.all(DimxRelations.map(async (singleRelation) => {
         await service.papiClient.addons.data.relations.upsert(singleRelation);
     }));
+}
+
+export async function renameSystemCharts(client: Client) {
+    const service = new ChartService(client)
+    let systemCharts = await service.find({where: 'System=true'});
+    if(systemCharts[0].Key.includes("c2cc9af4d7ad")) {
+        console.log("system charts already updated");
+    }
+    else {
+        for(const chartIndex in systemCharts) {
+            console.log(systemCharts[chartIndex])
+            const oldKey = systemCharts[chartIndex].Key;
+
+            // chart will be saved with the new key, because hidden=false
+            const request : any = {body: systemCharts[chartIndex]};
+            request.body.Hidden = false;
+            await service.upsert(request);
+
+            // deleting old chart, upsert will use the old key because hidden=true
+            request.body.Key = oldKey;
+            request.body.Hidden = true;
+            await service.upsert(request);
+        }
+        console.log("system charts successfully updated")
+    }
+    
 }

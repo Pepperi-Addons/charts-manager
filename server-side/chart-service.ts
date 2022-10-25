@@ -27,7 +27,9 @@ class ChartService {
         const body = request.body;
 
         //system charts keys will contain the addon uuid suffix
-        body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`; 
+        if(body.Hidden != true)
+            body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`; 
+
         this.validatePostData(request);
 
         const pfsChart = await this.upsertChartToPFS(body);
