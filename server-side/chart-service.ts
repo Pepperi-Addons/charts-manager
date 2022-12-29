@@ -2,7 +2,6 @@ import { PapiClient } from '@pepperi-addons/papi-sdk'
 import { Client, Request } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
 import { CHARTS_PFS_TABLE_NAME, CHARTS_TABLE_NAME } from './entities';
-import { ChartTypes } from './models/chart'
 import { Constants } from './constants';
 import { Schema, validate, Validator } from 'jsonschema';
 
@@ -84,18 +83,22 @@ class ChartService {
         const body = request.body;
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
-       
+        this.validateParam(body, 'Type');
+        this.validateTypeParams(body['Type']);
     }
 
     validateParam(obj: any, paramName: string) {
         if (obj[paramName] == null) {
-            throw new Error(`${paramName} is a required field`);
+            throw new Error(`'${paramName}' is a required field`);
+        }
+        else if(obj[paramName] == '') {
+            throw new Error(`'${paramName}' field cannot be empty`);
         }
     }
 
-    validateTypeParams(body: any) {
-        if (ChartTypes.indexOf(body['Type']) == -1) {
-            throw new Error(`${body['Type']} is not supported type`);
+    validateTypeParams(type: any) {
+        if (!Constants.ChartTypes.includes(type)) {
+            throw new Error(`'${type}' type is not supported`);
         }
     }
 
