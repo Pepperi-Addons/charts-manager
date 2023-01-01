@@ -84,7 +84,7 @@ class ChartService {
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
         this.validateParam(body, 'Type');
-        this.validateTypeParams(body['Type']);
+        this.validateType(body['Type']);
     }
 
     validateParam(obj: any, paramName: string) {
@@ -94,9 +94,12 @@ class ChartService {
         else if(obj[paramName] == '') {
             throw new Error(`'${paramName}' field cannot be empty`);
         }
+        if(paramName == 'Name' && (obj[paramName].includes('/') || obj[paramName].includes('\\'))) {
+            throw new Error(`Name cannot contain slash or backslash`);
+        }
     }
 
-    validateTypeParams(type: any) {
+    validateType(type: any) {
         if (!Constants.ChartTypes.includes(type)) {
             throw new Error(`'${type}' type is not supported`);
         }
