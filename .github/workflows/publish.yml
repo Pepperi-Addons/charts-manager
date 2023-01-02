@@ -3,9 +3,7 @@ name: PublishAddon
 on:
   push:
     branches:
-      - main
-      - master
-      - Hadar-Branch
+      - 'release/**'
 
 jobs:
   publish-addon:
