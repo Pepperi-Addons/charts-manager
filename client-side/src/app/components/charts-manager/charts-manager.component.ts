@@ -169,7 +169,7 @@ export class ChartsManagerComponent implements OnInit {
   async saveClicked() {
     this.loaderService.show();
     if(this.mode == 'Add') {
-      const sameNameCharts = await this.addonService.get(`/charts?where=Name=${this.chart.Name}`);
+      const sameNameCharts = await this.addonService.get(`/charts?where=Name='${this.chart.Name}'`);
       if(sameNameCharts.length > 0) {
         this.openCustomDialog("Given name is taken", "A resource with the same name already exists.");
         this.loaderService.hide();
@@ -181,6 +181,7 @@ export class ChartsManagerComponent implements OnInit {
       this.loaderService.hide();
       this.goBack();
     }).catch(ex => {
+      this.loaderService.hide();
       console.log(ex);
       this.openCustomDialog("Error", ex);
     })
