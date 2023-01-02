@@ -114,7 +114,12 @@ export class ChartsManagerComponent implements OnInit {
         { "ActionDate": "May", "Series 1": this.getRandomNumber()},
         { "ActionDate": "Jun", "Series 1": this.getRandomNumber()}
       ]
-    }
+    },
+    'Table chart': [
+      {DataQueries:[{"Name":"Data1","Groups":["ActionDate"],"Series":["Series 1"]}],DataSet:[{"ActionDate":"Jan","Series 1":12},{"ActionDate":"Feb","Series 1":39},{"ActionDate":"Mar","Series 1":79},{"ActionDate":"Apr","Series 1":10},{"ActionDate":"May","Series 1":69},{"ActionDate":"Jun","Series 1":91}]},
+      {DataQueries:[{"Name":"Data2","Groups":["ActionDate"],"Series":["Series 2"]}],DataSet:[{"ActionDate":"Jan","Series 2":12111},{"ActionDate":"Feb","Series 2":3319.121},{"ActionDate":"Mar","Series 2":79},{"ActionDate":"Apr","Series 2":122.0},{"ActionDate":"May","Series 2":1269},{"ActionDate":"Jun","Series 2":91}]}
+    ]
+    
   }
   constructor(
     public addonService: AddonService,
