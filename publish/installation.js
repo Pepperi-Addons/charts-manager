@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.1.21";
+var AddonVersion = "1.1.22";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -83265,22 +83265,10 @@ const DimxRelations = [{
         AddonRelativeURL: '/api/export_data_source'
     }];
 
-var chart = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChartTypes = [
-    'Single',
-    'Gauge',
-    'MultiSeries'
-];
-
-});
-
-unwrapExports(chart);
-var chart_1 = chart.ChartTypes;
-
 class Constants {
 }
 Constants.DataURLRegex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,([a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*)$/i;
+Constants.ChartTypes = ["Chart", "Benchmark chart", "Value scorecard", "Series scorecard", "Table chart"];
 
 var helpers = createCommonjsModule(function (module, exports) {
 
@@ -85161,15 +85149,23 @@ class ChartService {
         const body = request.body;
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
+        this.validateParam(body, 'Type');
+        this.validateType(body['Type']);
     }
     validateParam(obj, paramName) {
         if (obj[paramName] == null) {
-            throw new Error(`${paramName} is a required field`);
+            throw new Error(`'${paramName}' is a required field`);
+        }
+        else if (obj[paramName] == '') {
+            throw new Error(`'${paramName}' field cannot be empty`);
+        }
+        if (paramName == 'Name' && (obj[paramName].includes('/') || obj[paramName].includes('\\'))) {
+            throw new Error(`Name cannot contain slash or backslash`);
         }
     }
-    validateTypeParams(body) {
-        if (chart_1.indexOf(body['Type']) == -1) {
-            throw new Error(`${body['Type']} is not supported type`);
+    validateType(type) {
+        if (!Constants.ChartTypes.includes(type)) {
+            throw new Error(`'${type}' type is not supported`);
         }
     }
     isDataURL(s) {
