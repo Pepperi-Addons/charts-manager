@@ -65,16 +65,18 @@ export class ChartsManagerComponent implements OnInit {
       DataSet: [
         { "ActionDateTime": "January", "AccountA": 121, "AccountB": 242}
       ],
-      BenchmarkQueries:[
-        {
-          Name: "Series1",
-          Groups:["ActionDateTime"],
-          Series: ["Average"]
-        }
-      ],
-      BenchmarkSet:[
-        { "ActionDateTime": "January", "Average": 240}
-      ]
+      Benchmark: {
+        DataQueries:[
+          {
+            Name: "Series1",
+            Groups:["ActionDateTime"],
+            Series: ["Average"]
+          }
+        ],
+        DataSet:[
+          { "ActionDateTime": "January", "Average": 240}
+        ]
+      }
     },
     'Value scorecard': {
       DataQueries:[
@@ -87,16 +89,18 @@ export class ChartsManagerComponent implements OnInit {
       DataSet: [
         {"Series1": 152}
       ],
-      BenchmarkQueries:[
-        {
-          Name: "Series1",
-          Groups:[],
-          Series: ["Series1"]
-        }
-      ],
-      BenchmarkSet:[
-        {"Series1": 183}
-      ]
+      Benchmark: {
+        DataQueries:[
+          {
+            Name: "Series1",
+            Groups:[],
+            Series: ["Series1"]
+          }
+        ],
+        DataSet:[
+          {"Series1": 183}
+        ]
+      }
     },
     'Series scorecard': {
       DataQueries:[
