@@ -154,6 +154,7 @@ export class ChartsManagerComponent implements OnInit {
     if (history.state.data) {
       this.chart = history.state.data;
       this.mode = 'Update';
+	  this.loaderService.show();
 	  const versionId = await this.findFileVersion(this.chart.Key);
 	  this.chart.ScriptURI+=`?versionId=${versionId}`
       this.importChartFileAndExecute();

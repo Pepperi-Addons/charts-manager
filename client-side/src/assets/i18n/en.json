@@ -21,7 +21,8 @@
     "FailedLoadLibrary": "Failed to load library: {{library}}",
     "Type": "Type",
     "UserDefined": "User defined",
-    "System": "System"
+    "System": "System",
+	"CHARTS_MANAGER_TITLE": "Charts Manager"
 
    
 }
