@@ -153,8 +153,9 @@ export class ChartsManagerComponent implements OnInit {
 
     if (history.state.data) {
       this.chart = history.state.data;
-      this.mode = 'Update'
-      this.chart.ScriptURI+=`?${Math.random()}`
+      this.mode = 'Update';
+	  const versionId = await this.findFileVersion(this.chart.Key);
+	  this.chart.ScriptURI+=`?versionId=${versionId}`
       this.importChartFileAndExecute();
     }
   }
@@ -183,6 +184,7 @@ export class ChartsManagerComponent implements OnInit {
     this.addonService.post('/charts',this.chart).then((res) => {
     // this.pepAddonService.postAddonApiCall(this.addonService.addonUUID, 'api', 'charts', this.chart).toPromise().then((res) => {
       this.loaderService.hide();
+	  this.openCustomDialog("Chart saved", "It may take up to 24 hours to see the changes.");
       this.goBack();
     }).catch(ex => {
       this.loaderService.hide();
@@ -306,5 +308,10 @@ export class ChartsManagerComponent implements OnInit {
   private handleErrorDialog(message: string) {
     this.loaderService.hide();
     this.addonService.openDialog(this.translate.instant("Error"), message);
+  }
+
+  private async findFileVersion(chartKey: string) {
+	const objects = await this.addonService.get(`/addons/pfs/3d118baf-f576-4cdb-a81e-c2cc9af4d7ad/ChartsPFS?where=Key=${chartKey}`);
+	return objects[0].FileVersion;
   }
 }
