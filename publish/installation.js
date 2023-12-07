@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.2.2";
+var AddonVersion = "1.2.5";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -85093,15 +85093,14 @@ class ChartService {
             addonUUID: client.AddonUUID
         });
     }
-    async upsert(request) {
+    async upsert(body) {
         var _a, _b;
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
-        const body = request.body;
         //system charts keys will contain the addon uuid suffix
         if (body.Hidden != true)
             body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
-        this.validatePostData(request);
+        this.validatePostData(body);
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
             Key: body.Key,
@@ -85134,7 +85133,7 @@ class ChartService {
                 Description: body.Description,
                 MIME: "text/javascript",
                 URI: body.ScriptURI,
-                Cache: false
+                Cache: true
             };
             if (body.Hidden) {
                 file.Hidden = true;
@@ -85145,8 +85144,7 @@ class ChartService {
             throw new Error(`Failed upsert file storage. error: ${e}`);
         }
     }
-    validatePostData(request) {
-        const body = request.body;
+    validatePostData(body) {
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
         this.validateParam(body, 'Type');
@@ -86770,8 +86768,11 @@ async function upgrade(client, request) {
     if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.2') < 0) {
         throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
     }
-    await createDIMXRelations(client);
-    await renameSystemCharts(client);
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.2.4') < 0) {
+        await createDIMXRelations(client);
+        await renameSystemCharts(client);
+        await setCacheOnAllCharts(client);
+    }
     return { success: true, resultObject: {} };
 }
 async function downgrade(client, request) {
@@ -86801,24 +86802,31 @@ async function renameSystemCharts(client) {
         console.log("system charts already updated");
     }
     else {
-        for (const chartIndex in systemCharts) {
-            console.log(systemCharts[chartIndex]);
-            const oldKey = systemCharts[chartIndex].Key;
+        for (const chart of systemCharts) {
+            console.log(`RENAMING CHART KEY: ${chart.Key}`);
+            const oldKey = chart.Key;
             // chart will be saved with the new key, because hidden=false
-            const request = { body: systemCharts[chartIndex] };
-            request.body.Hidden = false;
-            await service.upsert(request);
+            chart.Hidden = false;
+            await service.upsert(chart);
             // deleting old chart, upsert will use the old key because hidden=true
-            request.body.Key = oldKey;
-            request.body.Hidden = true;
-            await service.upsert(request);
+            chart.Key = oldKey;
+            chart.Hidden = true;
+            await service.upsert(chart);
         }
         console.log("system charts successfully updated");
     }
 }
+async function setCacheOnAllCharts(client) {
+    const service = new ChartService(client);
+    let charts = await service.find({});
+    const responses = await Promise.all(charts.map(async (chart) => {
+        // the updated upsert function will set the cache as true
+        service.upsert(chart);
+    }));
+    return responses;
+}
 
 exports.downgrade = downgrade;
 exports.install = install;
-exports.renameSystemCharts = renameSystemCharts;
 exports.uninstall = uninstall;
 exports.upgrade = upgrade;

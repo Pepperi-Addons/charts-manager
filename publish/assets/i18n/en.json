@@ -21,7 +21,13 @@
     "FailedLoadLibrary": "Failed to load library: {{library}}",
     "Type": "Type",
     "UserDefined": "User defined",
-    "System": "System"
+    "System": "System",
+	"CHARTS_MANAGER_TITLE": "Charts Manager",
+	"TAKEN_NAME_TITLE": "Given name is taken",
+	"TAKEN_NAME_MESSAGE": "A resource with the same name already exists.",
+	"CHART_SAVED_TITLE": "Chart saved",
+	"CHART_SAVED_MESSAGE": "It may take up to 24 hours to see the changes in the pages."
+
 
    
 }

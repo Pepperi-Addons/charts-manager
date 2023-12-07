@@ -83174,7 +83174,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.2.2";
+var AddonVersion = "1.2.5";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -85048,15 +85048,14 @@ class ChartService {
             addonUUID: client.AddonUUID
         });
     }
-    async upsert(request) {
+    async upsert(body) {
         var _a, _b;
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
-        const body = request.body;
         //system charts keys will contain the addon uuid suffix
         if (body.Hidden != true)
             body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
-        this.validatePostData(request);
+        this.validatePostData(body);
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
             Key: body.Key,
@@ -85089,7 +85088,7 @@ class ChartService {
                 Description: body.Description,
                 MIME: "text/javascript",
                 URI: body.ScriptURI,
-                Cache: false
+                Cache: true
             };
             if (body.Hidden) {
                 file.Hidden = true;
@@ -85100,8 +85099,7 @@ class ChartService {
             throw new Error(`Failed upsert file storage. error: ${e}`);
         }
     }
-    validatePostData(request) {
-        const body = request.body;
+    validatePostData(body) {
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
         this.validateParam(body, 'Type');
@@ -85174,7 +85172,7 @@ class ChartService {
 async function charts(client, request) {
     const service = new ChartService(client);
     if (request.method == 'POST') {
-        return await service.upsert(request);
+        return await service.upsert(request.body);
     }
     else if (request.method == 'GET') {
         return await service.find(request.query);
