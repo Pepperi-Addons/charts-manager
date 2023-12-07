@@ -12,11 +12,11 @@
 
 <pep-page-layout>
     <ng-container pep-top-area>
-        <pep-top-bar [title]="'Charts Manager' | translate">
+        <pep-top-bar [title]="'CHARTS_MANAGER_TITLE' | translate">
         </pep-top-bar>
     </ng-container>
     <ng-container pep-main-area>
-        <generic-list [allowMultipleSelection]="false" [inline]="true" [dataSource]="listDataSource">
+        <generic-list [allowMultipleSelection]="false" [inline]="false" [dataSource]="listDataSource">
             <div right-buttons>
                 <pep-button [value]="'Add' | translate" [sizeType]="'sm'" [styleType]="'strong'" [classNames]="'pep-spacing-element'" (buttonClick)="add()"></pep-button>
             </div>

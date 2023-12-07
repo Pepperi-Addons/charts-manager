@@ -19,17 +19,16 @@ class ChartService {
         });
     }
 
-    async upsert(request: Request) {
-
+    async upsert(body: any) {
+    
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         const chartsPfsTable = this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
-        const body = request.body;
 
         //system charts keys will contain the addon uuid suffix
         if(body.Hidden != true)
             body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`; 
 
-        this.validatePostData(request);
+        this.validatePostData(body);
 
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
@@ -65,7 +64,7 @@ class ChartService {
                 Description: body.Description,
                 MIME: "text/javascript",
                 URI: body.ScriptURI,
-                Cache: false
+                Cache: true
             }
 
             if (body.Hidden){
@@ -79,8 +78,7 @@ class ChartService {
         }
     }
 
-    private validatePostData(request: Request) {
-        const body = request.body;
+    private validatePostData(body: any) {
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
         this.validateParam(body, 'Type');

@@ -13,6 +13,7 @@ import ChartService from './chart-service';
 import { chartsPfsScheme, chartsTableScheme, CHARTS_TABLE_NAME, DimxRelations } from './entities';
 import { AddonVersion, AddonUUID } from '../addon.config.json'
 import semver from 'semver';
+import { AddonData } from '@pepperi-addons/papi-sdk';
 
 export async function install(client: Client, request: Request): Promise<any> {
     const service = new ChartService(client)
@@ -37,8 +38,16 @@ export async function upgrade(client: Client, request: Request): Promise<any> {
 	{
 		throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
 	}
-    await createDIMXRelations(client);
-    await renameSystemCharts(client);
+
+    
+
+	if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.2.4') < 0) 
+	{
+		await createDIMXRelations(client);
+    	await renameSystemCharts(client);
+		await setCacheOnAllCharts(client);
+	}
+
 	return { success: true, resultObject: {} }
 }
 
@@ -65,28 +74,37 @@ async function createDIMXRelations(client: Client) {
     }));
 }
 
-export async function renameSystemCharts(client: Client) {
+async function renameSystemCharts(client: Client) {
     const service = new ChartService(client)
     let systemCharts = await service.find({where: 'System=true'});
     if(systemCharts[0].Key.includes("c2cc9af4d7ad")) {
         console.log("system charts already updated");
     }
     else {
-        for(const chartIndex in systemCharts) {
-            console.log(systemCharts[chartIndex])
-            const oldKey = systemCharts[chartIndex].Key;
+        for(const chart of (systemCharts as AddonData[])) {
+            console.log(`RENAMING CHART KEY: ${chart.Key}`);
+            const oldKey = chart.Key;
 
             // chart will be saved with the new key, because hidden=false
-            const request : any = {body: systemCharts[chartIndex]};
-            request.body.Hidden = false;
-            await service.upsert(request);
+            chart.Hidden = false;
+            await service.upsert(chart);
 
             // deleting old chart, upsert will use the old key because hidden=true
-            request.body.Key = oldKey;
-            request.body.Hidden = true;
-            await service.upsert(request);
+            chart.Key = oldKey;
+            chart.Hidden = true;
+            await service.upsert(chart);
         }
         console.log("system charts successfully updated")
     }
     
+}
+
+async function setCacheOnAllCharts(client: Client) {
+    const service = new ChartService(client)
+    let charts = await service.find({});
+	const responses = await Promise.all(charts.map(async (chart) => {
+		// the updated upsert function will set the cache as true
+		service.upsert(chart);
+	}));
+	return responses;
 }
