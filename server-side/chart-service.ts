@@ -1,4 +1,4 @@
-import { PapiClient } from '@pepperi-addons/papi-sdk'
+import { AddonData, PapiClient } from '@pepperi-addons/papi-sdk'
 import { Client } from '@pepperi-addons/debug-server';
 import config from '../addon.config.json'
 import { CHARTS_PFS_TABLE_NAME, CHARTS_TABLE_NAME } from './entities';
@@ -19,7 +19,7 @@ class ChartService {
         });
     }
 
-    async upsert(body: any) {
+    async upsert(body: any): Promise<AddonData>{
 
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
 
@@ -43,7 +43,7 @@ class ChartService {
         return chart;
     }
 
-    async find(query: any) {
+    async find(query: any): Promise<AddonData | AddonData[]> {
         const metaDataTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
         if (query.key) {
             const chartMetaData = await metaDataTable.key(query.key).get();
@@ -55,7 +55,7 @@ class ChartService {
         }
     }
 
-    private async upsertChartToPFS(body) {
+    private async upsertChartToPFS(body): Promise<AddonData> {
         try {
             const file: any = {
                 Key: body.Key,
@@ -77,14 +77,14 @@ class ChartService {
         }
     }
 
-    private validatePostData(body: any) {
+    private validatePostData(body: any): void {
         this.validateParam(body, 'Name');
         this.validateParam(body, 'ScriptURI');
         this.validateParam(body, 'Type');
         this.validateType(body['Type']);
     }
 
-    validateParam(obj: any, paramName: string) {
+    validateParam(obj: any, paramName: string): void {
         if (obj[paramName] === null) {
             throw new Error(`'${paramName}' is a required field`);
         }
@@ -96,19 +96,15 @@ class ChartService {
         }
     }
 
-    validateType(type: string) {
+    validateType(type: string): void {
         if (!Constants.ChartTypes.includes(type)) {
             throw new Error(`'${type}' type is not supported`);
         }
     }
 
-    isDataURL(s) {
-        return !!s.match(Constants.DataURLRegex);
-    }
-
     //DIMX
     // for the AddonRelativeURL of the relation
-    async importDataSource(body) {
+    async importDataSource(body: any): Promise<any> {
         console.log(`@@@@importing chart: ${JSON.stringify(body)}@@@@`);
         body.DIMXObjects = await Promise.all(body.DIMXObjects.map(async (item) => {
             const validator = new Validator();
@@ -151,7 +147,7 @@ class ChartService {
 		return validSchema;
 	}
 
-    async exportDataSource(body) {
+    async exportDataSource(body: any): Promise<any> {
         console.log("exporting data")
         return body;
     }

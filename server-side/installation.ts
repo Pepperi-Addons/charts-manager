@@ -39,7 +39,6 @@ export async function upgrade(client: Client, request: Request): Promise<any> {
 		throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
 	}
 
-
 	if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.2.4') < 0)
 	{
 		await create_dimx_relations(client);
@@ -54,7 +53,7 @@ export async function downgrade(client: Client, request: Request): Promise<any> 
     return { success: true, resultObject: {} }
 }
 
-function handle_exception(err) {
+function handle_exception(err): any {
     let errorMessage = 'Unknown Error Occured';
     if (err instanceof Error) {
         errorMessage = err.message;
@@ -66,14 +65,14 @@ function handle_exception(err) {
     };
 }
 
-async function create_dimx_relations(client: Client) {
+async function create_dimx_relations(client: Client): Promise<void> {
     const service = new ChartService(client)
     await Promise.all(DimxRelations.map(async (singleRelation) => {
         await service.papiClient.addons.data.relations.upsert(singleRelation);
     }));
 }
 
-async function rename_system_charts(client: Client) {
+async function rename_system_charts(client: Client): Promise<void> {
     const service = new ChartService(client)
     const systemCharts = await service.find({where: 'System=true'});
     if (systemCharts[0].Key.includes("c2cc9af4d7ad")) {
@@ -98,12 +97,12 @@ async function rename_system_charts(client: Client) {
 
 }
 
-async function set_cache_on_all_charts(client: Client) {
+async function set_cache_on_all_charts(client: Client): Promise<void> {
     const service = new ChartService(client)
     const charts = await service.find({});
-	const responses = await Promise.all(charts.map(async (chart) => {
+
+	await Promise.all(charts.map(async (chart) => {
 		// the updated upsert function will set the cache as true
 		service.upsert(chart);
 	}));
-	return responses;
 }

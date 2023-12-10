@@ -1,8 +1,9 @@
+import { AddonData } from '@pepperi-addons/papi-sdk';
 import ChartService from './chart-service'
 import { Client, Request } from '@pepperi-addons/debug-server'
 
 
-export async function charts(client: Client, request: Request) {
+export async function charts(client: Client, request: Request): Promise<AddonData | AddonData[] | undefined> {
     const service = new ChartService(client)
     if (request.method === 'POST') {
         return await service.upsert(request.body);
@@ -12,7 +13,7 @@ export async function charts(client: Client, request: Request) {
     }
 }
 
-export function import_data_source(client: Client, request: Request) {
+export function import_data_source(client: Client, request: Request): any {
     const service = new ChartService(client)
     if (request.method === 'POST') {
         return service.importDataSource(request.body);
@@ -22,7 +23,7 @@ export function import_data_source(client: Client, request: Request) {
     }
 }
 
-export function export_data_source(client: Client, request: Request) {
+export function export_data_source(client: Client, request: Request): any {
     const service = new ChartService(client)
     if (request.method === 'POST') {
         return service.exportDataSource(request.body);
