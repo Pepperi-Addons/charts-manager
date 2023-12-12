@@ -10,8 +10,8 @@ The error Message is importent! it will be written in the audit log and help the
 
 import { Client, Request } from '@pepperi-addons/debug-server'
 import ChartService from './chart-service';
-import { chartsPfsScheme, chartsTableScheme, CHARTS_TABLE_NAME, DimxRelations } from './entities';
-import { AddonVersion, AddonUUID } from '../addon.config.json'
+import { chartsPfsScheme, chartsTableScheme, DimxRelations } from './entities';
+import { AddonUUID } from '../addon.config.json'
 import semver from 'semver';
 import { AddonData } from '@pepperi-addons/papi-sdk';
 
@@ -19,13 +19,13 @@ export async function install(client: Client, request: Request): Promise<any> {
     const service = new ChartService(client)
     try {
         await service.papiClient.addons.data.schemes.post(chartsTableScheme);
-        await service.papiClient.post(`/addons/data/schemes/${AddonUUID}`,chartsPfsScheme);
-        await createDIMXRelations(client);
+        await service.papiClient.post(`/addons/data/schemes/${AddonUUID}`, chartsPfsScheme);
+        await create_dimx_relations(client);
         return { success: true, resultObject: {} }
     }
     catch (err) {
         console.log('Failed to install charts addon', err)
-         return handleException(err);
+         return handle_exception(err);
     }
 }
 
@@ -34,18 +34,16 @@ export async function uninstall(client: Client, request: Request): Promise<any> 
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
-    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.2') < 0) 
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.2') < 0)
 	{
 		throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
 	}
 
-    
-
-	if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.2.4') < 0) 
+	if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.2.4') < 0)
 	{
-		await createDIMXRelations(client);
-    	await renameSystemCharts(client);
-		await setCacheOnAllCharts(client);
+		await create_dimx_relations(client);
+		await rename_system_charts(client);
+		await set_cache_on_all_charts(client);
 	}
 
 	return { success: true, resultObject: {} }
@@ -55,7 +53,7 @@ export async function downgrade(client: Client, request: Request): Promise<any> 
     return { success: true, resultObject: {} }
 }
 
-function handleException(err) {
+function handle_exception(err): any {
     let errorMessage = 'Unknown Error Occured';
     if (err instanceof Error) {
         errorMessage = err.message;
@@ -67,21 +65,21 @@ function handleException(err) {
     };
 }
 
-async function createDIMXRelations(client: Client) {
+async function create_dimx_relations(client: Client): Promise<void> {
     const service = new ChartService(client)
     await Promise.all(DimxRelations.map(async (singleRelation) => {
         await service.papiClient.addons.data.relations.upsert(singleRelation);
     }));
 }
 
-async function renameSystemCharts(client: Client) {
+async function rename_system_charts(client: Client): Promise<void> {
     const service = new ChartService(client)
-    let systemCharts = await service.find({where: 'System=true'});
-    if(systemCharts[0].Key.includes("c2cc9af4d7ad")) {
+    const systemCharts = await service.find({where: 'System=true'});
+    if (systemCharts[0].Key.includes("c2cc9af4d7ad")) {
         console.log("system charts already updated");
     }
     else {
-        for(const chart of (systemCharts as AddonData[])) {
+        for (const chart of (systemCharts as AddonData[])) {
             console.log(`RENAMING CHART KEY: ${chart.Key}`);
             const oldKey = chart.Key;
 
@@ -96,15 +94,15 @@ async function renameSystemCharts(client: Client) {
         }
         console.log("system charts successfully updated")
     }
-    
+
 }
 
-async function setCacheOnAllCharts(client: Client) {
+async function set_cache_on_all_charts(client: Client): Promise<void> {
     const service = new ChartService(client)
-    let charts = await service.find({});
-	const responses = await Promise.all(charts.map(async (chart) => {
+    const charts = await service.find({});
+
+	await Promise.all(charts.map(async (chart) => {
 		// the updated upsert function will set the cache as true
 		service.upsert(chart);
 	}));
-	return responses;
 }
