@@ -233,11 +233,11 @@ dataView.DataViewFieldTypes;
 dataView.DataViewScreenSizes;
 dataView.DataViewTypes;
 
-var profile = createCommonjsModule(function (module, exports) {
+var profile$1 = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 });
 
-unwrapExports(profile);
+unwrapExports(profile$1);
 
 var pepperiObject = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -344,7 +344,7 @@ unwrapExports(subscription);
 var page = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SplitTypes = exports.PageSizeTypes = void 0;
-exports.PageSizeTypes = ['sm', 'md', 'lg'];
+exports.PageSizeTypes = ['none', 'sm', 'md', 'lg'];
 exports.SplitTypes = [
     '1/4 3/4',
     '1/3 2/3',
@@ -384,6 +384,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 unwrapExports(genericResource$1);
 
+var baseActivity = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+unwrapExports(baseActivity);
+
+var survey = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+unwrapExports(survey);
+
+var userDefinedFlows$1 = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+unwrapExports(userDefinedFlows$1);
+
+var configurations$1 = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+unwrapExports(configurations$1);
+
+var policy = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+unwrapExports(policy);
+
+var profile = createCommonjsModule(function (module, exports) {
+Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+unwrapExports(profile);
+
 var entities = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -405,7 +441,7 @@ __exportStar(account, exports);
 __exportStar(user, exports);
 __exportStar(uiControl, exports);
 __exportStar(dataView, exports);
-__exportStar(profile, exports);
+__exportStar(profile$1, exports);
 __exportStar(pepperiObject, exports);
 __exportStar(apiFieldObject, exports);
 __exportStar(maintenance$1, exports);
@@ -427,6 +463,12 @@ __exportStar(page, exports);
 __exportStar(user_defined_collections, exports);
 __exportStar(dimx_inputs, exports);
 __exportStar(genericResource$1, exports);
+__exportStar(baseActivity, exports);
+__exportStar(survey, exports);
+__exportStar(userDefinedFlows$1, exports);
+__exportStar(configurations$1, exports);
+__exportStar(policy, exports);
+__exportStar(profile, exports);
 // need something here that can be transpiled to js
 // all the other entities are interfaces
 class Entities {
@@ -620,6 +662,75 @@ exports.default = Endpoint;
 unwrapExports(endpoint);
 endpoint.IterableEndpoint;
 
+var configurations = createCommonjsModule(function (module, exports) {
+var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConfigurationsEndpoints = void 0;
+const endpoint_1 = __importDefault(endpoint);
+class ConfigurationsCRUDEndpoints extends endpoint_1.default {
+    constructor(service, url) {
+        super(service, url);
+        this.url = url;
+    }
+    key(key) {
+        return {
+            get: async () => {
+                return await this.service.get(`${this.url}/key/${key}`);
+            },
+        };
+    }
+    async search(searchBody) {
+        return await this.service.post(`${this.url}/search`, searchBody);
+    }
+}
+//configurations/
+class ConfigurationsEndpoints extends ConfigurationsCRUDEndpoints {
+    constructor(service, url) {
+        super(service, url);
+        this.service = service;
+        this.url = url;
+        this.schemes = new ConfigurationsCRUDEndpoints(this.service, this.url + '/schemes');
+    }
+    addonUUID(addonUUID) {
+        return {
+            scheme: (scheme) => {
+                return {
+                    drafts: new DraftsEndpoints(this.service, this.url + `/${addonUUID}/${scheme}/drafts`),
+                    versions: new ConfigurationsCRUDEndpoints(this.service, this.url + `/${addonUUID}/${scheme}/versions`),
+                };
+            },
+        };
+    }
+}
+exports.ConfigurationsEndpoints = ConfigurationsEndpoints;
+//configurations/:uuid/:scheme/drafts
+class DraftsEndpoints extends ConfigurationsCRUDEndpoints {
+    constructor(service, url) {
+        super(service, url);
+        this.service = service;
+        this.url = url;
+    }
+    key(key) {
+        return {
+            publish: async (description) => {
+                return await this.service.post(this.url + `/key/${key}/publish`, { Description: description });
+            },
+            restore: async (versionKey) => {
+                return await this.service.post(this.url + `/key/${key}/restore`, { VersionKey: versionKey });
+            },
+            get: async () => {
+                return await this.service.get(`${this.url}/key/${key}`);
+            },
+        };
+    }
+}
+});
+
+unwrapExports(configurations);
+configurations.ConfigurationsEndpoints;
+
 var addons = createCommonjsModule(function (module, exports) {
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -627,6 +738,7 @@ var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || func
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddonEndpoint = void 0;
 const endpoint_1 = __importDefault(endpoint);
+
 class InstalledAddonEnpoint {
     constructor(service, addonUUID) {
         this.service = service;
@@ -723,6 +835,15 @@ class TableEndpoint extends endpoint_1.default {
         this.addonUUID = addonUUID;
         this.tableName = tableName;
     }
+    async upsert(object, waitForIndex = false) {
+        let headers = undefined;
+        if (waitForIndex) {
+            headers = {
+                'x-pepperi-await-indexing': true,
+            };
+        }
+        return this.service.post(this.getEndpointURL(), object, headers);
+    }
     key(keyName) {
         return {
             get: async () => {
@@ -742,6 +863,7 @@ class AddonEndpoint extends endpoint_1.default {
         this.installedAddons = new InstalledAddonsEnpoint(this.service);
         this.versions = new AddonVersionEndpoint(this.service);
         this.api = new AddonApiEndpoint(this.service);
+        this.configurations = new configurations.ConfigurationsEndpoints(this.service, '/addons/configurations');
         // data = new AddonDataEndpoint(this.service);
         this.data = {
             schemes: {
@@ -850,6 +972,19 @@ class AddonEndpoint extends endpoint_1.default {
                     };
                 },
             },
+            search: {
+                uuid: (addonUUID) => {
+                    return {
+                        table: (tableName) => {
+                            return {
+                                post: async (searchBody) => {
+                                    return await this.service.post(`/addons/data/search/${addonUUID}/${tableName}`, searchBody);
+                                },
+                            };
+                        },
+                    };
+                },
+            },
         };
         this.index = {
             schemes: {
@@ -888,12 +1023,12 @@ class AddonEndpoint extends endpoint_1.default {
                     },
                 };
             },
-            batch: (body) => {
+            batch: (body, headers = undefined) => {
                 return {
                     uuid: (addonUUID) => {
                         return {
                             resource: async (resourceName) => {
-                                return await this.service.post(`/addons/index/batch/${addonUUID}/${resourceName}`, body);
+                                return await this.service.post(`/addons/index/batch/${addonUUID}/${resourceName}`, body, headers);
                             },
                         };
                     },
@@ -973,12 +1108,12 @@ class AddonEndpoint extends endpoint_1.default {
                                 },
                             };
                         },
-                        batch: (body) => {
+                        batch: (body, headers = undefined) => {
                             return {
                                 uuid: (addonUUID) => {
                                     return {
                                         resource: async (resourceName) => {
-                                            return await this.service.post(`/addons/shared_index/index/${indexName}/batch/${addonUUID}/${resourceName}`, body);
+                                            return await this.service.post(`/addons/shared_index/index/${indexName}/batch/${addonUUID}/${resourceName}`, body, headers);
                                         },
                                     };
                                 },
@@ -1045,6 +1180,9 @@ class AddonEndpoint extends endpoint_1.default {
                         };
                     },
                 };
+            },
+            temporaryFile: async (temporaryFileRequest) => {
+                return await this.service.post(`/addons/pfs/temporary_file`, temporaryFileRequest !== null && temporaryFileRequest !== void 0 ? temporaryFileRequest : {});
             },
         };
         this.jobs = {
@@ -1398,6 +1536,36 @@ exports.SchemesEndpoint = SchemesEndpoint;
 unwrapExports(userDefinedCollections);
 userDefinedCollections.SchemesEndpoint;
 
+var userDefinedFlows = createCommonjsModule(function (module, exports) {
+var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FlowsEndpoint = void 0;
+const endpoint_1 = __importDefault(endpoint);
+const base_url = '/user_defined_flows';
+class FlowsEndpoint extends endpoint_1.default {
+    constructor(service) {
+        super(service, base_url);
+        this.service = service;
+    }
+    key(flowKey) {
+        return {
+            get: async () => {
+                return await this.service.get(`${base_url}/key/${flowKey}`);
+            },
+        };
+    }
+    async search(body) {
+        return await this.service.post(`${base_url}/search`, body);
+    }
+}
+exports.FlowsEndpoint = FlowsEndpoint;
+});
+
+unwrapExports(userDefinedFlows);
+userDefinedFlows.FlowsEndpoint;
+
 var genericResource = createCommonjsModule(function (module, exports) {
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -1484,7 +1652,9 @@ __exportStar(sync, exports);
 __exportStar(fileStorage, exports);
 __exportStar(notification, exports);
 __exportStar(userDefinedCollections, exports);
+__exportStar(userDefinedFlows, exports);
 __exportStar(genericResource, exports);
+__exportStar(configurations, exports);
 });
 
 unwrapExports(endpoints);
@@ -79457,7 +79627,7 @@ var combiningMarksRegex = /[\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\
 
 function validateLabel(label, processing_option) {
   if (label.substr(0, 4) === "xn--") {
-    label = punycode__default['default'].toUnicode(label);
+    label = punycode__default["default"].toUnicode(label);
   }
 
   var error = false;
@@ -79513,7 +79683,7 @@ var toASCII = function(domain_name, useSTD3, processing_option, verifyDnsLength)
   var labels = result.string.split(".");
   labels = labels.map(function(l) {
     try {
-      return punycode__default['default'].toASCII(l);
+      return punycode__default["default"].toASCII(l);
     } catch(e) {
       result.error = true;
       return l;
@@ -79572,7 +79742,7 @@ const specialSchemes = {
 const failure = Symbol("failure");
 
 function countSymbols(str) {
-  return punycode__default['default'].ucs2.decode(str).length;
+  return punycode__default["default"].ucs2.decode(str).length;
 }
 
 function at(input, idx) {
@@ -79788,7 +79958,7 @@ function parseIPv6(input) {
   let compress = null;
   let pointer = 0;
 
-  input = punycode__default['default'].ucs2.decode(input);
+  input = punycode__default["default"].ucs2.decode(input);
 
   if (input[pointer] === 58) {
     if (input[pointer + 1] !== 58) {
@@ -79978,7 +80148,7 @@ function parseOpaqueHost(input) {
   }
 
   let output = "";
-  const decoded = punycode__default['default'].ucs2.decode(input);
+  const decoded = punycode__default["default"].ucs2.decode(input);
   for (let i = 0; i < decoded.length; ++i) {
     output += percentEncodeChar(decoded[i], isC0ControlPercentEncode);
   }
@@ -80109,7 +80279,7 @@ function URLStateMachine(input, base, encodingOverride, url, stateOverride) {
   this.arrFlag = false;
   this.passwordTokenSeenFlag = false;
 
-  this.input = punycode__default['default'].ucs2.decode(this.input);
+  this.input = punycode__default["default"].ucs2.decode(this.input);
 
   for (; this.pointer <= this.input.length; ++this.pointer) {
     const c = this.input[this.pointer];
@@ -80821,7 +80991,7 @@ module.exports.basicURLParse = function (input, options) {
 
 module.exports.setTheUsername = function (url, username) {
   url.username = "";
-  const decoded = punycode__default['default'].ucs2.decode(username);
+  const decoded = punycode__default["default"].ucs2.decode(username);
   for (let i = 0; i < decoded.length; ++i) {
     url.username += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
   }
@@ -80829,7 +80999,7 @@ module.exports.setTheUsername = function (url, username) {
 
 module.exports.setThePassword = function (url, password) {
   url.password = "";
-  const decoded = punycode__default['default'].ucs2.decode(password);
+  const decoded = punycode__default["default"].ucs2.decode(password);
   for (let i = 0; i < decoded.length; ++i) {
     url.password += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
   }
@@ -81290,7 +81460,7 @@ var publicApi = {
 // Based on https://github.com/tmpvar/jsdom/blob/aa85b2abf07766ff7bf5c1f6daafb3726f2f2db5/lib/jsdom/living/blob.js
 
 // fix for "Readable" isn't a named export issue
-const Readable = Stream__default['default'].Readable;
+const Readable = Stream__default["default"].Readable;
 
 const BUFFER = Symbol('buffer');
 const TYPE = Symbol('type');
@@ -81442,7 +81612,7 @@ try {
 const INTERNALS = Symbol('Body internals');
 
 // fix an issue where "PassThrough" isn't a named export for node <10
-const PassThrough = Stream__default['default'].PassThrough;
+const PassThrough = Stream__default["default"].PassThrough;
 
 /**
  * Body mixin
@@ -81475,7 +81645,7 @@ function Body(body) {
 	} else if (ArrayBuffer.isView(body)) {
 		// body is ArrayBufferView
 		body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-	} else if (body instanceof Stream__default['default']) ; else {
+	} else if (body instanceof Stream__default["default"]) ; else {
 		// none of the above
 		// coerce to string then buffer
 		body = Buffer.from(String(body));
@@ -81488,7 +81658,7 @@ function Body(body) {
 	this.size = size;
 	this.timeout = timeout;
 
-	if (body instanceof Stream__default['default']) {
+	if (body instanceof Stream__default["default"]) {
 		body.on('error', function (err) {
 			const error = err.name === 'AbortError' ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, 'system', err);
 			_this[INTERNALS].error = error;
@@ -81644,7 +81814,7 @@ function consumeBody() {
 	}
 
 	// istanbul ignore if: should never happen
-	if (!(body instanceof Stream__default['default'])) {
+	if (!(body instanceof Stream__default["default"])) {
 		return Body.Promise.resolve(Buffer.alloc(0));
 	}
 
@@ -81817,7 +81987,7 @@ function clone(instance) {
 
 	// check that body is a stream and not form-data object
 	// note: we can't clone the form-data object without having it as a dependency
-	if (body instanceof Stream__default['default'] && typeof body.getBoundary !== 'function') {
+	if (body instanceof Stream__default["default"] && typeof body.getBoundary !== 'function') {
 		// tee instance body
 		p1 = new PassThrough();
 		p2 = new PassThrough();
@@ -81865,7 +82035,7 @@ function extractContentType(body) {
 	} else if (typeof body.getBoundary === 'function') {
 		// detect form data input from form-data module
 		return `multipart/form-data;boundary=${body.getBoundary()}`;
-	} else if (body instanceof Stream__default['default']) {
+	} else if (body instanceof Stream__default["default"]) {
 		// body is stream
 		// can't really do much about this
 		return null;
@@ -82319,7 +82489,7 @@ function createHeadersLenient(obj) {
 const INTERNALS$1 = Symbol('Response internals');
 
 // fix an issue where "STATUS_CODES" aren't a named export for node <10
-const STATUS_CODES = http__default['default'].STATUS_CODES;
+const STATUS_CODES = http__default["default"].STATUS_CODES;
 
 /**
  * Response class
@@ -82418,11 +82588,11 @@ Object.defineProperty(Response.prototype, Symbol.toStringTag, {
 });
 
 const INTERNALS$2 = Symbol('Request internals');
-const URL = Url__default['default'].URL || publicApi.URL;
+const URL = Url__default["default"].URL || publicApi.URL;
 
 // fix an issue where "format", "parse" aren't a named export for node <10
-const parse_url = Url__default['default'].parse;
-const format_url = Url__default['default'].format;
+const parse_url = Url__default["default"].parse;
+const format_url = Url__default["default"].format;
 
 /**
  * Wrapper around `new URL` to handle arbitrary URLs
@@ -82444,7 +82614,7 @@ function parseURL(urlStr) {
 	return parse_url(urlStr);
 }
 
-const streamDestructionSupported = 'destroy' in Stream__default['default'].Readable.prototype;
+const streamDestructionSupported = 'destroy' in Stream__default["default"].Readable.prototype;
 
 /**
  * Check if a value is an instance of Request.
@@ -82607,7 +82777,7 @@ function getNodeRequestOptions(request) {
 		throw new TypeError('Only HTTP(S) protocols are supported');
 	}
 
-	if (request.signal && request.body instanceof Stream__default['default'].Readable && !streamDestructionSupported) {
+	if (request.signal && request.body instanceof Stream__default["default"].Readable && !streamDestructionSupported) {
 		throw new Error('Cancellation of streamed requests with AbortSignal is not supported in node < 8');
 	}
 
@@ -82639,10 +82809,6 @@ function getNodeRequestOptions(request) {
 	let agent = request.agent;
 	if (typeof agent === 'function') {
 		agent = agent(parsedURL);
-	}
-
-	if (!headers.has('Connection') && !agent) {
-		headers.set('Connection', 'close');
 	}
 
 	// HTTP-network fetch step 4.2
@@ -82681,16 +82847,30 @@ AbortError.prototype = Object.create(Error.prototype);
 AbortError.prototype.constructor = AbortError;
 AbortError.prototype.name = 'AbortError';
 
-const URL$1 = Url__default['default'].URL || publicApi.URL;
+const URL$1 = Url__default["default"].URL || publicApi.URL;
 
 // fix an issue where "PassThrough", "resolve" aren't a named export for node <10
-const PassThrough$1 = Stream__default['default'].PassThrough;
+const PassThrough$1 = Stream__default["default"].PassThrough;
 
 const isDomainOrSubdomain = function isDomainOrSubdomain(destination, original) {
 	const orig = new URL$1(original).hostname;
 	const dest = new URL$1(destination).hostname;
 
 	return orig === dest || orig[orig.length - dest.length - 1] === '.' && orig.endsWith(dest);
+};
+
+/**
+ * isSameProtocol reports whether the two provided URLs use the same protocol.
+ *
+ * Both domains must already be in canonical form.
+ * @param {string|URL} original
+ * @param {string|URL} destination
+ */
+const isSameProtocol = function isSameProtocol(destination, original) {
+	const orig = new URL$1(original).protocol;
+	const dest = new URL$1(destination).protocol;
+
+	return orig === dest;
 };
 
 /**
@@ -82715,7 +82895,7 @@ function fetch(url, opts) {
 		const request = new Request(url, opts);
 		const options = getNodeRequestOptions(request);
 
-		const send = (options.protocol === 'https:' ? https__default['default'] : http__default['default']).request;
+		const send = (options.protocol === 'https:' ? https__default["default"] : http__default["default"]).request;
 		const signal = request.signal;
 
 		let response = null;
@@ -82723,8 +82903,8 @@ function fetch(url, opts) {
 		const abort = function abort() {
 			let error = new AbortError('The user aborted a request.');
 			reject(error);
-			if (request.body && request.body instanceof Stream__default['default'].Readable) {
-				request.body.destroy(error);
+			if (request.body && request.body instanceof Stream__default["default"].Readable) {
+				destroyStream(request.body, error);
 			}
 			if (!response || !response.body) return;
 			response.body.emit('error', error);
@@ -82765,8 +82945,42 @@ function fetch(url, opts) {
 
 		req.on('error', function (err) {
 			reject(new FetchError(`request to ${request.url} failed, reason: ${err.message}`, 'system', err));
+
+			if (response && response.body) {
+				destroyStream(response.body, err);
+			}
+
 			finalize();
 		});
+
+		fixResponseChunkedTransferBadEnding(req, function (err) {
+			if (signal && signal.aborted) {
+				return;
+			}
+
+			if (response && response.body) {
+				destroyStream(response.body, err);
+			}
+		});
+
+		/* c8 ignore next 18 */
+		if (parseInt(process.version.substring(1)) < 14) {
+			// Before Node.js 14, pipeline() does not fully support async iterators and does not always
+			// properly handle when the socket close/end events are out of order.
+			req.on('socket', function (s) {
+				s.addListener('close', function (hadError) {
+					// if a data listener is still present we didn't end cleanly
+					const hasDataListener = s.listenerCount('data') > 0;
+
+					// if end happened before close but the socket didn't emit an error, do it now
+					if (response && hasDataListener && !hadError && !(signal && signal.aborted)) {
+						const err = new Error('Premature close');
+						err.code = 'ERR_STREAM_PREMATURE_CLOSE';
+						response.body.emit('error', err);
+					}
+				});
+			});
+		}
 
 		req.on('response', function (res) {
 			clearTimeout(reqTimeout);
@@ -82839,7 +83053,7 @@ function fetch(url, opts) {
 							size: request.size
 						};
 
-						if (!isDomainOrSubdomain(request.url, locationURL)) {
+						if (!isDomainOrSubdomain(request.url, locationURL) || !isSameProtocol(request.url, locationURL)) {
 							for (const name of ['authorization', 'www-authenticate', 'cookie', 'cookie2']) {
 								requestOpts.headers.delete(name);
 							}
@@ -82905,13 +83119,13 @@ function fetch(url, opts) {
 			// by common browsers.
 			// Always using Z_SYNC_FLUSH is what cURL does.
 			const zlibOptions = {
-				flush: zlib__default['default'].Z_SYNC_FLUSH,
-				finishFlush: zlib__default['default'].Z_SYNC_FLUSH
+				flush: zlib__default["default"].Z_SYNC_FLUSH,
+				finishFlush: zlib__default["default"].Z_SYNC_FLUSH
 			};
 
 			// for gzip
 			if (codings == 'gzip' || codings == 'x-gzip') {
-				body = body.pipe(zlib__default['default'].createGunzip(zlibOptions));
+				body = body.pipe(zlib__default["default"].createGunzip(zlibOptions));
 				response = new Response(body, response_options);
 				resolve(response);
 				return;
@@ -82925,19 +83139,26 @@ function fetch(url, opts) {
 				raw.once('data', function (chunk) {
 					// see http://stackoverflow.com/questions/37519828
 					if ((chunk[0] & 0x0F) === 0x08) {
-						body = body.pipe(zlib__default['default'].createInflate());
+						body = body.pipe(zlib__default["default"].createInflate());
 					} else {
-						body = body.pipe(zlib__default['default'].createInflateRaw());
+						body = body.pipe(zlib__default["default"].createInflateRaw());
 					}
 					response = new Response(body, response_options);
 					resolve(response);
+				});
+				raw.on('end', function () {
+					// some old IIS servers return zero-length OK deflate responses, so 'data' is never emitted.
+					if (!response) {
+						response = new Response(body, response_options);
+						resolve(response);
+					}
 				});
 				return;
 			}
 
 			// for br
-			if (codings == 'br' && typeof zlib__default['default'].createBrotliDecompress === 'function') {
-				body = body.pipe(zlib__default['default'].createBrotliDecompress());
+			if (codings == 'br' && typeof zlib__default["default"].createBrotliDecompress === 'function') {
+				body = body.pipe(zlib__default["default"].createBrotliDecompress());
 				response = new Response(body, response_options);
 				resolve(response);
 				return;
@@ -82951,6 +83172,44 @@ function fetch(url, opts) {
 		writeToStream(req, request);
 	});
 }
+function fixResponseChunkedTransferBadEnding(request, errorCallback) {
+	let socket;
+
+	request.on('socket', function (s) {
+		socket = s;
+	});
+
+	request.on('response', function (response) {
+		const headers = response.headers;
+
+		if (headers['transfer-encoding'] === 'chunked' && !headers['content-length']) {
+			response.once('close', function (hadError) {
+				// tests for socket presence, as in some situations the
+				// the 'socket' event is not triggered for the request
+				// (happens in deno), avoids `TypeError`
+				// if a data listener is still present we didn't end cleanly
+				const hasDataListener = socket && socket.listenerCount('data') > 0;
+
+				if (hasDataListener && !hadError) {
+					const err = new Error('Premature close');
+					err.code = 'ERR_STREAM_PREMATURE_CLOSE';
+					errorCallback(err);
+				}
+			});
+		}
+	});
+}
+
+function destroyStream(stream, err) {
+	if (stream.destroy) {
+		stream.destroy(err);
+	} else {
+		// node < 8
+		stream.emit('error', err);
+		stream.end();
+	}
+}
+
 /**
  * Redirect code matching
  *
@@ -82970,7 +83229,8 @@ var lib$1 = /*#__PURE__*/Object.freeze({
 	Headers: Headers,
 	Request: Request,
 	Response: Response,
-	FetchError: FetchError
+	FetchError: FetchError,
+	AbortError: AbortError
 });
 
 var require$$0 = getCjsExportFromNamespace(lib$1);
@@ -82987,7 +83247,7 @@ function getPerformance() {
     try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         if (commonjsGlobal != undefined) {
-            return (_a = perf_hooks__default['default']) === null || _a === void 0 ? void 0 : _a.performance;
+            return (_a = perf_hooks__default["default"]) === null || _a === void 0 ? void 0 : _a.performance;
         }
     }
     catch (_b) { }
@@ -83078,6 +83338,9 @@ class PapiClient {
                 return new endpoints.GenericResourceEndpoint(this, `/resources/${resourceName}`);
             },
         };
+        this.userDefinedFlows = new endpoints.FlowsEndpoint(this);
+        this.policies = new endpoint_1.default(this, '/policies');
+        this.policyProfiles = new endpoint_1.default(this, '/policy_profiles');
     }
     async get(url) {
         return this.apiCall('GET', url)
@@ -83109,6 +83372,9 @@ class PapiClient {
         }
         if (this.options.actionUUID) {
             options.headers['X-Pepperi-ActionID'] = this.options.actionUUID;
+        }
+        if (this.options.codeJobUUID) {
+            options.headers['X-Pepperi-CodeJobID'] = this.options.codeJobUUID;
         }
         const performance = papiModule.getPerformance();
         const t0 = performance === null || performance === void 0 ? void 0 : performance.now();
@@ -83174,7 +83440,7 @@ __exportStar(helper, exports);
 var index = unwrapExports(dist);
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.3.1";
+var AddonVersion = "1.3.2";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -83356,13 +83622,13 @@ var SchemaContext = exports.SchemaContext = function SchemaContext (schema, opti
 };
 
 SchemaContext.prototype.resolve = function resolve (target) {
-  return Url__default['default'].resolve(this.base, target);
+  return Url__default["default"].resolve(this.base, target);
 };
 
 SchemaContext.prototype.makeChild = function makeChild(schema, propertyName){
   var path = (propertyName===undefined) ? this.path : this.path.concat([propertyName]);
   var id = schema.$id || schema.id;
-  var base = Url__default['default'].resolve(this.base, id||'');
+  var base = Url__default["default"].resolve(this.base, id||'');
   var ctx = new SchemaContext(schema, this.options, path, base, Object.create(this.schemas));
   if(id && !ctx.schemas[base]){
     ctx.schemas[base] = schema;
@@ -84622,12 +84888,12 @@ var scan_1 = function scan(base, schema){
     if(!schema || typeof schema!='object') return;
     // Mark all referenced schemas so we can tell later which schemas are referred to, but never defined
     if(schema.$ref){
-      var resolvedUri = Url__default['default'].resolve(baseuri, schema.$ref);
+      var resolvedUri = Url__default["default"].resolve(baseuri, schema.$ref);
       ref[resolvedUri] = ref[resolvedUri] ? ref[resolvedUri]+1 : 0;
       return;
     }
     var id = schema.$id || schema.id;
-    var ourBase = id ? Url__default['default'].resolve(baseuri, id) : baseuri;
+    var ourBase = id ? Url__default["default"].resolve(baseuri, id) : baseuri;
     if (ourBase) {
       // If there's no fragment, append an empty one
       if(ourBase.indexOf('#')<0) ourBase += '#';
@@ -84792,7 +85058,7 @@ Validator.prototype.validate = function validate (instance, schema, options, ctx
   // This section indexes subschemas in the provided schema, so they don't need to be added with Validator#addSchema
   // This will work so long as the function at uri.resolve() will resolve a relative URI to a relative URI
   var id = schema.$id || schema.id;
-  var base = Url__default['default'].resolve(options.base||anonymousBase, id||'');
+  var base = Url__default["default"].resolve(options.base||anonymousBase, id||'');
   if(!ctx){
     ctx = new SchemaContext(schema, options, [], base, Object.create(this.schemas));
     if (!ctx.schemas[base]) {
@@ -84939,7 +85205,7 @@ Validator.prototype.resolve = function resolve (schema, switchSchema, ctx) {
     return {subschema: ctx.schemas[switchSchema], switchSchema: switchSchema};
   }
   // Else try walking the property pointer
-  var parsed = Url__default['default'].parse(switchSchema);
+  var parsed = Url__default["default"].parse(switchSchema);
   var fragment = parsed && parsed.hash;
   var document = fragment && fragment.length && switchSchema.substr(0, switchSchema.length - fragment.length);
   if (!document || !ctx.schemas[document]) {
@@ -85051,10 +85317,10 @@ class ChartService {
     async upsert(body) {
         var _a, _b;
         const chartsTable = this.papiClient.addons.data.uuid(config.AddonUUID).table(CHARTS_TABLE_NAME);
-        this.papiClient.addons.pfs.uuid(config.AddonUUID).schema(CHARTS_PFS_TABLE_NAME);
         //system charts keys will contain the addon uuid suffix
-        if (body.Hidden != true)
+        if (body.Hidden !== true) {
             body.Key = body.System ? `${body.Name}_c2cc9af4d7ad.js` : `${body.Name}.js`;
+        }
         this.validatePostData(body);
         const pfsChart = await this.upsertChartToPFS(body);
         const metaDataFields = {
@@ -85082,7 +85348,7 @@ class ChartService {
     }
     async upsertChartToPFS(body) {
         try {
-            let file = {
+            const file = {
                 Key: body.Key,
                 Name: body.Name,
                 Description: body.Description,
@@ -85106,13 +85372,13 @@ class ChartService {
         this.validateType(body['Type']);
     }
     validateParam(obj, paramName) {
-        if (obj[paramName] == null) {
+        if (obj[paramName] === null) {
             throw new Error(`'${paramName}' is a required field`);
         }
-        else if (obj[paramName] == '') {
+        else if (obj[paramName] === '') {
             throw new Error(`'${paramName}' field cannot be empty`);
         }
-        if (paramName == 'Name' && (obj[paramName].includes('/') || obj[paramName].includes('\\'))) {
+        if (paramName === 'Name' && (obj[paramName].includes('/') || obj[paramName].includes('\\'))) {
             throw new Error(`Name cannot contain slash or backslash`);
         }
     }
@@ -85121,37 +85387,13 @@ class ChartService {
             throw new Error(`'${type}' type is not supported`);
         }
     }
-    isDataURL(s) {
-        return !!s.match(Constants.DataURLRegex);
-    }
     //DIMX
     // for the AddonRelativeURL of the relation
     async importDataSource(body) {
         console.log(`@@@@importing chart: ${JSON.stringify(body)}@@@@`);
         body.DIMXObjects = await Promise.all(body.DIMXObjects.map(async (item) => {
             const validator = new lib_1();
-            const validSchema = {
-                properties: {
-                    Key: {
-                        type: "string",
-                        required: true
-                    },
-                    Name: {
-                        type: "string",
-                        required: true
-                    },
-                    Type: {
-                        type: "string",
-                        required: true
-                    },
-                    System: {
-                        type: "boolean"
-                    },
-                    ScriptURI: {
-                        type: "string"
-                    }
-                }
-            };
+            const validSchema = this.getValidSchema();
             const validationResult = validator.validate(item.Object, validSchema);
             if (!validationResult.valid) {
                 const errors = validationResult.errors.map(error => error.stack.replace("instance.", ""));
@@ -85163,6 +85405,31 @@ class ChartService {
         console.log('returned object is:', JSON.stringify(body));
         return body;
     }
+    getValidSchema() {
+        const validSchema = {
+            properties: {
+                Key: {
+                    type: "string",
+                    required: true
+                },
+                Name: {
+                    type: "string",
+                    required: true
+                },
+                Type: {
+                    type: "string",
+                    required: true
+                },
+                System: {
+                    type: "boolean"
+                },
+                ScriptURI: {
+                    type: "string"
+                }
+            }
+        };
+        return validSchema;
+    }
     async exportDataSource(body) {
         console.log("exporting data");
         return body;
@@ -85171,28 +85438,28 @@ class ChartService {
 
 async function charts(client, request) {
     const service = new ChartService(client);
-    if (request.method == 'POST') {
+    if (request.method === 'POST') {
         return await service.upsert(request.body);
     }
-    else if (request.method == 'GET') {
+    else if (request.method === 'GET') {
         return await service.find(request.query);
     }
 }
 function import_data_source(client, request) {
     const service = new ChartService(client);
-    if (request.method == 'POST') {
+    if (request.method === 'POST') {
         return service.importDataSource(request.body);
     }
-    else if (request.method == 'GET') {
+    else if (request.method === 'GET') {
         throw new Error(`Method ${request.method} not supported`);
     }
 }
 function export_data_source(client, request) {
     const service = new ChartService(client);
-    if (request.method == 'POST') {
+    if (request.method === 'POST') {
         return service.exportDataSource(request.body);
     }
-    else if (request.method == 'GET') {
+    else if (request.method === 'GET') {
         throw new Error(`Method ${request.method} not supported`);
     }
 }
