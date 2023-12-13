@@ -5,49 +5,59 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var Stream = require('stream');
 var http = require('http');
 var Url = require('url');
-var punycode = require('punycode');
+var require$$0$1 = require('punycode');
 var https = require('https');
 var zlib = require('zlib');
-var perf_hooks = require('perf_hooks');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var Stream__default = /*#__PURE__*/_interopDefaultLegacy(Stream);
 var http__default = /*#__PURE__*/_interopDefaultLegacy(http);
 var Url__default = /*#__PURE__*/_interopDefaultLegacy(Url);
-var punycode__default = /*#__PURE__*/_interopDefaultLegacy(punycode);
+var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0$1);
 var https__default = /*#__PURE__*/_interopDefaultLegacy(https);
 var zlib__default = /*#__PURE__*/_interopDefaultLegacy(zlib);
-var perf_hooks__default = /*#__PURE__*/_interopDefaultLegacy(perf_hooks);
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-function unwrapExports (x) {
+function getDefaultExportFromCjs (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 }
 
-function createCommonjsModule(fn, basedir, module) {
-	return module = {
-	  path: basedir,
-	  exports: {},
-	  require: function (path, base) {
-      return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-    }
-	}, fn(module, module.exports), module.exports;
+function getAugmentedNamespace(n) {
+  if (n.__esModule) return n;
+  var f = n.default;
+	if (typeof f == "function") {
+		var a = function a () {
+			if (this instanceof a) {
+        return Reflect.construct(f, arguments, this.constructor);
+			}
+			return f.apply(this, arguments);
+		};
+		a.prototype = f.prototype;
+  } else a = {};
+  Object.defineProperty(a, '__esModule', {value: true});
+	Object.keys(n).forEach(function (k) {
+		var d = Object.getOwnPropertyDescriptor(n, k);
+		Object.defineProperty(a, k, d.get ? d : {
+			enumerable: true,
+			get: function () {
+				return n[k];
+			}
+		});
+	});
+	return a;
 }
 
-function getCjsExportFromNamespace (n) {
-	return n && n['default'] || n;
-}
+var dist = {};
 
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-}
+var entities = {};
 
-var addons$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SchemeFieldTypes = void 0;
-exports.SchemeFieldTypes = [
+var addons$1 = {};
+
+Object.defineProperty(addons$1, "__esModule", { value: true });
+addons$1.SchemeFieldTypes = void 0;
+addons$1.SchemeFieldTypes = [
     'String',
     'MultipleStringValues',
     'Bool',
@@ -61,45 +71,32 @@ exports.SchemeFieldTypes = [
     'DynamicResource',
     'ContainedDynamicResource',
 ];
-});
 
-unwrapExports(addons$1);
-addons$1.SchemeFieldTypes;
+var userDefinedTables = {};
 
-var userDefinedTables = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(userDefinedTables, "__esModule", { value: true });
 
-unwrapExports(userDefinedTables);
+var codeJobs$1 = {};
 
-var codeJobs$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(codeJobs$1, "__esModule", { value: true });
 
-unwrapExports(codeJobs$1);
+var activity = {};
 
-var activity = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(activity, "__esModule", { value: true });
 
-unwrapExports(activity);
+var account = {};
 
-var account = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(account, "__esModule", { value: true });
 
-unwrapExports(account);
+var user = {};
 
-var user = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(user, "__esModule", { value: true });
 
-unwrapExports(user);
+var uiControl = {};
 
-var uiControl = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UIControlViewTypes = void 0;
-exports.UIControlViewTypes = {
+Object.defineProperty(uiControl, "__esModule", { value: true });
+uiControl.UIControlViewTypes = void 0;
+uiControl.UIControlViewTypes = {
     None: 0,
     Grid: 1,
     Cards: 2,
@@ -110,15 +107,12 @@ exports.UIControlViewTypes = {
     Menu: 7,
     Configuration: 8,
 };
-});
 
-unwrapExports(uiControl);
-uiControl.UIControlViewTypes;
+var dataView = {};
 
-var dataView = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataViewRowModes = exports.HorizontalAlignments = exports.VerticalAlignments = exports.ResoursePrefixes = exports.ResourceTypes = exports.DataViewFieldTypes = exports.DataViewScreenSizes = exports.DataViewTypes = void 0;
-exports.DataViewTypes = [
+Object.defineProperty(dataView, "__esModule", { value: true });
+dataView.DataViewRowModes = dataView.HorizontalAlignments = dataView.VerticalAlignments = dataView.ResoursePrefixes = dataView.ResourceTypes = dataView.DataViewFieldTypes = dataView.DataViewScreenSizes = dataView.DataViewTypes = void 0;
+dataView.DataViewTypes = [
     'Grid',
     'Form',
     'Card',
@@ -130,8 +124,8 @@ exports.DataViewTypes = [
     'CardsGrid',
     'Details',
 ];
-exports.DataViewScreenSizes = ['Tablet', 'Phablet', 'Landscape'];
-exports.DataViewFieldTypes = {
+dataView.DataViewScreenSizes = ['Tablet', 'Phablet', 'Landscape'];
+dataView.DataViewFieldTypes = {
     None: 0,
     TextBox: 1,
     LimitedLengthTextBox: 2,
@@ -190,7 +184,7 @@ exports.DataViewFieldTypes = {
     BooleanText: 55,
     RichTextHTML: 56,
 };
-exports.ResourceTypes = [
+dataView.ResourceTypes = [
     'None',
     'accounts',
     'transactions',
@@ -204,148 +198,102 @@ exports.ResourceTypes = [
     'catalogs',
     'types',
 ];
-exports.ResoursePrefixes = ['GA', 'OA', 'CP', 'AT', 'GL', 'CA'];
-exports.VerticalAlignments = {
+dataView.ResoursePrefixes = ['GA', 'OA', 'CP', 'AT', 'GL', 'CA'];
+dataView.VerticalAlignments = {
     Stretch: 0,
     Top: 1,
     Bottom: 2,
     Center: 3,
 };
-exports.HorizontalAlignments = {
+dataView.HorizontalAlignments = {
     Stretch: 0,
     Left: 1,
     Right: 2,
     Center: 3,
 };
-exports.DataViewRowModes = {
+dataView.DataViewRowModes = {
     Fixed: 0,
     MatchParent: 1,
 };
-});
 
-unwrapExports(dataView);
-dataView.DataViewRowModes;
-dataView.HorizontalAlignments;
-dataView.VerticalAlignments;
-dataView.ResoursePrefixes;
-dataView.ResourceTypes;
-dataView.DataViewFieldTypes;
-dataView.DataViewScreenSizes;
-dataView.DataViewTypes;
+var profile$1 = {};
 
-var profile$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(profile$1, "__esModule", { value: true });
 
-unwrapExports(profile$1);
+var pepperiObject = {};
 
-var pepperiObject = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(pepperiObject, "__esModule", { value: true });
 
-unwrapExports(pepperiObject);
+var apiFieldObject = {};
 
-var apiFieldObject = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(apiFieldObject, "__esModule", { value: true });
 
-unwrapExports(apiFieldObject);
+var maintenance$1 = {};
 
-var maintenance$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(maintenance$1, "__esModule", { value: true });
 
-unwrapExports(maintenance$1);
+var fileStorage$1 = {};
 
-var fileStorage$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(fileStorage$1, "__esModule", { value: true });
 
-unwrapExports(fileStorage$1);
+var auditLogs$1 = {};
 
-var auditLogs$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(auditLogs$1, "__esModule", { value: true });
 
-unwrapExports(auditLogs$1);
+var atdSettings = {};
 
-var atdSettings = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(atdSettings, "__esModule", { value: true });
 
-unwrapExports(atdSettings);
+var atdMetaData = {};
 
-var atdMetaData = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(atdMetaData, "__esModule", { value: true });
 
-unwrapExports(atdMetaData);
+var types$1 = {};
 
-var types$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(types$1, "__esModule", { value: true });
 
-unwrapExports(types$1);
+var batchApiResponse = {};
 
-var batchApiResponse = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(batchApiResponse, "__esModule", { value: true });
 
-unwrapExports(batchApiResponse);
+var _export = {};
 
-var _export = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(_export, "__esModule", { value: true });
 
-unwrapExports(_export);
+var catalog = {};
 
-var catalog = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(catalog, "__esModule", { value: true });
 
-unwrapExports(catalog);
+var sync$1 = {};
 
-var sync$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(sync$1, "__esModule", { value: true });
 
-unwrapExports(sync$1);
+var item = {};
 
-var item = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(item, "__esModule", { value: true });
 
-unwrapExports(item);
+var transactionLines = {};
 
-var transactionLines = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(transactionLines, "__esModule", { value: true });
 
-unwrapExports(transactionLines);
+var contact = {};
 
-var contact = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(contact, "__esModule", { value: true });
 
-unwrapExports(contact);
+var image = {};
 
-var image = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(image, "__esModule", { value: true });
 
-unwrapExports(image);
+var subscription = {};
 
-var subscription = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(subscription, "__esModule", { value: true });
 
-unwrapExports(subscription);
+var page = {};
 
-var page = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SplitTypes = exports.PageSizeTypes = void 0;
-exports.PageSizeTypes = ['none', 'sm', 'md', 'lg'];
-exports.SplitTypes = [
+Object.defineProperty(page, "__esModule", { value: true });
+page.SplitTypes = page.PageSizeTypes = void 0;
+page.PageSizeTypes = ['none', 'sm', 'md', 'lg'];
+page.SplitTypes = [
     '1/4 3/4',
     '1/3 2/3',
     '1/2 1/2',
@@ -357,129 +305,105 @@ exports.SplitTypes = [
     '1/4 1/4 1/2',
     '1/4 1/4 1/4 1/4',
 ];
-});
 
-unwrapExports(page);
-page.SplitTypes;
-page.PageSizeTypes;
+var user_defined_collections = {};
 
-var user_defined_collections = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DocumentKeyTypes = void 0;
-exports.DocumentKeyTypes = ['AutoGenerate', 'Composite', 'Key'];
-});
+Object.defineProperty(user_defined_collections, "__esModule", { value: true });
+user_defined_collections.DocumentKeyTypes = void 0;
+user_defined_collections.DocumentKeyTypes = ['AutoGenerate', 'Composite', 'Key'];
 
-unwrapExports(user_defined_collections);
-user_defined_collections.DocumentKeyTypes;
+var dimx_inputs = {};
 
-var dimx_inputs = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(dimx_inputs, "__esModule", { value: true });
 
-unwrapExports(dimx_inputs);
+var genericResource$1 = {};
 
-var genericResource$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(genericResource$1, "__esModule", { value: true });
 
-unwrapExports(genericResource$1);
+var baseActivity = {};
 
-var baseActivity = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(baseActivity, "__esModule", { value: true });
 
-unwrapExports(baseActivity);
+var survey = {};
 
-var survey = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(survey, "__esModule", { value: true });
 
-unwrapExports(survey);
+var userDefinedFlows$1 = {};
 
-var userDefinedFlows$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(userDefinedFlows$1, "__esModule", { value: true });
 
-unwrapExports(userDefinedFlows$1);
+var configurations$1 = {};
 
-var configurations$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(configurations$1, "__esModule", { value: true });
 
-unwrapExports(configurations$1);
+var policy = {};
 
-var policy = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(policy, "__esModule", { value: true });
 
-unwrapExports(policy);
+var profile = {};
 
-var profile = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-});
+Object.defineProperty(profile, "__esModule", { value: true });
 
-unwrapExports(profile);
+(function (exports) {
+	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+	    if (k2 === undefined) k2 = k;
+	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+	}) : (function(o, m, k, k2) {
+	    if (k2 === undefined) k2 = k;
+	    o[k2] = m[k];
+	}));
+	var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m, exports) {
+	    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.Entities = void 0;
+	__exportStar(addons$1, exports);
+	__exportStar(userDefinedTables, exports);
+	__exportStar(codeJobs$1, exports);
+	__exportStar(activity, exports);
+	__exportStar(account, exports);
+	__exportStar(user, exports);
+	__exportStar(uiControl, exports);
+	__exportStar(dataView, exports);
+	__exportStar(profile$1, exports);
+	__exportStar(pepperiObject, exports);
+	__exportStar(apiFieldObject, exports);
+	__exportStar(maintenance$1, exports);
+	__exportStar(fileStorage$1, exports);
+	__exportStar(auditLogs$1, exports);
+	__exportStar(atdSettings, exports);
+	__exportStar(atdMetaData, exports);
+	__exportStar(types$1, exports);
+	__exportStar(batchApiResponse, exports);
+	__exportStar(_export, exports);
+	__exportStar(catalog, exports);
+	__exportStar(sync$1, exports);
+	__exportStar(item, exports);
+	__exportStar(transactionLines, exports);
+	__exportStar(contact, exports);
+	__exportStar(image, exports);
+	__exportStar(subscription, exports);
+	__exportStar(page, exports);
+	__exportStar(user_defined_collections, exports);
+	__exportStar(dimx_inputs, exports);
+	__exportStar(genericResource$1, exports);
+	__exportStar(baseActivity, exports);
+	__exportStar(survey, exports);
+	__exportStar(userDefinedFlows$1, exports);
+	__exportStar(configurations$1, exports);
+	__exportStar(policy, exports);
+	__exportStar(profile, exports);
+	// need something here that can be transpiled to js
+	// all the other entities are interfaces
+	class Entities {
+	}
+	exports.Entities = Entities; 
+} (entities));
 
-var entities = createCommonjsModule(function (module, exports) {
-var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Entities = void 0;
-__exportStar(addons$1, exports);
-__exportStar(userDefinedTables, exports);
-__exportStar(codeJobs$1, exports);
-__exportStar(activity, exports);
-__exportStar(account, exports);
-__exportStar(user, exports);
-__exportStar(uiControl, exports);
-__exportStar(dataView, exports);
-__exportStar(profile$1, exports);
-__exportStar(pepperiObject, exports);
-__exportStar(apiFieldObject, exports);
-__exportStar(maintenance$1, exports);
-__exportStar(fileStorage$1, exports);
-__exportStar(auditLogs$1, exports);
-__exportStar(atdSettings, exports);
-__exportStar(atdMetaData, exports);
-__exportStar(types$1, exports);
-__exportStar(batchApiResponse, exports);
-__exportStar(_export, exports);
-__exportStar(catalog, exports);
-__exportStar(sync$1, exports);
-__exportStar(item, exports);
-__exportStar(transactionLines, exports);
-__exportStar(contact, exports);
-__exportStar(image, exports);
-__exportStar(subscription, exports);
-__exportStar(page, exports);
-__exportStar(user_defined_collections, exports);
-__exportStar(dimx_inputs, exports);
-__exportStar(genericResource$1, exports);
-__exportStar(baseActivity, exports);
-__exportStar(survey, exports);
-__exportStar(userDefinedFlows$1, exports);
-__exportStar(configurations$1, exports);
-__exportStar(policy, exports);
-__exportStar(profile, exports);
-// need something here that can be transpiled to js
-// all the other entities are interfaces
-class Entities {
-}
-exports.Entities = Entities;
-});
+var papiClient = {};
 
-unwrapExports(entities);
-entities.Entities;
+var endpoint = {};
 
-var endpoint = createCommonjsModule(function (module, exports) {
 var __asyncValues = (commonjsGlobal && commonjsGlobal.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -487,8 +411,8 @@ var __asyncValues = (commonjsGlobal && commonjsGlobal.__asyncValues) || function
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IterableEndpoint = void 0;
+Object.defineProperty(endpoint, "__esModule", { value: true });
+endpoint.IterableEndpoint = void 0;
 class IterableEndpoint {
     constructor(service, endpoint) {
         this.service = service;
@@ -579,7 +503,7 @@ class IterableEndpoint {
         return { items, numOfPages };
     }
 }
-exports.IterableEndpoint = IterableEndpoint;
+endpoint.IterableEndpoint = IterableEndpoint;
 class Endpoint extends IterableEndpoint {
     constructor(service, endpoint) {
         super(service, endpoint);
@@ -656,20 +580,21 @@ class Endpoint extends IterableEndpoint {
         return ret.join('&');
     }
 }
-exports.default = Endpoint;
-});
+endpoint.default = Endpoint;
 
-unwrapExports(endpoint);
-endpoint.IterableEndpoint;
+var endpoints = {};
 
-var configurations = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var addons = {};
+
+var configurations = {};
+
+var __importDefault$a = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigurationsEndpoints = void 0;
-const endpoint_1 = __importDefault(endpoint);
-class ConfigurationsCRUDEndpoints extends endpoint_1.default {
+Object.defineProperty(configurations, "__esModule", { value: true });
+configurations.ConfigurationsEndpoints = void 0;
+const endpoint_1$a = __importDefault$a(endpoint);
+class ConfigurationsCRUDEndpoints extends endpoint_1$a.default {
     constructor(service, url) {
         super(service, url);
         this.url = url;
@@ -704,7 +629,7 @@ class ConfigurationsEndpoints extends ConfigurationsCRUDEndpoints {
         };
     }
 }
-exports.ConfigurationsEndpoints = ConfigurationsEndpoints;
+configurations.ConfigurationsEndpoints = ConfigurationsEndpoints;
 //configurations/:uuid/:scheme/drafts
 class DraftsEndpoints extends ConfigurationsCRUDEndpoints {
     constructor(service, url) {
@@ -726,19 +651,14 @@ class DraftsEndpoints extends ConfigurationsCRUDEndpoints {
         };
     }
 }
-});
 
-unwrapExports(configurations);
-configurations.ConfigurationsEndpoints;
-
-var addons = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$9 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddonEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
-
+Object.defineProperty(addons, "__esModule", { value: true });
+addons.AddonEndpoint = void 0;
+const endpoint_1$9 = __importDefault$9(endpoint);
+const configurations_1 = configurations;
 class InstalledAddonEnpoint {
     constructor(service, addonUUID) {
         this.service = service;
@@ -766,7 +686,7 @@ class InstalledAddonEnpoint {
         return await this.service.get(`/addons/installed_addons/${this.addonUUID}`);
     }
 }
-class InstalledAddonsEnpoint extends endpoint_1.default {
+class InstalledAddonsEnpoint extends endpoint_1$9.default {
     constructor(service) {
         super(service, '/addons/installed_addons');
     }
@@ -820,16 +740,16 @@ class AddonApiEndpoint {
             asyncPart = '/async';
         }
         const url = '/addons/api' + asyncPart + `/${this.options.uuid}/${this.options.file}/${this.options.func}`;
-        const queryString = endpoint_1.default.encodeQueryParams(params);
+        const queryString = endpoint_1$9.default.encodeQueryParams(params);
         return queryString ? url + '?' + queryString : url;
     }
 }
-class AddonVersionEndpoint extends endpoint_1.default {
+class AddonVersionEndpoint extends endpoint_1$9.default {
     constructor(service) {
         super(service, '/addons/versions');
     }
 }
-class TableEndpoint extends endpoint_1.default {
+class TableEndpoint extends endpoint_1$9.default {
     constructor(service, addonUUID, tableName) {
         super(service, `/addons/data/${addonUUID}/${tableName}`);
         this.addonUUID = addonUUID;
@@ -857,19 +777,19 @@ class TableEndpoint extends endpoint_1.default {
         };
     }
 }
-class AddonEndpoint extends endpoint_1.default {
+class AddonEndpoint extends endpoint_1$9.default {
     constructor(service) {
         super(service, '/addons');
         this.installedAddons = new InstalledAddonsEnpoint(this.service);
         this.versions = new AddonVersionEndpoint(this.service);
         this.api = new AddonApiEndpoint(this.service);
-        this.configurations = new configurations.ConfigurationsEndpoints(this.service, '/addons/configurations');
+        this.configurations = new configurations_1.ConfigurationsEndpoints(this.service, '/addons/configurations');
         // data = new AddonDataEndpoint(this.service);
         this.data = {
             schemes: {
                 get: async (params) => {
                     let url = '/addons/data/schemes';
-                    const query = endpoint_1.default.encodeQueryParams(params);
+                    const query = endpoint_1$9.default.encodeQueryParams(params);
                     url = query ? url + '?' + query : url;
                     return await this.service.get(url);
                 },
@@ -891,7 +811,7 @@ class AddonEndpoint extends endpoint_1.default {
                     },
                 };
             },
-            relations: new endpoint_1.default(this.service, '/addons/data/relations'),
+            relations: new endpoint_1$9.default(this.service, '/addons/data/relations'),
             import: {
                 uuid: (addonUUID) => {
                     return {
@@ -1015,7 +935,7 @@ class AddonEndpoint extends endpoint_1.default {
                             },
                             find: async (params) => {
                                 let url = `/addons/index/${addonUUID}/${resourceName}`;
-                                const query = endpoint_1.default.encodeQueryParams(params);
+                                const query = endpoint_1$9.default.encodeQueryParams(params);
                                 url = query ? url + '?' + query : url;
                                 return await this.service.get(url);
                             },
@@ -1100,7 +1020,7 @@ class AddonEndpoint extends endpoint_1.default {
                                         },
                                         find: async (params) => {
                                             let url = `/addons/shared_index/index/${indexName}/${addonUUID}/${resourceName}`;
-                                            const query = endpoint_1.default.encodeQueryParams(params);
+                                            const query = endpoint_1$9.default.encodeQueryParams(params);
                                             url = query ? url + '?' + query : url;
                                             return await this.service.get(url);
                                         },
@@ -1170,7 +1090,7 @@ class AddonEndpoint extends endpoint_1.default {
                             },
                             find: async (params) => {
                                 let url = `/addons/pfs/${addonUUID}/${schemaName}`;
-                                const query = endpoint_1.default.encodeQueryParams(params);
+                                const query = endpoint_1$9.default.encodeQueryParams(params);
                                 url = `${url}?${query}`;
                                 return await this.service.get(url);
                             },
@@ -1195,26 +1115,23 @@ class AddonEndpoint extends endpoint_1.default {
             },
             find: async (params) => {
                 let url = '/addons/jobs';
-                const query = endpoint_1.default.encodeQueryParams(params);
+                const query = endpoint_1$9.default.encodeQueryParams(params);
                 url = query ? url + '?' + query : url;
                 return await this.service.get(url);
             },
         };
     }
 }
-exports.AddonEndpoint = AddonEndpoint;
-});
+addons.AddonEndpoint = AddonEndpoint;
 
-unwrapExports(addons);
-addons.AddonEndpoint;
+var codeJobs = {};
 
-var codeJobs = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$8 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CodeJobsEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
+Object.defineProperty(codeJobs, "__esModule", { value: true });
+codeJobs.CodeJobsEndpoint = void 0;
+const endpoint_1$8 = __importDefault$8(endpoint);
 class CodeJobEndpoint {
     constructor(service, uuid, async) {
         this.service = service;
@@ -1235,7 +1152,7 @@ class CodeJobEndpoint {
         return this.service.post(`/code_jobs/${asyncPart}${this.uuid}/execute`);
     }
 }
-class CodeJobsEndpoint extends endpoint_1.default {
+class CodeJobsEndpoint extends endpoint_1$8.default {
     constructor(service) {
         super(service, '/code_jobs');
         this.isAsync = false;
@@ -1248,19 +1165,16 @@ class CodeJobsEndpoint extends endpoint_1.default {
         return this;
     }
 }
-exports.CodeJobsEndpoint = CodeJobsEndpoint;
-});
+codeJobs.CodeJobsEndpoint = CodeJobsEndpoint;
 
-unwrapExports(codeJobs);
-codeJobs.CodeJobsEndpoint;
+var metaData = {};
 
-var metaData = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$7 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Settings = exports.Fields = exports.SubTypes = exports.Types = exports.TypeMetaData = exports.DistributorFlagsEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
+Object.defineProperty(metaData, "__esModule", { value: true });
+metaData.Settings = metaData.Fields = metaData.SubTypes = metaData.Types = metaData.TypeMetaData = metaData.DistributorFlagsEndpoint = void 0;
+const endpoint_1$7 = __importDefault$7(endpoint);
 class DistributorFlagsEndpoint {
     constructor(service) {
         this.service = service;
@@ -1276,7 +1190,7 @@ class DistributorFlagsEndpoint {
         return await this.service.get(`/meta_data/flags/${this.options.name}`);
     }
 }
-exports.DistributorFlagsEndpoint = DistributorFlagsEndpoint;
+metaData.DistributorFlagsEndpoint = DistributorFlagsEndpoint;
 class TypeMetaData {
     constructor(service, typeObject) {
         this.service = service;
@@ -1285,7 +1199,7 @@ class TypeMetaData {
         this.fields = new Fields(this.service, this.typeObject);
     }
 }
-exports.TypeMetaData = TypeMetaData;
+metaData.TypeMetaData = TypeMetaData;
 class Types {
     constructor(service, typeName) {
         this.service = service;
@@ -1300,7 +1214,7 @@ class Types {
         return await this.service.get(url);
     }
 }
-exports.Types = Types;
+metaData.Types = Types;
 class SubTypes {
     constructor(service, typeName, subtype) {
         this.service = service;
@@ -1318,7 +1232,7 @@ class SubTypes {
         return await this.service.get(url);
     }
 }
-exports.SubTypes = SubTypes;
+metaData.SubTypes = SubTypes;
 class Fields {
     constructor(service, type, subtypeid) {
         this.service = service;
@@ -1336,7 +1250,7 @@ class Fields {
             }
         }
         else if (typeof p === 'object') {
-            const queryString = endpoint_1.default.encodeQueryParams(p);
+            const queryString = endpoint_1$7.default.encodeQueryParams(p);
             url = queryString ? url + '?' + queryString : url;
         }
         return await this.service.get(url);
@@ -1361,7 +1275,7 @@ class Fields {
         return (url = `${url}/fields`);
     }
 }
-exports.Fields = Fields;
+metaData.Fields = Fields;
 class Settings {
     constructor(service, type, subtypeid) {
         this.service = service;
@@ -1377,20 +1291,12 @@ class Settings {
         return await this.service.post(url, body);
     }
 }
-exports.Settings = Settings;
-});
+metaData.Settings = Settings;
 
-unwrapExports(metaData);
-metaData.Settings;
-metaData.Fields;
-metaData.SubTypes;
-metaData.Types;
-metaData.TypeMetaData;
-metaData.DistributorFlagsEndpoint;
+var maintenance = {};
 
-var maintenance = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MaintenanceEndpoint = void 0;
+Object.defineProperty(maintenance, "__esModule", { value: true });
+maintenance.MaintenanceEndpoint = void 0;
 class MaintenanceEndpoint {
     constructor(service) {
         this.service = service;
@@ -1400,30 +1306,27 @@ class MaintenanceEndpoint {
         return await this.service.post(url, body);
     }
 }
-exports.MaintenanceEndpoint = MaintenanceEndpoint;
-});
+maintenance.MaintenanceEndpoint = MaintenanceEndpoint;
 
-unwrapExports(maintenance);
-maintenance.MaintenanceEndpoint;
+var auditLogs = {};
 
-var auditLogs = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$6 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuditLogsEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
+Object.defineProperty(auditLogs, "__esModule", { value: true });
+auditLogs.AuditLogsEndpoint = void 0;
+const endpoint_1$6 = __importDefault$6(endpoint);
 class AuditLogEndpoint {
     constructor(service, uuid) {
         this.service = service;
         this.uuid = uuid;
-        this.lines = new endpoint_1.default(this.service, `/audit_logs/${this.uuid}/lines`);
+        this.lines = new endpoint_1$6.default(this.service, `/audit_logs/${this.uuid}/lines`);
     }
     async get() {
         return await this.service.get(`/audit_logs/${this.uuid}`);
     }
 }
-class AuditLogsEndpoint extends endpoint_1.default {
+class AuditLogsEndpoint extends endpoint_1$6.default {
     constructor(service) {
         super(service, '/audit_logs');
     }
@@ -1431,15 +1334,12 @@ class AuditLogsEndpoint extends endpoint_1.default {
         return new AuditLogEndpoint(this.service, uuid);
     }
 }
-exports.AuditLogsEndpoint = AuditLogsEndpoint;
-});
+auditLogs.AuditLogsEndpoint = AuditLogsEndpoint;
 
-unwrapExports(auditLogs);
-auditLogs.AuditLogsEndpoint;
+var sync = {};
 
-var sync = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SyncEndpoint = void 0;
+Object.defineProperty(sync, "__esModule", { value: true });
+sync.SyncEndpoint = void 0;
 class SyncEndpoint {
     constructor(service) {
         this.service = service;
@@ -1457,20 +1357,17 @@ class SyncEndpoint {
         return await this.service.get(url);
     }
 }
-exports.SyncEndpoint = SyncEndpoint;
-});
+sync.SyncEndpoint = SyncEndpoint;
 
-unwrapExports(sync);
-sync.SyncEndpoint;
+var fileStorage = {};
 
-var fileStorage = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$5 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FileStorageEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
-class FileStorageEndpoint extends endpoint_1.default {
+Object.defineProperty(fileStorage, "__esModule", { value: true });
+fileStorage.FileStorageEndpoint = void 0;
+const endpoint_1$5 = __importDefault$5(endpoint);
+class FileStorageEndpoint extends endpoint_1$5.default {
     constructor(service) {
         super(service, '/file_storage');
     }
@@ -1481,43 +1378,37 @@ class FileStorageEndpoint extends endpoint_1.default {
         return await this.service.post('/file_storage/tmp');
     }
 }
-exports.FileStorageEndpoint = FileStorageEndpoint;
-});
+fileStorage.FileStorageEndpoint = FileStorageEndpoint;
 
-unwrapExports(fileStorage);
-fileStorage.FileStorageEndpoint;
+var notification = {};
 
-var notification = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$4 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
+Object.defineProperty(notification, "__esModule", { value: true });
+notification.NotificationEndpoint = void 0;
+const endpoint_1$4 = __importDefault$4(endpoint);
 class NotificationEndpoint {
     constructor(service) {
         this.service = service;
-        this.subscriptions = new endpoint_1.default(this.service, '/notification/subscriptions');
+        this.subscriptions = new endpoint_1$4.default(this.service, '/notification/subscriptions');
     }
     async publish(body) {
         const url = '/notification/publish';
         return await this.service.post(url, body);
     }
 }
-exports.NotificationEndpoint = NotificationEndpoint;
-});
+notification.NotificationEndpoint = NotificationEndpoint;
 
-unwrapExports(notification);
-notification.NotificationEndpoint;
+var userDefinedCollections = {};
 
-var userDefinedCollections = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$3 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SchemesEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
-class SchemesEndpoint extends endpoint_1.default {
+Object.defineProperty(userDefinedCollections, "__esModule", { value: true });
+userDefinedCollections.SchemesEndpoint = void 0;
+const endpoint_1$3 = __importDefault$3(endpoint);
+class SchemesEndpoint extends endpoint_1$3.default {
     constructor(service) {
         super(service, '/user_defined_collections/schemes');
         this.service = service;
@@ -1530,21 +1421,18 @@ class SchemesEndpoint extends endpoint_1.default {
         };
     }
 }
-exports.SchemesEndpoint = SchemesEndpoint;
-});
+userDefinedCollections.SchemesEndpoint = SchemesEndpoint;
 
-unwrapExports(userDefinedCollections);
-userDefinedCollections.SchemesEndpoint;
+var userDefinedFlows = {};
 
-var userDefinedFlows = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$2 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FlowsEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
+Object.defineProperty(userDefinedFlows, "__esModule", { value: true });
+userDefinedFlows.FlowsEndpoint = void 0;
+const endpoint_1$2 = __importDefault$2(endpoint);
 const base_url = '/user_defined_flows';
-class FlowsEndpoint extends endpoint_1.default {
+class FlowsEndpoint extends endpoint_1$2.default {
     constructor(service) {
         super(service, base_url);
         this.service = service;
@@ -1560,19 +1448,16 @@ class FlowsEndpoint extends endpoint_1.default {
         return await this.service.post(`${base_url}/search`, body);
     }
 }
-exports.FlowsEndpoint = FlowsEndpoint;
-});
+userDefinedFlows.FlowsEndpoint = FlowsEndpoint;
 
-unwrapExports(userDefinedFlows);
-userDefinedFlows.FlowsEndpoint;
+var genericResource = {};
 
-var genericResource = createCommonjsModule(function (module, exports) {
-var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
+var __importDefault$1 = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GenericResourceEndpoint = void 0;
-const endpoint_1 = __importDefault(endpoint);
+Object.defineProperty(genericResource, "__esModule", { value: true });
+genericResource.GenericResourceEndpoint = void 0;
+const endpoint_1$1 = __importDefault$1(endpoint);
 class GenericResourceEndpoint {
     constructor(service, baseUrl) {
         this.service = service;
@@ -1600,7 +1485,7 @@ class GenericResourceEndpoint {
         };
     }
     async get(options = {}) {
-        const query = endpoint_1.default.encodeQueryParams(options);
+        const query = endpoint_1$1.default.encodeQueryParams(options);
         const url = query ? this.baseUrl + '?' + query : this.baseUrl;
         return await this.service.get(url);
     }
@@ -1625,42 +1510,42 @@ class GenericResourceEndpoint {
         return await this.service.post(`${this.baseUrl}/search`, body);
     }
 }
-exports.GenericResourceEndpoint = GenericResourceEndpoint;
-});
+genericResource.GenericResourceEndpoint = GenericResourceEndpoint;
 
-unwrapExports(genericResource);
-genericResource.GenericResourceEndpoint;
+(function (exports) {
+	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+	    if (k2 === undefined) k2 = k;
+	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+	}) : (function(o, m, k, k2) {
+	    if (k2 === undefined) k2 = k;
+	    o[k2] = m[k];
+	}));
+	var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m, exports) {
+	    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	__exportStar(addons, exports);
+	__exportStar(codeJobs, exports);
+	__exportStar(metaData, exports);
+	__exportStar(maintenance, exports);
+	__exportStar(auditLogs, exports);
+	__exportStar(sync, exports);
+	__exportStar(fileStorage, exports);
+	__exportStar(notification, exports);
+	__exportStar(userDefinedCollections, exports);
+	__exportStar(userDefinedFlows, exports);
+	__exportStar(genericResource, exports);
+	__exportStar(configurations, exports); 
+} (endpoints));
 
-var endpoints = createCommonjsModule(function (module, exports) {
-var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(addons, exports);
-__exportStar(codeJobs, exports);
-__exportStar(metaData, exports);
-__exportStar(maintenance, exports);
-__exportStar(auditLogs, exports);
-__exportStar(sync, exports);
-__exportStar(fileStorage, exports);
-__exportStar(notification, exports);
-__exportStar(userDefinedCollections, exports);
-__exportStar(userDefinedFlows, exports);
-__exportStar(genericResource, exports);
-__exportStar(configurations, exports);
-});
+var papiModule = {};
 
-unwrapExports(endpoints);
+var publicApi = {};
+
+var URL$2 = {exports: {}};
 
 var conversions = {};
-var lib$2 = conversions;
+var lib$1 = conversions;
 
 function sign(x) {
     return x < 0 ? -1 : 1;
@@ -1847,33 +1732,40 @@ conversions["RegExp"] = function (V, opts) {
     return V;
 };
 
-var utils = createCommonjsModule(function (module) {
+var utils = {exports: {}};
 
-module.exports.mixin = function mixin(target, source) {
-  const keys = Object.getOwnPropertyNames(source);
-  for (let i = 0; i < keys.length; ++i) {
-    Object.defineProperty(target, keys[i], Object.getOwnPropertyDescriptor(source, keys[i]));
-  }
-};
+utils.exports;
 
-module.exports.wrapperSymbol = Symbol("wrapper");
-module.exports.implSymbol = Symbol("impl");
+(function (module) {
 
-module.exports.wrapperForImpl = function (impl) {
-  return impl[module.exports.wrapperSymbol];
-};
+	module.exports.mixin = function mixin(target, source) {
+	  const keys = Object.getOwnPropertyNames(source);
+	  for (let i = 0; i < keys.length; ++i) {
+	    Object.defineProperty(target, keys[i], Object.getOwnPropertyDescriptor(source, keys[i]));
+	  }
+	};
 
-module.exports.implForWrapper = function (wrapper) {
-  return wrapper[module.exports.implSymbol];
-};
-});
-utils.mixin;
-utils.wrapperSymbol;
-utils.implSymbol;
-utils.wrapperForImpl;
-utils.implForWrapper;
+	module.exports.wrapperSymbol = Symbol("wrapper");
+	module.exports.implSymbol = Symbol("impl");
 
-var mappingTable$1 = [
+	module.exports.wrapperForImpl = function (impl) {
+	  return impl[module.exports.wrapperSymbol];
+	};
+
+	module.exports.implForWrapper = function (wrapper) {
+	  return wrapper[module.exports.implSymbol];
+	}; 
+} (utils));
+
+var utilsExports = utils.exports;
+
+var URLImpl = {};
+
+var urlStateMachine = {exports: {}};
+
+var tr46 = {};
+
+var require$$1 = [
 	[
 		[
 			0,
@@ -79524,12 +79416,8 @@ var mappingTable$1 = [
 	]
 ];
 
-var mappingTable$2 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': mappingTable$1
-});
-
-var mappingTable = getCjsExportFromNamespace(mappingTable$2);
+var punycode = require$$0__default["default"];
+var mappingTable = require$$1;
 
 var PROCESSING_OPTIONS = {
   TRANSITIONAL: 0,
@@ -79627,7 +79515,8 @@ var combiningMarksRegex = /[\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\
 
 function validateLabel(label, processing_option) {
   if (label.substr(0, 4) === "xn--") {
-    label = punycode__default["default"].toUnicode(label);
+    label = punycode.toUnicode(label);
+    PROCESSING_OPTIONS.NONTRANSITIONAL;
   }
 
   var error = false;
@@ -79678,12 +79567,12 @@ function processing(domain_name, useSTD3, processing_option) {
   };
 }
 
-var toASCII = function(domain_name, useSTD3, processing_option, verifyDnsLength) {
+tr46.toASCII = function(domain_name, useSTD3, processing_option, verifyDnsLength) {
   var result = processing(domain_name, useSTD3, processing_option);
   var labels = result.string.split(".");
   labels = labels.map(function(l) {
     try {
-      return punycode__default["default"].toASCII(l);
+      return punycode.toASCII(l);
     } catch(e) {
       result.error = true;
       return l;
@@ -79708,7 +79597,7 @@ var toASCII = function(domain_name, useSTD3, processing_option, verifyDnsLength)
   return labels.join(".");
 };
 
-var toUnicode = function(domain_name, useSTD3) {
+tr46.toUnicode = function(domain_name, useSTD3) {
   var result = processing(domain_name, useSTD3, PROCESSING_OPTIONS.NONTRANSITIONAL);
 
   return {
@@ -79717,1335 +79606,1326 @@ var toUnicode = function(domain_name, useSTD3) {
   };
 };
 
-var PROCESSING_OPTIONS_1 = PROCESSING_OPTIONS;
-
-var tr46 = {
-	toASCII: toASCII,
-	toUnicode: toUnicode,
-	PROCESSING_OPTIONS: PROCESSING_OPTIONS_1
-};
+tr46.PROCESSING_OPTIONS = PROCESSING_OPTIONS;
+
+urlStateMachine.exports;
+
+(function (module) {
+	const punycode = require$$0__default["default"];
+	const tr46$1 = tr46;
 
-var urlStateMachine = createCommonjsModule(function (module) {
-
-
-
-const specialSchemes = {
-  ftp: 21,
-  file: null,
-  gopher: 70,
-  http: 80,
-  https: 443,
-  ws: 80,
-  wss: 443
-};
-
-const failure = Symbol("failure");
-
-function countSymbols(str) {
-  return punycode__default["default"].ucs2.decode(str).length;
-}
-
-function at(input, idx) {
-  const c = input[idx];
-  return isNaN(c) ? undefined : String.fromCodePoint(c);
-}
-
-function isASCIIDigit(c) {
-  return c >= 0x30 && c <= 0x39;
-}
-
-function isASCIIAlpha(c) {
-  return (c >= 0x41 && c <= 0x5A) || (c >= 0x61 && c <= 0x7A);
-}
-
-function isASCIIAlphanumeric(c) {
-  return isASCIIAlpha(c) || isASCIIDigit(c);
-}
-
-function isASCIIHex(c) {
-  return isASCIIDigit(c) || (c >= 0x41 && c <= 0x46) || (c >= 0x61 && c <= 0x66);
-}
-
-function isSingleDot(buffer) {
-  return buffer === "." || buffer.toLowerCase() === "%2e";
-}
-
-function isDoubleDot(buffer) {
-  buffer = buffer.toLowerCase();
-  return buffer === ".." || buffer === "%2e." || buffer === ".%2e" || buffer === "%2e%2e";
-}
-
-function isWindowsDriveLetterCodePoints(cp1, cp2) {
-  return isASCIIAlpha(cp1) && (cp2 === 58 || cp2 === 124);
-}
-
-function isWindowsDriveLetterString(string) {
-  return string.length === 2 && isASCIIAlpha(string.codePointAt(0)) && (string[1] === ":" || string[1] === "|");
-}
-
-function isNormalizedWindowsDriveLetterString(string) {
-  return string.length === 2 && isASCIIAlpha(string.codePointAt(0)) && string[1] === ":";
-}
-
-function containsForbiddenHostCodePoint(string) {
-  return string.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|%|\/|:|\?|@|\[|\\|\]/) !== -1;
-}
-
-function containsForbiddenHostCodePointExcludingPercent(string) {
-  return string.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|\/|:|\?|@|\[|\\|\]/) !== -1;
-}
-
-function isSpecialScheme(scheme) {
-  return specialSchemes[scheme] !== undefined;
-}
-
-function isSpecial(url) {
-  return isSpecialScheme(url.scheme);
-}
-
-function defaultPort(scheme) {
-  return specialSchemes[scheme];
-}
-
-function percentEncode(c) {
-  let hex = c.toString(16).toUpperCase();
-  if (hex.length === 1) {
-    hex = "0" + hex;
-  }
-
-  return "%" + hex;
-}
-
-function utf8PercentEncode(c) {
-  const buf = new Buffer(c);
-
-  let str = "";
-
-  for (let i = 0; i < buf.length; ++i) {
-    str += percentEncode(buf[i]);
-  }
-
-  return str;
-}
-
-function utf8PercentDecode(str) {
-  const input = new Buffer(str);
-  const output = [];
-  for (let i = 0; i < input.length; ++i) {
-    if (input[i] !== 37) {
-      output.push(input[i]);
-    } else if (input[i] === 37 && isASCIIHex(input[i + 1]) && isASCIIHex(input[i + 2])) {
-      output.push(parseInt(input.slice(i + 1, i + 3).toString(), 16));
-      i += 2;
-    } else {
-      output.push(input[i]);
-    }
-  }
-  return new Buffer(output).toString();
-}
-
-function isC0ControlPercentEncode(c) {
-  return c <= 0x1F || c > 0x7E;
-}
-
-const extraPathPercentEncodeSet = new Set([32, 34, 35, 60, 62, 63, 96, 123, 125]);
-function isPathPercentEncode(c) {
-  return isC0ControlPercentEncode(c) || extraPathPercentEncodeSet.has(c);
-}
-
-const extraUserinfoPercentEncodeSet =
-  new Set([47, 58, 59, 61, 64, 91, 92, 93, 94, 124]);
-function isUserinfoPercentEncode(c) {
-  return isPathPercentEncode(c) || extraUserinfoPercentEncodeSet.has(c);
-}
-
-function percentEncodeChar(c, encodeSetPredicate) {
-  const cStr = String.fromCodePoint(c);
-
-  if (encodeSetPredicate(c)) {
-    return utf8PercentEncode(cStr);
-  }
-
-  return cStr;
-}
-
-function parseIPv4Number(input) {
-  let R = 10;
-
-  if (input.length >= 2 && input.charAt(0) === "0" && input.charAt(1).toLowerCase() === "x") {
-    input = input.substring(2);
-    R = 16;
-  } else if (input.length >= 2 && input.charAt(0) === "0") {
-    input = input.substring(1);
-    R = 8;
-  }
-
-  if (input === "") {
-    return 0;
-  }
-
-  const regex = R === 10 ? /[^0-9]/ : (R === 16 ? /[^0-9A-Fa-f]/ : /[^0-7]/);
-  if (regex.test(input)) {
-    return failure;
-  }
-
-  return parseInt(input, R);
-}
-
-function parseIPv4(input) {
-  const parts = input.split(".");
-  if (parts[parts.length - 1] === "") {
-    if (parts.length > 1) {
-      parts.pop();
-    }
-  }
-
-  if (parts.length > 4) {
-    return input;
-  }
-
-  const numbers = [];
-  for (const part of parts) {
-    if (part === "") {
-      return input;
-    }
-    const n = parseIPv4Number(part);
-    if (n === failure) {
-      return input;
-    }
-
-    numbers.push(n);
-  }
-
-  for (let i = 0; i < numbers.length - 1; ++i) {
-    if (numbers[i] > 255) {
-      return failure;
-    }
-  }
-  if (numbers[numbers.length - 1] >= Math.pow(256, 5 - numbers.length)) {
-    return failure;
-  }
-
-  let ipv4 = numbers.pop();
-  let counter = 0;
-
-  for (const n of numbers) {
-    ipv4 += n * Math.pow(256, 3 - counter);
-    ++counter;
-  }
-
-  return ipv4;
-}
-
-function serializeIPv4(address) {
-  let output = "";
-  let n = address;
-
-  for (let i = 1; i <= 4; ++i) {
-    output = String(n % 256) + output;
-    if (i !== 4) {
-      output = "." + output;
-    }
-    n = Math.floor(n / 256);
-  }
-
-  return output;
-}
-
-function parseIPv6(input) {
-  const address = [0, 0, 0, 0, 0, 0, 0, 0];
-  let pieceIndex = 0;
-  let compress = null;
-  let pointer = 0;
-
-  input = punycode__default["default"].ucs2.decode(input);
-
-  if (input[pointer] === 58) {
-    if (input[pointer + 1] !== 58) {
-      return failure;
-    }
-
-    pointer += 2;
-    ++pieceIndex;
-    compress = pieceIndex;
-  }
-
-  while (pointer < input.length) {
-    if (pieceIndex === 8) {
-      return failure;
-    }
-
-    if (input[pointer] === 58) {
-      if (compress !== null) {
-        return failure;
-      }
-      ++pointer;
-      ++pieceIndex;
-      compress = pieceIndex;
-      continue;
-    }
-
-    let value = 0;
-    let length = 0;
-
-    while (length < 4 && isASCIIHex(input[pointer])) {
-      value = value * 0x10 + parseInt(at(input, pointer), 16);
-      ++pointer;
-      ++length;
-    }
-
-    if (input[pointer] === 46) {
-      if (length === 0) {
-        return failure;
-      }
-
-      pointer -= length;
-
-      if (pieceIndex > 6) {
-        return failure;
-      }
-
-      let numbersSeen = 0;
-
-      while (input[pointer] !== undefined) {
-        let ipv4Piece = null;
-
-        if (numbersSeen > 0) {
-          if (input[pointer] === 46 && numbersSeen < 4) {
-            ++pointer;
-          } else {
-            return failure;
-          }
-        }
-
-        if (!isASCIIDigit(input[pointer])) {
-          return failure;
-        }
-
-        while (isASCIIDigit(input[pointer])) {
-          const number = parseInt(at(input, pointer));
-          if (ipv4Piece === null) {
-            ipv4Piece = number;
-          } else if (ipv4Piece === 0) {
-            return failure;
-          } else {
-            ipv4Piece = ipv4Piece * 10 + number;
-          }
-          if (ipv4Piece > 255) {
-            return failure;
-          }
-          ++pointer;
-        }
-
-        address[pieceIndex] = address[pieceIndex] * 0x100 + ipv4Piece;
-
-        ++numbersSeen;
-
-        if (numbersSeen === 2 || numbersSeen === 4) {
-          ++pieceIndex;
-        }
-      }
-
-      if (numbersSeen !== 4) {
-        return failure;
-      }
-
-      break;
-    } else if (input[pointer] === 58) {
-      ++pointer;
-      if (input[pointer] === undefined) {
-        return failure;
-      }
-    } else if (input[pointer] !== undefined) {
-      return failure;
-    }
-
-    address[pieceIndex] = value;
-    ++pieceIndex;
-  }
-
-  if (compress !== null) {
-    let swaps = pieceIndex - compress;
-    pieceIndex = 7;
-    while (pieceIndex !== 0 && swaps > 0) {
-      const temp = address[compress + swaps - 1];
-      address[compress + swaps - 1] = address[pieceIndex];
-      address[pieceIndex] = temp;
-      --pieceIndex;
-      --swaps;
-    }
-  } else if (compress === null && pieceIndex !== 8) {
-    return failure;
-  }
-
-  return address;
-}
-
-function serializeIPv6(address) {
-  let output = "";
-  const seqResult = findLongestZeroSequence(address);
-  const compress = seqResult.idx;
-  let ignore0 = false;
-
-  for (let pieceIndex = 0; pieceIndex <= 7; ++pieceIndex) {
-    if (ignore0 && address[pieceIndex] === 0) {
-      continue;
-    } else if (ignore0) {
-      ignore0 = false;
-    }
-
-    if (compress === pieceIndex) {
-      const separator = pieceIndex === 0 ? "::" : ":";
-      output += separator;
-      ignore0 = true;
-      continue;
-    }
-
-    output += address[pieceIndex].toString(16);
-
-    if (pieceIndex !== 7) {
-      output += ":";
-    }
-  }
-
-  return output;
-}
-
-function parseHost(input, isSpecialArg) {
-  if (input[0] === "[") {
-    if (input[input.length - 1] !== "]") {
-      return failure;
-    }
-
-    return parseIPv6(input.substring(1, input.length - 1));
-  }
-
-  if (!isSpecialArg) {
-    return parseOpaqueHost(input);
-  }
-
-  const domain = utf8PercentDecode(input);
-  const asciiDomain = tr46.toASCII(domain, false, tr46.PROCESSING_OPTIONS.NONTRANSITIONAL, false);
-  if (asciiDomain === null) {
-    return failure;
-  }
-
-  if (containsForbiddenHostCodePoint(asciiDomain)) {
-    return failure;
-  }
-
-  const ipv4Host = parseIPv4(asciiDomain);
-  if (typeof ipv4Host === "number" || ipv4Host === failure) {
-    return ipv4Host;
-  }
-
-  return asciiDomain;
-}
-
-function parseOpaqueHost(input) {
-  if (containsForbiddenHostCodePointExcludingPercent(input)) {
-    return failure;
-  }
-
-  let output = "";
-  const decoded = punycode__default["default"].ucs2.decode(input);
-  for (let i = 0; i < decoded.length; ++i) {
-    output += percentEncodeChar(decoded[i], isC0ControlPercentEncode);
-  }
-  return output;
-}
-
-function findLongestZeroSequence(arr) {
-  let maxIdx = null;
-  let maxLen = 1; // only find elements > 1
-  let currStart = null;
-  let currLen = 0;
-
-  for (let i = 0; i < arr.length; ++i) {
-    if (arr[i] !== 0) {
-      if (currLen > maxLen) {
-        maxIdx = currStart;
-        maxLen = currLen;
-      }
-
-      currStart = null;
-      currLen = 0;
-    } else {
-      if (currStart === null) {
-        currStart = i;
-      }
-      ++currLen;
-    }
-  }
-
-  // if trailing zeros
-  if (currLen > maxLen) {
-    maxIdx = currStart;
-    maxLen = currLen;
-  }
-
-  return {
-    idx: maxIdx,
-    len: maxLen
-  };
-}
-
-function serializeHost(host) {
-  if (typeof host === "number") {
-    return serializeIPv4(host);
-  }
-
-  // IPv6 serializer
-  if (host instanceof Array) {
-    return "[" + serializeIPv6(host) + "]";
-  }
-
-  return host;
-}
-
-function trimControlChars(url) {
-  return url.replace(/^[\u0000-\u001F\u0020]+|[\u0000-\u001F\u0020]+$/g, "");
-}
-
-function trimTabAndNewline(url) {
-  return url.replace(/\u0009|\u000A|\u000D/g, "");
-}
-
-function shortenPath(url) {
-  const path = url.path;
-  if (path.length === 0) {
-    return;
-  }
-  if (url.scheme === "file" && path.length === 1 && isNormalizedWindowsDriveLetter(path[0])) {
-    return;
-  }
-
-  path.pop();
-}
-
-function includesCredentials(url) {
-  return url.username !== "" || url.password !== "";
-}
-
-function cannotHaveAUsernamePasswordPort(url) {
-  return url.host === null || url.host === "" || url.cannotBeABaseURL || url.scheme === "file";
-}
-
-function isNormalizedWindowsDriveLetter(string) {
-  return /^[A-Za-z]:$/.test(string);
-}
-
-function URLStateMachine(input, base, encodingOverride, url, stateOverride) {
-  this.pointer = 0;
-  this.input = input;
-  this.base = base || null;
-  this.encodingOverride = encodingOverride || "utf-8";
-  this.stateOverride = stateOverride;
-  this.url = url;
-  this.failure = false;
-  this.parseError = false;
-
-  if (!this.url) {
-    this.url = {
-      scheme: "",
-      username: "",
-      password: "",
-      host: null,
-      port: null,
-      path: [],
-      query: null,
-      fragment: null,
-
-      cannotBeABaseURL: false
-    };
-
-    const res = trimControlChars(this.input);
-    if (res !== this.input) {
-      this.parseError = true;
-    }
-    this.input = res;
-  }
-
-  const res = trimTabAndNewline(this.input);
-  if (res !== this.input) {
-    this.parseError = true;
-  }
-  this.input = res;
-
-  this.state = stateOverride || "scheme start";
-
-  this.buffer = "";
-  this.atFlag = false;
-  this.arrFlag = false;
-  this.passwordTokenSeenFlag = false;
-
-  this.input = punycode__default["default"].ucs2.decode(this.input);
-
-  for (; this.pointer <= this.input.length; ++this.pointer) {
-    const c = this.input[this.pointer];
-    const cStr = isNaN(c) ? undefined : String.fromCodePoint(c);
-
-    // exec state machine
-    const ret = this["parse " + this.state](c, cStr);
-    if (!ret) {
-      break; // terminate algorithm
-    } else if (ret === failure) {
-      this.failure = true;
-      break;
-    }
-  }
-}
-
-URLStateMachine.prototype["parse scheme start"] = function parseSchemeStart(c, cStr) {
-  if (isASCIIAlpha(c)) {
-    this.buffer += cStr.toLowerCase();
-    this.state = "scheme";
-  } else if (!this.stateOverride) {
-    this.state = "no scheme";
-    --this.pointer;
-  } else {
-    this.parseError = true;
-    return failure;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse scheme"] = function parseScheme(c, cStr) {
-  if (isASCIIAlphanumeric(c) || c === 43 || c === 45 || c === 46) {
-    this.buffer += cStr.toLowerCase();
-  } else if (c === 58) {
-    if (this.stateOverride) {
-      if (isSpecial(this.url) && !isSpecialScheme(this.buffer)) {
-        return false;
-      }
-
-      if (!isSpecial(this.url) && isSpecialScheme(this.buffer)) {
-        return false;
-      }
-
-      if ((includesCredentials(this.url) || this.url.port !== null) && this.buffer === "file") {
-        return false;
-      }
-
-      if (this.url.scheme === "file" && (this.url.host === "" || this.url.host === null)) {
-        return false;
-      }
-    }
-    this.url.scheme = this.buffer;
-    this.buffer = "";
-    if (this.stateOverride) {
-      return false;
-    }
-    if (this.url.scheme === "file") {
-      if (this.input[this.pointer + 1] !== 47 || this.input[this.pointer + 2] !== 47) {
-        this.parseError = true;
-      }
-      this.state = "file";
-    } else if (isSpecial(this.url) && this.base !== null && this.base.scheme === this.url.scheme) {
-      this.state = "special relative or authority";
-    } else if (isSpecial(this.url)) {
-      this.state = "special authority slashes";
-    } else if (this.input[this.pointer + 1] === 47) {
-      this.state = "path or authority";
-      ++this.pointer;
-    } else {
-      this.url.cannotBeABaseURL = true;
-      this.url.path.push("");
-      this.state = "cannot-be-a-base-URL path";
-    }
-  } else if (!this.stateOverride) {
-    this.buffer = "";
-    this.state = "no scheme";
-    this.pointer = -1;
-  } else {
-    this.parseError = true;
-    return failure;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse no scheme"] = function parseNoScheme(c) {
-  if (this.base === null || (this.base.cannotBeABaseURL && c !== 35)) {
-    return failure;
-  } else if (this.base.cannotBeABaseURL && c === 35) {
-    this.url.scheme = this.base.scheme;
-    this.url.path = this.base.path.slice();
-    this.url.query = this.base.query;
-    this.url.fragment = "";
-    this.url.cannotBeABaseURL = true;
-    this.state = "fragment";
-  } else if (this.base.scheme === "file") {
-    this.state = "file";
-    --this.pointer;
-  } else {
-    this.state = "relative";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse special relative or authority"] = function parseSpecialRelativeOrAuthority(c) {
-  if (c === 47 && this.input[this.pointer + 1] === 47) {
-    this.state = "special authority ignore slashes";
-    ++this.pointer;
-  } else {
-    this.parseError = true;
-    this.state = "relative";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse path or authority"] = function parsePathOrAuthority(c) {
-  if (c === 47) {
-    this.state = "authority";
-  } else {
-    this.state = "path";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse relative"] = function parseRelative(c) {
-  this.url.scheme = this.base.scheme;
-  if (isNaN(c)) {
-    this.url.username = this.base.username;
-    this.url.password = this.base.password;
-    this.url.host = this.base.host;
-    this.url.port = this.base.port;
-    this.url.path = this.base.path.slice();
-    this.url.query = this.base.query;
-  } else if (c === 47) {
-    this.state = "relative slash";
-  } else if (c === 63) {
-    this.url.username = this.base.username;
-    this.url.password = this.base.password;
-    this.url.host = this.base.host;
-    this.url.port = this.base.port;
-    this.url.path = this.base.path.slice();
-    this.url.query = "";
-    this.state = "query";
-  } else if (c === 35) {
-    this.url.username = this.base.username;
-    this.url.password = this.base.password;
-    this.url.host = this.base.host;
-    this.url.port = this.base.port;
-    this.url.path = this.base.path.slice();
-    this.url.query = this.base.query;
-    this.url.fragment = "";
-    this.state = "fragment";
-  } else if (isSpecial(this.url) && c === 92) {
-    this.parseError = true;
-    this.state = "relative slash";
-  } else {
-    this.url.username = this.base.username;
-    this.url.password = this.base.password;
-    this.url.host = this.base.host;
-    this.url.port = this.base.port;
-    this.url.path = this.base.path.slice(0, this.base.path.length - 1);
-
-    this.state = "path";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse relative slash"] = function parseRelativeSlash(c) {
-  if (isSpecial(this.url) && (c === 47 || c === 92)) {
-    if (c === 92) {
-      this.parseError = true;
-    }
-    this.state = "special authority ignore slashes";
-  } else if (c === 47) {
-    this.state = "authority";
-  } else {
-    this.url.username = this.base.username;
-    this.url.password = this.base.password;
-    this.url.host = this.base.host;
-    this.url.port = this.base.port;
-    this.state = "path";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse special authority slashes"] = function parseSpecialAuthoritySlashes(c) {
-  if (c === 47 && this.input[this.pointer + 1] === 47) {
-    this.state = "special authority ignore slashes";
-    ++this.pointer;
-  } else {
-    this.parseError = true;
-    this.state = "special authority ignore slashes";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse special authority ignore slashes"] = function parseSpecialAuthorityIgnoreSlashes(c) {
-  if (c !== 47 && c !== 92) {
-    this.state = "authority";
-    --this.pointer;
-  } else {
-    this.parseError = true;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse authority"] = function parseAuthority(c, cStr) {
-  if (c === 64) {
-    this.parseError = true;
-    if (this.atFlag) {
-      this.buffer = "%40" + this.buffer;
-    }
-    this.atFlag = true;
-
-    // careful, this is based on buffer and has its own pointer (this.pointer != pointer) and inner chars
-    const len = countSymbols(this.buffer);
-    for (let pointer = 0; pointer < len; ++pointer) {
-      const codePoint = this.buffer.codePointAt(pointer);
-
-      if (codePoint === 58 && !this.passwordTokenSeenFlag) {
-        this.passwordTokenSeenFlag = true;
-        continue;
-      }
-      const encodedCodePoints = percentEncodeChar(codePoint, isUserinfoPercentEncode);
-      if (this.passwordTokenSeenFlag) {
-        this.url.password += encodedCodePoints;
-      } else {
-        this.url.username += encodedCodePoints;
-      }
-    }
-    this.buffer = "";
-  } else if (isNaN(c) || c === 47 || c === 63 || c === 35 ||
-             (isSpecial(this.url) && c === 92)) {
-    if (this.atFlag && this.buffer === "") {
-      this.parseError = true;
-      return failure;
-    }
-    this.pointer -= countSymbols(this.buffer) + 1;
-    this.buffer = "";
-    this.state = "host";
-  } else {
-    this.buffer += cStr;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse hostname"] =
-URLStateMachine.prototype["parse host"] = function parseHostName(c, cStr) {
-  if (this.stateOverride && this.url.scheme === "file") {
-    --this.pointer;
-    this.state = "file host";
-  } else if (c === 58 && !this.arrFlag) {
-    if (this.buffer === "") {
-      this.parseError = true;
-      return failure;
-    }
-
-    const host = parseHost(this.buffer, isSpecial(this.url));
-    if (host === failure) {
-      return failure;
-    }
-
-    this.url.host = host;
-    this.buffer = "";
-    this.state = "port";
-    if (this.stateOverride === "hostname") {
-      return false;
-    }
-  } else if (isNaN(c) || c === 47 || c === 63 || c === 35 ||
-             (isSpecial(this.url) && c === 92)) {
-    --this.pointer;
-    if (isSpecial(this.url) && this.buffer === "") {
-      this.parseError = true;
-      return failure;
-    } else if (this.stateOverride && this.buffer === "" &&
-               (includesCredentials(this.url) || this.url.port !== null)) {
-      this.parseError = true;
-      return false;
-    }
-
-    const host = parseHost(this.buffer, isSpecial(this.url));
-    if (host === failure) {
-      return failure;
-    }
-
-    this.url.host = host;
-    this.buffer = "";
-    this.state = "path start";
-    if (this.stateOverride) {
-      return false;
-    }
-  } else {
-    if (c === 91) {
-      this.arrFlag = true;
-    } else if (c === 93) {
-      this.arrFlag = false;
-    }
-    this.buffer += cStr;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse port"] = function parsePort(c, cStr) {
-  if (isASCIIDigit(c)) {
-    this.buffer += cStr;
-  } else if (isNaN(c) || c === 47 || c === 63 || c === 35 ||
-             (isSpecial(this.url) && c === 92) ||
-             this.stateOverride) {
-    if (this.buffer !== "") {
-      const port = parseInt(this.buffer);
-      if (port > Math.pow(2, 16) - 1) {
-        this.parseError = true;
-        return failure;
-      }
-      this.url.port = port === defaultPort(this.url.scheme) ? null : port;
-      this.buffer = "";
-    }
-    if (this.stateOverride) {
-      return false;
-    }
-    this.state = "path start";
-    --this.pointer;
-  } else {
-    this.parseError = true;
-    return failure;
-  }
-
-  return true;
-};
-
-const fileOtherwiseCodePoints = new Set([47, 92, 63, 35]);
-
-URLStateMachine.prototype["parse file"] = function parseFile(c) {
-  this.url.scheme = "file";
-
-  if (c === 47 || c === 92) {
-    if (c === 92) {
-      this.parseError = true;
-    }
-    this.state = "file slash";
-  } else if (this.base !== null && this.base.scheme === "file") {
-    if (isNaN(c)) {
-      this.url.host = this.base.host;
-      this.url.path = this.base.path.slice();
-      this.url.query = this.base.query;
-    } else if (c === 63) {
-      this.url.host = this.base.host;
-      this.url.path = this.base.path.slice();
-      this.url.query = "";
-      this.state = "query";
-    } else if (c === 35) {
-      this.url.host = this.base.host;
-      this.url.path = this.base.path.slice();
-      this.url.query = this.base.query;
-      this.url.fragment = "";
-      this.state = "fragment";
-    } else {
-      if (this.input.length - this.pointer - 1 === 0 || // remaining consists of 0 code points
-          !isWindowsDriveLetterCodePoints(c, this.input[this.pointer + 1]) ||
-          (this.input.length - this.pointer - 1 >= 2 && // remaining has at least 2 code points
-           !fileOtherwiseCodePoints.has(this.input[this.pointer + 2]))) {
-        this.url.host = this.base.host;
-        this.url.path = this.base.path.slice();
-        shortenPath(this.url);
-      } else {
-        this.parseError = true;
-      }
-
-      this.state = "path";
-      --this.pointer;
-    }
-  } else {
-    this.state = "path";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse file slash"] = function parseFileSlash(c) {
-  if (c === 47 || c === 92) {
-    if (c === 92) {
-      this.parseError = true;
-    }
-    this.state = "file host";
-  } else {
-    if (this.base !== null && this.base.scheme === "file") {
-      if (isNormalizedWindowsDriveLetterString(this.base.path[0])) {
-        this.url.path.push(this.base.path[0]);
-      } else {
-        this.url.host = this.base.host;
-      }
-    }
-    this.state = "path";
-    --this.pointer;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse file host"] = function parseFileHost(c, cStr) {
-  if (isNaN(c) || c === 47 || c === 92 || c === 63 || c === 35) {
-    --this.pointer;
-    if (!this.stateOverride && isWindowsDriveLetterString(this.buffer)) {
-      this.parseError = true;
-      this.state = "path";
-    } else if (this.buffer === "") {
-      this.url.host = "";
-      if (this.stateOverride) {
-        return false;
-      }
-      this.state = "path start";
-    } else {
-      let host = parseHost(this.buffer, isSpecial(this.url));
-      if (host === failure) {
-        return failure;
-      }
-      if (host === "localhost") {
-        host = "";
-      }
-      this.url.host = host;
-
-      if (this.stateOverride) {
-        return false;
-      }
-
-      this.buffer = "";
-      this.state = "path start";
-    }
-  } else {
-    this.buffer += cStr;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse path start"] = function parsePathStart(c) {
-  if (isSpecial(this.url)) {
-    if (c === 92) {
-      this.parseError = true;
-    }
-    this.state = "path";
-
-    if (c !== 47 && c !== 92) {
-      --this.pointer;
-    }
-  } else if (!this.stateOverride && c === 63) {
-    this.url.query = "";
-    this.state = "query";
-  } else if (!this.stateOverride && c === 35) {
-    this.url.fragment = "";
-    this.state = "fragment";
-  } else if (c !== undefined) {
-    this.state = "path";
-    if (c !== 47) {
-      --this.pointer;
-    }
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse path"] = function parsePath(c) {
-  if (isNaN(c) || c === 47 || (isSpecial(this.url) && c === 92) ||
-      (!this.stateOverride && (c === 63 || c === 35))) {
-    if (isSpecial(this.url) && c === 92) {
-      this.parseError = true;
-    }
-
-    if (isDoubleDot(this.buffer)) {
-      shortenPath(this.url);
-      if (c !== 47 && !(isSpecial(this.url) && c === 92)) {
-        this.url.path.push("");
-      }
-    } else if (isSingleDot(this.buffer) && c !== 47 &&
-               !(isSpecial(this.url) && c === 92)) {
-      this.url.path.push("");
-    } else if (!isSingleDot(this.buffer)) {
-      if (this.url.scheme === "file" && this.url.path.length === 0 && isWindowsDriveLetterString(this.buffer)) {
-        if (this.url.host !== "" && this.url.host !== null) {
-          this.parseError = true;
-          this.url.host = "";
-        }
-        this.buffer = this.buffer[0] + ":";
-      }
-      this.url.path.push(this.buffer);
-    }
-    this.buffer = "";
-    if (this.url.scheme === "file" && (c === undefined || c === 63 || c === 35)) {
-      while (this.url.path.length > 1 && this.url.path[0] === "") {
-        this.parseError = true;
-        this.url.path.shift();
-      }
-    }
-    if (c === 63) {
-      this.url.query = "";
-      this.state = "query";
-    }
-    if (c === 35) {
-      this.url.fragment = "";
-      this.state = "fragment";
-    }
-  } else {
-    // TODO: If c is not a URL code point and not "%", parse error.
-
-    if (c === 37 &&
-      (!isASCIIHex(this.input[this.pointer + 1]) ||
-        !isASCIIHex(this.input[this.pointer + 2]))) {
-      this.parseError = true;
-    }
-
-    this.buffer += percentEncodeChar(c, isPathPercentEncode);
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse cannot-be-a-base-URL path"] = function parseCannotBeABaseURLPath(c) {
-  if (c === 63) {
-    this.url.query = "";
-    this.state = "query";
-  } else if (c === 35) {
-    this.url.fragment = "";
-    this.state = "fragment";
-  } else {
-    // TODO: Add: not a URL code point
-    if (!isNaN(c) && c !== 37) {
-      this.parseError = true;
-    }
-
-    if (c === 37 &&
-        (!isASCIIHex(this.input[this.pointer + 1]) ||
-         !isASCIIHex(this.input[this.pointer + 2]))) {
-      this.parseError = true;
-    }
-
-    if (!isNaN(c)) {
-      this.url.path[0] = this.url.path[0] + percentEncodeChar(c, isC0ControlPercentEncode);
-    }
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse query"] = function parseQuery(c, cStr) {
-  if (isNaN(c) || (!this.stateOverride && c === 35)) {
-    if (!isSpecial(this.url) || this.url.scheme === "ws" || this.url.scheme === "wss") {
-      this.encodingOverride = "utf-8";
-    }
-
-    const buffer = new Buffer(this.buffer); // TODO: Use encoding override instead
-    for (let i = 0; i < buffer.length; ++i) {
-      if (buffer[i] < 0x21 || buffer[i] > 0x7E || buffer[i] === 0x22 || buffer[i] === 0x23 ||
-          buffer[i] === 0x3C || buffer[i] === 0x3E) {
-        this.url.query += percentEncode(buffer[i]);
-      } else {
-        this.url.query += String.fromCodePoint(buffer[i]);
-      }
-    }
-
-    this.buffer = "";
-    if (c === 35) {
-      this.url.fragment = "";
-      this.state = "fragment";
-    }
-  } else {
-    // TODO: If c is not a URL code point and not "%", parse error.
-    if (c === 37 &&
-      (!isASCIIHex(this.input[this.pointer + 1]) ||
-        !isASCIIHex(this.input[this.pointer + 2]))) {
-      this.parseError = true;
-    }
-
-    this.buffer += cStr;
-  }
-
-  return true;
-};
-
-URLStateMachine.prototype["parse fragment"] = function parseFragment(c) {
-  if (isNaN(c)) ; else if (c === 0x0) {
-    this.parseError = true;
-  } else {
-    // TODO: If c is not a URL code point and not "%", parse error.
-    if (c === 37 &&
-      (!isASCIIHex(this.input[this.pointer + 1]) ||
-        !isASCIIHex(this.input[this.pointer + 2]))) {
-      this.parseError = true;
-    }
-
-    this.url.fragment += percentEncodeChar(c, isC0ControlPercentEncode);
-  }
-
-  return true;
-};
-
-function serializeURL(url, excludeFragment) {
-  let output = url.scheme + ":";
-  if (url.host !== null) {
-    output += "//";
-
-    if (url.username !== "" || url.password !== "") {
-      output += url.username;
-      if (url.password !== "") {
-        output += ":" + url.password;
-      }
-      output += "@";
-    }
-
-    output += serializeHost(url.host);
-
-    if (url.port !== null) {
-      output += ":" + url.port;
-    }
-  } else if (url.host === null && url.scheme === "file") {
-    output += "//";
-  }
-
-  if (url.cannotBeABaseURL) {
-    output += url.path[0];
-  } else {
-    for (const string of url.path) {
-      output += "/" + string;
-    }
-  }
-
-  if (url.query !== null) {
-    output += "?" + url.query;
-  }
-
-  if (!excludeFragment && url.fragment !== null) {
-    output += "#" + url.fragment;
-  }
-
-  return output;
-}
-
-function serializeOrigin(tuple) {
-  let result = tuple.scheme + "://";
-  result += serializeHost(tuple.host);
-
-  if (tuple.port !== null) {
-    result += ":" + tuple.port;
-  }
-
-  return result;
-}
-
-module.exports.serializeURL = serializeURL;
-
-module.exports.serializeURLOrigin = function (url) {
-  // https://url.spec.whatwg.org/#concept-url-origin
-  switch (url.scheme) {
-    case "blob":
-      try {
-        return module.exports.serializeURLOrigin(module.exports.parseURL(url.path[0]));
-      } catch (e) {
-        // serializing an opaque origin returns "null"
-        return "null";
-      }
-    case "ftp":
-    case "gopher":
-    case "http":
-    case "https":
-    case "ws":
-    case "wss":
-      return serializeOrigin({
-        scheme: url.scheme,
-        host: url.host,
-        port: url.port
-      });
-    case "file":
-      // spec says "exercise to the reader", chrome says "file://"
-      return "file://";
-    default:
-      // serializing an opaque origin returns "null"
-      return "null";
-  }
-};
-
-module.exports.basicURLParse = function (input, options) {
-  if (options === undefined) {
-    options = {};
-  }
-
-  const usm = new URLStateMachine(input, options.baseURL, options.encodingOverride, options.url, options.stateOverride);
-  if (usm.failure) {
-    return "failure";
-  }
-
-  return usm.url;
-};
-
-module.exports.setTheUsername = function (url, username) {
-  url.username = "";
-  const decoded = punycode__default["default"].ucs2.decode(username);
-  for (let i = 0; i < decoded.length; ++i) {
-    url.username += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
-  }
-};
-
-module.exports.setThePassword = function (url, password) {
-  url.password = "";
-  const decoded = punycode__default["default"].ucs2.decode(password);
-  for (let i = 0; i < decoded.length; ++i) {
-    url.password += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
-  }
-};
-
-module.exports.serializeHost = serializeHost;
-
-module.exports.cannotHaveAUsernamePasswordPort = cannotHaveAUsernamePasswordPort;
-
-module.exports.serializeInteger = function (integer) {
-  return String(integer);
-};
-
-module.exports.parseURL = function (input, options) {
-  if (options === undefined) {
-    options = {};
-  }
-
-  // We don't handle blobs, so this just delegates:
-  return module.exports.basicURLParse(input, { baseURL: options.baseURL, encodingOverride: options.encodingOverride });
-};
-});
-urlStateMachine.serializeURL;
-urlStateMachine.serializeURLOrigin;
-urlStateMachine.basicURLParse;
-urlStateMachine.setTheUsername;
-urlStateMachine.setThePassword;
-urlStateMachine.serializeHost;
-urlStateMachine.cannotHaveAUsernamePasswordPort;
-urlStateMachine.serializeInteger;
-urlStateMachine.parseURL;
-
-var implementation = class URLImpl {
+	const specialSchemes = {
+	  ftp: 21,
+	  file: null,
+	  gopher: 70,
+	  http: 80,
+	  https: 443,
+	  ws: 80,
+	  wss: 443
+	};
+
+	const failure = Symbol("failure");
+
+	function countSymbols(str) {
+	  return punycode.ucs2.decode(str).length;
+	}
+
+	function at(input, idx) {
+	  const c = input[idx];
+	  return isNaN(c) ? undefined : String.fromCodePoint(c);
+	}
+
+	function isASCIIDigit(c) {
+	  return c >= 0x30 && c <= 0x39;
+	}
+
+	function isASCIIAlpha(c) {
+	  return (c >= 0x41 && c <= 0x5A) || (c >= 0x61 && c <= 0x7A);
+	}
+
+	function isASCIIAlphanumeric(c) {
+	  return isASCIIAlpha(c) || isASCIIDigit(c);
+	}
+
+	function isASCIIHex(c) {
+	  return isASCIIDigit(c) || (c >= 0x41 && c <= 0x46) || (c >= 0x61 && c <= 0x66);
+	}
+
+	function isSingleDot(buffer) {
+	  return buffer === "." || buffer.toLowerCase() === "%2e";
+	}
+
+	function isDoubleDot(buffer) {
+	  buffer = buffer.toLowerCase();
+	  return buffer === ".." || buffer === "%2e." || buffer === ".%2e" || buffer === "%2e%2e";
+	}
+
+	function isWindowsDriveLetterCodePoints(cp1, cp2) {
+	  return isASCIIAlpha(cp1) && (cp2 === 58 || cp2 === 124);
+	}
+
+	function isWindowsDriveLetterString(string) {
+	  return string.length === 2 && isASCIIAlpha(string.codePointAt(0)) && (string[1] === ":" || string[1] === "|");
+	}
+
+	function isNormalizedWindowsDriveLetterString(string) {
+	  return string.length === 2 && isASCIIAlpha(string.codePointAt(0)) && string[1] === ":";
+	}
+
+	function containsForbiddenHostCodePoint(string) {
+	  return string.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|%|\/|:|\?|@|\[|\\|\]/) !== -1;
+	}
+
+	function containsForbiddenHostCodePointExcludingPercent(string) {
+	  return string.search(/\u0000|\u0009|\u000A|\u000D|\u0020|#|\/|:|\?|@|\[|\\|\]/) !== -1;
+	}
+
+	function isSpecialScheme(scheme) {
+	  return specialSchemes[scheme] !== undefined;
+	}
+
+	function isSpecial(url) {
+	  return isSpecialScheme(url.scheme);
+	}
+
+	function defaultPort(scheme) {
+	  return specialSchemes[scheme];
+	}
+
+	function percentEncode(c) {
+	  let hex = c.toString(16).toUpperCase();
+	  if (hex.length === 1) {
+	    hex = "0" + hex;
+	  }
+
+	  return "%" + hex;
+	}
+
+	function utf8PercentEncode(c) {
+	  const buf = new Buffer(c);
+
+	  let str = "";
+
+	  for (let i = 0; i < buf.length; ++i) {
+	    str += percentEncode(buf[i]);
+	  }
+
+	  return str;
+	}
+
+	function utf8PercentDecode(str) {
+	  const input = new Buffer(str);
+	  const output = [];
+	  for (let i = 0; i < input.length; ++i) {
+	    if (input[i] !== 37) {
+	      output.push(input[i]);
+	    } else if (input[i] === 37 && isASCIIHex(input[i + 1]) && isASCIIHex(input[i + 2])) {
+	      output.push(parseInt(input.slice(i + 1, i + 3).toString(), 16));
+	      i += 2;
+	    } else {
+	      output.push(input[i]);
+	    }
+	  }
+	  return new Buffer(output).toString();
+	}
+
+	function isC0ControlPercentEncode(c) {
+	  return c <= 0x1F || c > 0x7E;
+	}
+
+	const extraPathPercentEncodeSet = new Set([32, 34, 35, 60, 62, 63, 96, 123, 125]);
+	function isPathPercentEncode(c) {
+	  return isC0ControlPercentEncode(c) || extraPathPercentEncodeSet.has(c);
+	}
+
+	const extraUserinfoPercentEncodeSet =
+	  new Set([47, 58, 59, 61, 64, 91, 92, 93, 94, 124]);
+	function isUserinfoPercentEncode(c) {
+	  return isPathPercentEncode(c) || extraUserinfoPercentEncodeSet.has(c);
+	}
+
+	function percentEncodeChar(c, encodeSetPredicate) {
+	  const cStr = String.fromCodePoint(c);
+
+	  if (encodeSetPredicate(c)) {
+	    return utf8PercentEncode(cStr);
+	  }
+
+	  return cStr;
+	}
+
+	function parseIPv4Number(input) {
+	  let R = 10;
+
+	  if (input.length >= 2 && input.charAt(0) === "0" && input.charAt(1).toLowerCase() === "x") {
+	    input = input.substring(2);
+	    R = 16;
+	  } else if (input.length >= 2 && input.charAt(0) === "0") {
+	    input = input.substring(1);
+	    R = 8;
+	  }
+
+	  if (input === "") {
+	    return 0;
+	  }
+
+	  const regex = R === 10 ? /[^0-9]/ : (R === 16 ? /[^0-9A-Fa-f]/ : /[^0-7]/);
+	  if (regex.test(input)) {
+	    return failure;
+	  }
+
+	  return parseInt(input, R);
+	}
+
+	function parseIPv4(input) {
+	  const parts = input.split(".");
+	  if (parts[parts.length - 1] === "") {
+	    if (parts.length > 1) {
+	      parts.pop();
+	    }
+	  }
+
+	  if (parts.length > 4) {
+	    return input;
+	  }
+
+	  const numbers = [];
+	  for (const part of parts) {
+	    if (part === "") {
+	      return input;
+	    }
+	    const n = parseIPv4Number(part);
+	    if (n === failure) {
+	      return input;
+	    }
+
+	    numbers.push(n);
+	  }
+
+	  for (let i = 0; i < numbers.length - 1; ++i) {
+	    if (numbers[i] > 255) {
+	      return failure;
+	    }
+	  }
+	  if (numbers[numbers.length - 1] >= Math.pow(256, 5 - numbers.length)) {
+	    return failure;
+	  }
+
+	  let ipv4 = numbers.pop();
+	  let counter = 0;
+
+	  for (const n of numbers) {
+	    ipv4 += n * Math.pow(256, 3 - counter);
+	    ++counter;
+	  }
+
+	  return ipv4;
+	}
+
+	function serializeIPv4(address) {
+	  let output = "";
+	  let n = address;
+
+	  for (let i = 1; i <= 4; ++i) {
+	    output = String(n % 256) + output;
+	    if (i !== 4) {
+	      output = "." + output;
+	    }
+	    n = Math.floor(n / 256);
+	  }
+
+	  return output;
+	}
+
+	function parseIPv6(input) {
+	  const address = [0, 0, 0, 0, 0, 0, 0, 0];
+	  let pieceIndex = 0;
+	  let compress = null;
+	  let pointer = 0;
+
+	  input = punycode.ucs2.decode(input);
+
+	  if (input[pointer] === 58) {
+	    if (input[pointer + 1] !== 58) {
+	      return failure;
+	    }
+
+	    pointer += 2;
+	    ++pieceIndex;
+	    compress = pieceIndex;
+	  }
+
+	  while (pointer < input.length) {
+	    if (pieceIndex === 8) {
+	      return failure;
+	    }
+
+	    if (input[pointer] === 58) {
+	      if (compress !== null) {
+	        return failure;
+	      }
+	      ++pointer;
+	      ++pieceIndex;
+	      compress = pieceIndex;
+	      continue;
+	    }
+
+	    let value = 0;
+	    let length = 0;
+
+	    while (length < 4 && isASCIIHex(input[pointer])) {
+	      value = value * 0x10 + parseInt(at(input, pointer), 16);
+	      ++pointer;
+	      ++length;
+	    }
+
+	    if (input[pointer] === 46) {
+	      if (length === 0) {
+	        return failure;
+	      }
+
+	      pointer -= length;
+
+	      if (pieceIndex > 6) {
+	        return failure;
+	      }
+
+	      let numbersSeen = 0;
+
+	      while (input[pointer] !== undefined) {
+	        let ipv4Piece = null;
+
+	        if (numbersSeen > 0) {
+	          if (input[pointer] === 46 && numbersSeen < 4) {
+	            ++pointer;
+	          } else {
+	            return failure;
+	          }
+	        }
+
+	        if (!isASCIIDigit(input[pointer])) {
+	          return failure;
+	        }
+
+	        while (isASCIIDigit(input[pointer])) {
+	          const number = parseInt(at(input, pointer));
+	          if (ipv4Piece === null) {
+	            ipv4Piece = number;
+	          } else if (ipv4Piece === 0) {
+	            return failure;
+	          } else {
+	            ipv4Piece = ipv4Piece * 10 + number;
+	          }
+	          if (ipv4Piece > 255) {
+	            return failure;
+	          }
+	          ++pointer;
+	        }
+
+	        address[pieceIndex] = address[pieceIndex] * 0x100 + ipv4Piece;
+
+	        ++numbersSeen;
+
+	        if (numbersSeen === 2 || numbersSeen === 4) {
+	          ++pieceIndex;
+	        }
+	      }
+
+	      if (numbersSeen !== 4) {
+	        return failure;
+	      }
+
+	      break;
+	    } else if (input[pointer] === 58) {
+	      ++pointer;
+	      if (input[pointer] === undefined) {
+	        return failure;
+	      }
+	    } else if (input[pointer] !== undefined) {
+	      return failure;
+	    }
+
+	    address[pieceIndex] = value;
+	    ++pieceIndex;
+	  }
+
+	  if (compress !== null) {
+	    let swaps = pieceIndex - compress;
+	    pieceIndex = 7;
+	    while (pieceIndex !== 0 && swaps > 0) {
+	      const temp = address[compress + swaps - 1];
+	      address[compress + swaps - 1] = address[pieceIndex];
+	      address[pieceIndex] = temp;
+	      --pieceIndex;
+	      --swaps;
+	    }
+	  } else if (compress === null && pieceIndex !== 8) {
+	    return failure;
+	  }
+
+	  return address;
+	}
+
+	function serializeIPv6(address) {
+	  let output = "";
+	  const seqResult = findLongestZeroSequence(address);
+	  const compress = seqResult.idx;
+	  let ignore0 = false;
+
+	  for (let pieceIndex = 0; pieceIndex <= 7; ++pieceIndex) {
+	    if (ignore0 && address[pieceIndex] === 0) {
+	      continue;
+	    } else if (ignore0) {
+	      ignore0 = false;
+	    }
+
+	    if (compress === pieceIndex) {
+	      const separator = pieceIndex === 0 ? "::" : ":";
+	      output += separator;
+	      ignore0 = true;
+	      continue;
+	    }
+
+	    output += address[pieceIndex].toString(16);
+
+	    if (pieceIndex !== 7) {
+	      output += ":";
+	    }
+	  }
+
+	  return output;
+	}
+
+	function parseHost(input, isSpecialArg) {
+	  if (input[0] === "[") {
+	    if (input[input.length - 1] !== "]") {
+	      return failure;
+	    }
+
+	    return parseIPv6(input.substring(1, input.length - 1));
+	  }
+
+	  if (!isSpecialArg) {
+	    return parseOpaqueHost(input);
+	  }
+
+	  const domain = utf8PercentDecode(input);
+	  const asciiDomain = tr46$1.toASCII(domain, false, tr46$1.PROCESSING_OPTIONS.NONTRANSITIONAL, false);
+	  if (asciiDomain === null) {
+	    return failure;
+	  }
+
+	  if (containsForbiddenHostCodePoint(asciiDomain)) {
+	    return failure;
+	  }
+
+	  const ipv4Host = parseIPv4(asciiDomain);
+	  if (typeof ipv4Host === "number" || ipv4Host === failure) {
+	    return ipv4Host;
+	  }
+
+	  return asciiDomain;
+	}
+
+	function parseOpaqueHost(input) {
+	  if (containsForbiddenHostCodePointExcludingPercent(input)) {
+	    return failure;
+	  }
+
+	  let output = "";
+	  const decoded = punycode.ucs2.decode(input);
+	  for (let i = 0; i < decoded.length; ++i) {
+	    output += percentEncodeChar(decoded[i], isC0ControlPercentEncode);
+	  }
+	  return output;
+	}
+
+	function findLongestZeroSequence(arr) {
+	  let maxIdx = null;
+	  let maxLen = 1; // only find elements > 1
+	  let currStart = null;
+	  let currLen = 0;
+
+	  for (let i = 0; i < arr.length; ++i) {
+	    if (arr[i] !== 0) {
+	      if (currLen > maxLen) {
+	        maxIdx = currStart;
+	        maxLen = currLen;
+	      }
+
+	      currStart = null;
+	      currLen = 0;
+	    } else {
+	      if (currStart === null) {
+	        currStart = i;
+	      }
+	      ++currLen;
+	    }
+	  }
+
+	  // if trailing zeros
+	  if (currLen > maxLen) {
+	    maxIdx = currStart;
+	    maxLen = currLen;
+	  }
+
+	  return {
+	    idx: maxIdx,
+	    len: maxLen
+	  };
+	}
+
+	function serializeHost(host) {
+	  if (typeof host === "number") {
+	    return serializeIPv4(host);
+	  }
+
+	  // IPv6 serializer
+	  if (host instanceof Array) {
+	    return "[" + serializeIPv6(host) + "]";
+	  }
+
+	  return host;
+	}
+
+	function trimControlChars(url) {
+	  return url.replace(/^[\u0000-\u001F\u0020]+|[\u0000-\u001F\u0020]+$/g, "");
+	}
+
+	function trimTabAndNewline(url) {
+	  return url.replace(/\u0009|\u000A|\u000D/g, "");
+	}
+
+	function shortenPath(url) {
+	  const path = url.path;
+	  if (path.length === 0) {
+	    return;
+	  }
+	  if (url.scheme === "file" && path.length === 1 && isNormalizedWindowsDriveLetter(path[0])) {
+	    return;
+	  }
+
+	  path.pop();
+	}
+
+	function includesCredentials(url) {
+	  return url.username !== "" || url.password !== "";
+	}
+
+	function cannotHaveAUsernamePasswordPort(url) {
+	  return url.host === null || url.host === "" || url.cannotBeABaseURL || url.scheme === "file";
+	}
+
+	function isNormalizedWindowsDriveLetter(string) {
+	  return /^[A-Za-z]:$/.test(string);
+	}
+
+	function URLStateMachine(input, base, encodingOverride, url, stateOverride) {
+	  this.pointer = 0;
+	  this.input = input;
+	  this.base = base || null;
+	  this.encodingOverride = encodingOverride || "utf-8";
+	  this.stateOverride = stateOverride;
+	  this.url = url;
+	  this.failure = false;
+	  this.parseError = false;
+
+	  if (!this.url) {
+	    this.url = {
+	      scheme: "",
+	      username: "",
+	      password: "",
+	      host: null,
+	      port: null,
+	      path: [],
+	      query: null,
+	      fragment: null,
+
+	      cannotBeABaseURL: false
+	    };
+
+	    const res = trimControlChars(this.input);
+	    if (res !== this.input) {
+	      this.parseError = true;
+	    }
+	    this.input = res;
+	  }
+
+	  const res = trimTabAndNewline(this.input);
+	  if (res !== this.input) {
+	    this.parseError = true;
+	  }
+	  this.input = res;
+
+	  this.state = stateOverride || "scheme start";
+
+	  this.buffer = "";
+	  this.atFlag = false;
+	  this.arrFlag = false;
+	  this.passwordTokenSeenFlag = false;
+
+	  this.input = punycode.ucs2.decode(this.input);
+
+	  for (; this.pointer <= this.input.length; ++this.pointer) {
+	    const c = this.input[this.pointer];
+	    const cStr = isNaN(c) ? undefined : String.fromCodePoint(c);
+
+	    // exec state machine
+	    const ret = this["parse " + this.state](c, cStr);
+	    if (!ret) {
+	      break; // terminate algorithm
+	    } else if (ret === failure) {
+	      this.failure = true;
+	      break;
+	    }
+	  }
+	}
+
+	URLStateMachine.prototype["parse scheme start"] = function parseSchemeStart(c, cStr) {
+	  if (isASCIIAlpha(c)) {
+	    this.buffer += cStr.toLowerCase();
+	    this.state = "scheme";
+	  } else if (!this.stateOverride) {
+	    this.state = "no scheme";
+	    --this.pointer;
+	  } else {
+	    this.parseError = true;
+	    return failure;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse scheme"] = function parseScheme(c, cStr) {
+	  if (isASCIIAlphanumeric(c) || c === 43 || c === 45 || c === 46) {
+	    this.buffer += cStr.toLowerCase();
+	  } else if (c === 58) {
+	    if (this.stateOverride) {
+	      if (isSpecial(this.url) && !isSpecialScheme(this.buffer)) {
+	        return false;
+	      }
+
+	      if (!isSpecial(this.url) && isSpecialScheme(this.buffer)) {
+	        return false;
+	      }
+
+	      if ((includesCredentials(this.url) || this.url.port !== null) && this.buffer === "file") {
+	        return false;
+	      }
+
+	      if (this.url.scheme === "file" && (this.url.host === "" || this.url.host === null)) {
+	        return false;
+	      }
+	    }
+	    this.url.scheme = this.buffer;
+	    this.buffer = "";
+	    if (this.stateOverride) {
+	      return false;
+	    }
+	    if (this.url.scheme === "file") {
+	      if (this.input[this.pointer + 1] !== 47 || this.input[this.pointer + 2] !== 47) {
+	        this.parseError = true;
+	      }
+	      this.state = "file";
+	    } else if (isSpecial(this.url) && this.base !== null && this.base.scheme === this.url.scheme) {
+	      this.state = "special relative or authority";
+	    } else if (isSpecial(this.url)) {
+	      this.state = "special authority slashes";
+	    } else if (this.input[this.pointer + 1] === 47) {
+	      this.state = "path or authority";
+	      ++this.pointer;
+	    } else {
+	      this.url.cannotBeABaseURL = true;
+	      this.url.path.push("");
+	      this.state = "cannot-be-a-base-URL path";
+	    }
+	  } else if (!this.stateOverride) {
+	    this.buffer = "";
+	    this.state = "no scheme";
+	    this.pointer = -1;
+	  } else {
+	    this.parseError = true;
+	    return failure;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse no scheme"] = function parseNoScheme(c) {
+	  if (this.base === null || (this.base.cannotBeABaseURL && c !== 35)) {
+	    return failure;
+	  } else if (this.base.cannotBeABaseURL && c === 35) {
+	    this.url.scheme = this.base.scheme;
+	    this.url.path = this.base.path.slice();
+	    this.url.query = this.base.query;
+	    this.url.fragment = "";
+	    this.url.cannotBeABaseURL = true;
+	    this.state = "fragment";
+	  } else if (this.base.scheme === "file") {
+	    this.state = "file";
+	    --this.pointer;
+	  } else {
+	    this.state = "relative";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse special relative or authority"] = function parseSpecialRelativeOrAuthority(c) {
+	  if (c === 47 && this.input[this.pointer + 1] === 47) {
+	    this.state = "special authority ignore slashes";
+	    ++this.pointer;
+	  } else {
+	    this.parseError = true;
+	    this.state = "relative";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse path or authority"] = function parsePathOrAuthority(c) {
+	  if (c === 47) {
+	    this.state = "authority";
+	  } else {
+	    this.state = "path";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse relative"] = function parseRelative(c) {
+	  this.url.scheme = this.base.scheme;
+	  if (isNaN(c)) {
+	    this.url.username = this.base.username;
+	    this.url.password = this.base.password;
+	    this.url.host = this.base.host;
+	    this.url.port = this.base.port;
+	    this.url.path = this.base.path.slice();
+	    this.url.query = this.base.query;
+	  } else if (c === 47) {
+	    this.state = "relative slash";
+	  } else if (c === 63) {
+	    this.url.username = this.base.username;
+	    this.url.password = this.base.password;
+	    this.url.host = this.base.host;
+	    this.url.port = this.base.port;
+	    this.url.path = this.base.path.slice();
+	    this.url.query = "";
+	    this.state = "query";
+	  } else if (c === 35) {
+	    this.url.username = this.base.username;
+	    this.url.password = this.base.password;
+	    this.url.host = this.base.host;
+	    this.url.port = this.base.port;
+	    this.url.path = this.base.path.slice();
+	    this.url.query = this.base.query;
+	    this.url.fragment = "";
+	    this.state = "fragment";
+	  } else if (isSpecial(this.url) && c === 92) {
+	    this.parseError = true;
+	    this.state = "relative slash";
+	  } else {
+	    this.url.username = this.base.username;
+	    this.url.password = this.base.password;
+	    this.url.host = this.base.host;
+	    this.url.port = this.base.port;
+	    this.url.path = this.base.path.slice(0, this.base.path.length - 1);
+
+	    this.state = "path";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse relative slash"] = function parseRelativeSlash(c) {
+	  if (isSpecial(this.url) && (c === 47 || c === 92)) {
+	    if (c === 92) {
+	      this.parseError = true;
+	    }
+	    this.state = "special authority ignore slashes";
+	  } else if (c === 47) {
+	    this.state = "authority";
+	  } else {
+	    this.url.username = this.base.username;
+	    this.url.password = this.base.password;
+	    this.url.host = this.base.host;
+	    this.url.port = this.base.port;
+	    this.state = "path";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse special authority slashes"] = function parseSpecialAuthoritySlashes(c) {
+	  if (c === 47 && this.input[this.pointer + 1] === 47) {
+	    this.state = "special authority ignore slashes";
+	    ++this.pointer;
+	  } else {
+	    this.parseError = true;
+	    this.state = "special authority ignore slashes";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse special authority ignore slashes"] = function parseSpecialAuthorityIgnoreSlashes(c) {
+	  if (c !== 47 && c !== 92) {
+	    this.state = "authority";
+	    --this.pointer;
+	  } else {
+	    this.parseError = true;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse authority"] = function parseAuthority(c, cStr) {
+	  if (c === 64) {
+	    this.parseError = true;
+	    if (this.atFlag) {
+	      this.buffer = "%40" + this.buffer;
+	    }
+	    this.atFlag = true;
+
+	    // careful, this is based on buffer and has its own pointer (this.pointer != pointer) and inner chars
+	    const len = countSymbols(this.buffer);
+	    for (let pointer = 0; pointer < len; ++pointer) {
+	      const codePoint = this.buffer.codePointAt(pointer);
+
+	      if (codePoint === 58 && !this.passwordTokenSeenFlag) {
+	        this.passwordTokenSeenFlag = true;
+	        continue;
+	      }
+	      const encodedCodePoints = percentEncodeChar(codePoint, isUserinfoPercentEncode);
+	      if (this.passwordTokenSeenFlag) {
+	        this.url.password += encodedCodePoints;
+	      } else {
+	        this.url.username += encodedCodePoints;
+	      }
+	    }
+	    this.buffer = "";
+	  } else if (isNaN(c) || c === 47 || c === 63 || c === 35 ||
+	             (isSpecial(this.url) && c === 92)) {
+	    if (this.atFlag && this.buffer === "") {
+	      this.parseError = true;
+	      return failure;
+	    }
+	    this.pointer -= countSymbols(this.buffer) + 1;
+	    this.buffer = "";
+	    this.state = "host";
+	  } else {
+	    this.buffer += cStr;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse hostname"] =
+	URLStateMachine.prototype["parse host"] = function parseHostName(c, cStr) {
+	  if (this.stateOverride && this.url.scheme === "file") {
+	    --this.pointer;
+	    this.state = "file host";
+	  } else if (c === 58 && !this.arrFlag) {
+	    if (this.buffer === "") {
+	      this.parseError = true;
+	      return failure;
+	    }
+
+	    const host = parseHost(this.buffer, isSpecial(this.url));
+	    if (host === failure) {
+	      return failure;
+	    }
+
+	    this.url.host = host;
+	    this.buffer = "";
+	    this.state = "port";
+	    if (this.stateOverride === "hostname") {
+	      return false;
+	    }
+	  } else if (isNaN(c) || c === 47 || c === 63 || c === 35 ||
+	             (isSpecial(this.url) && c === 92)) {
+	    --this.pointer;
+	    if (isSpecial(this.url) && this.buffer === "") {
+	      this.parseError = true;
+	      return failure;
+	    } else if (this.stateOverride && this.buffer === "" &&
+	               (includesCredentials(this.url) || this.url.port !== null)) {
+	      this.parseError = true;
+	      return false;
+	    }
+
+	    const host = parseHost(this.buffer, isSpecial(this.url));
+	    if (host === failure) {
+	      return failure;
+	    }
+
+	    this.url.host = host;
+	    this.buffer = "";
+	    this.state = "path start";
+	    if (this.stateOverride) {
+	      return false;
+	    }
+	  } else {
+	    if (c === 91) {
+	      this.arrFlag = true;
+	    } else if (c === 93) {
+	      this.arrFlag = false;
+	    }
+	    this.buffer += cStr;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse port"] = function parsePort(c, cStr) {
+	  if (isASCIIDigit(c)) {
+	    this.buffer += cStr;
+	  } else if (isNaN(c) || c === 47 || c === 63 || c === 35 ||
+	             (isSpecial(this.url) && c === 92) ||
+	             this.stateOverride) {
+	    if (this.buffer !== "") {
+	      const port = parseInt(this.buffer);
+	      if (port > Math.pow(2, 16) - 1) {
+	        this.parseError = true;
+	        return failure;
+	      }
+	      this.url.port = port === defaultPort(this.url.scheme) ? null : port;
+	      this.buffer = "";
+	    }
+	    if (this.stateOverride) {
+	      return false;
+	    }
+	    this.state = "path start";
+	    --this.pointer;
+	  } else {
+	    this.parseError = true;
+	    return failure;
+	  }
+
+	  return true;
+	};
+
+	const fileOtherwiseCodePoints = new Set([47, 92, 63, 35]);
+
+	URLStateMachine.prototype["parse file"] = function parseFile(c) {
+	  this.url.scheme = "file";
+
+	  if (c === 47 || c === 92) {
+	    if (c === 92) {
+	      this.parseError = true;
+	    }
+	    this.state = "file slash";
+	  } else if (this.base !== null && this.base.scheme === "file") {
+	    if (isNaN(c)) {
+	      this.url.host = this.base.host;
+	      this.url.path = this.base.path.slice();
+	      this.url.query = this.base.query;
+	    } else if (c === 63) {
+	      this.url.host = this.base.host;
+	      this.url.path = this.base.path.slice();
+	      this.url.query = "";
+	      this.state = "query";
+	    } else if (c === 35) {
+	      this.url.host = this.base.host;
+	      this.url.path = this.base.path.slice();
+	      this.url.query = this.base.query;
+	      this.url.fragment = "";
+	      this.state = "fragment";
+	    } else {
+	      if (this.input.length - this.pointer - 1 === 0 || // remaining consists of 0 code points
+	          !isWindowsDriveLetterCodePoints(c, this.input[this.pointer + 1]) ||
+	          (this.input.length - this.pointer - 1 >= 2 && // remaining has at least 2 code points
+	           !fileOtherwiseCodePoints.has(this.input[this.pointer + 2]))) {
+	        this.url.host = this.base.host;
+	        this.url.path = this.base.path.slice();
+	        shortenPath(this.url);
+	      } else {
+	        this.parseError = true;
+	      }
+
+	      this.state = "path";
+	      --this.pointer;
+	    }
+	  } else {
+	    this.state = "path";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse file slash"] = function parseFileSlash(c) {
+	  if (c === 47 || c === 92) {
+	    if (c === 92) {
+	      this.parseError = true;
+	    }
+	    this.state = "file host";
+	  } else {
+	    if (this.base !== null && this.base.scheme === "file") {
+	      if (isNormalizedWindowsDriveLetterString(this.base.path[0])) {
+	        this.url.path.push(this.base.path[0]);
+	      } else {
+	        this.url.host = this.base.host;
+	      }
+	    }
+	    this.state = "path";
+	    --this.pointer;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse file host"] = function parseFileHost(c, cStr) {
+	  if (isNaN(c) || c === 47 || c === 92 || c === 63 || c === 35) {
+	    --this.pointer;
+	    if (!this.stateOverride && isWindowsDriveLetterString(this.buffer)) {
+	      this.parseError = true;
+	      this.state = "path";
+	    } else if (this.buffer === "") {
+	      this.url.host = "";
+	      if (this.stateOverride) {
+	        return false;
+	      }
+	      this.state = "path start";
+	    } else {
+	      let host = parseHost(this.buffer, isSpecial(this.url));
+	      if (host === failure) {
+	        return failure;
+	      }
+	      if (host === "localhost") {
+	        host = "";
+	      }
+	      this.url.host = host;
+
+	      if (this.stateOverride) {
+	        return false;
+	      }
+
+	      this.buffer = "";
+	      this.state = "path start";
+	    }
+	  } else {
+	    this.buffer += cStr;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse path start"] = function parsePathStart(c) {
+	  if (isSpecial(this.url)) {
+	    if (c === 92) {
+	      this.parseError = true;
+	    }
+	    this.state = "path";
+
+	    if (c !== 47 && c !== 92) {
+	      --this.pointer;
+	    }
+	  } else if (!this.stateOverride && c === 63) {
+	    this.url.query = "";
+	    this.state = "query";
+	  } else if (!this.stateOverride && c === 35) {
+	    this.url.fragment = "";
+	    this.state = "fragment";
+	  } else if (c !== undefined) {
+	    this.state = "path";
+	    if (c !== 47) {
+	      --this.pointer;
+	    }
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse path"] = function parsePath(c) {
+	  if (isNaN(c) || c === 47 || (isSpecial(this.url) && c === 92) ||
+	      (!this.stateOverride && (c === 63 || c === 35))) {
+	    if (isSpecial(this.url) && c === 92) {
+	      this.parseError = true;
+	    }
+
+	    if (isDoubleDot(this.buffer)) {
+	      shortenPath(this.url);
+	      if (c !== 47 && !(isSpecial(this.url) && c === 92)) {
+	        this.url.path.push("");
+	      }
+	    } else if (isSingleDot(this.buffer) && c !== 47 &&
+	               !(isSpecial(this.url) && c === 92)) {
+	      this.url.path.push("");
+	    } else if (!isSingleDot(this.buffer)) {
+	      if (this.url.scheme === "file" && this.url.path.length === 0 && isWindowsDriveLetterString(this.buffer)) {
+	        if (this.url.host !== "" && this.url.host !== null) {
+	          this.parseError = true;
+	          this.url.host = "";
+	        }
+	        this.buffer = this.buffer[0] + ":";
+	      }
+	      this.url.path.push(this.buffer);
+	    }
+	    this.buffer = "";
+	    if (this.url.scheme === "file" && (c === undefined || c === 63 || c === 35)) {
+	      while (this.url.path.length > 1 && this.url.path[0] === "") {
+	        this.parseError = true;
+	        this.url.path.shift();
+	      }
+	    }
+	    if (c === 63) {
+	      this.url.query = "";
+	      this.state = "query";
+	    }
+	    if (c === 35) {
+	      this.url.fragment = "";
+	      this.state = "fragment";
+	    }
+	  } else {
+	    // TODO: If c is not a URL code point and not "%", parse error.
+
+	    if (c === 37 &&
+	      (!isASCIIHex(this.input[this.pointer + 1]) ||
+	        !isASCIIHex(this.input[this.pointer + 2]))) {
+	      this.parseError = true;
+	    }
+
+	    this.buffer += percentEncodeChar(c, isPathPercentEncode);
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse cannot-be-a-base-URL path"] = function parseCannotBeABaseURLPath(c) {
+	  if (c === 63) {
+	    this.url.query = "";
+	    this.state = "query";
+	  } else if (c === 35) {
+	    this.url.fragment = "";
+	    this.state = "fragment";
+	  } else {
+	    // TODO: Add: not a URL code point
+	    if (!isNaN(c) && c !== 37) {
+	      this.parseError = true;
+	    }
+
+	    if (c === 37 &&
+	        (!isASCIIHex(this.input[this.pointer + 1]) ||
+	         !isASCIIHex(this.input[this.pointer + 2]))) {
+	      this.parseError = true;
+	    }
+
+	    if (!isNaN(c)) {
+	      this.url.path[0] = this.url.path[0] + percentEncodeChar(c, isC0ControlPercentEncode);
+	    }
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse query"] = function parseQuery(c, cStr) {
+	  if (isNaN(c) || (!this.stateOverride && c === 35)) {
+	    if (!isSpecial(this.url) || this.url.scheme === "ws" || this.url.scheme === "wss") {
+	      this.encodingOverride = "utf-8";
+	    }
+
+	    const buffer = new Buffer(this.buffer); // TODO: Use encoding override instead
+	    for (let i = 0; i < buffer.length; ++i) {
+	      if (buffer[i] < 0x21 || buffer[i] > 0x7E || buffer[i] === 0x22 || buffer[i] === 0x23 ||
+	          buffer[i] === 0x3C || buffer[i] === 0x3E) {
+	        this.url.query += percentEncode(buffer[i]);
+	      } else {
+	        this.url.query += String.fromCodePoint(buffer[i]);
+	      }
+	    }
+
+	    this.buffer = "";
+	    if (c === 35) {
+	      this.url.fragment = "";
+	      this.state = "fragment";
+	    }
+	  } else {
+	    // TODO: If c is not a URL code point and not "%", parse error.
+	    if (c === 37 &&
+	      (!isASCIIHex(this.input[this.pointer + 1]) ||
+	        !isASCIIHex(this.input[this.pointer + 2]))) {
+	      this.parseError = true;
+	    }
+
+	    this.buffer += cStr;
+	  }
+
+	  return true;
+	};
+
+	URLStateMachine.prototype["parse fragment"] = function parseFragment(c) {
+	  if (isNaN(c)) ; else if (c === 0x0) {
+	    this.parseError = true;
+	  } else {
+	    // TODO: If c is not a URL code point and not "%", parse error.
+	    if (c === 37 &&
+	      (!isASCIIHex(this.input[this.pointer + 1]) ||
+	        !isASCIIHex(this.input[this.pointer + 2]))) {
+	      this.parseError = true;
+	    }
+
+	    this.url.fragment += percentEncodeChar(c, isC0ControlPercentEncode);
+	  }
+
+	  return true;
+	};
+
+	function serializeURL(url, excludeFragment) {
+	  let output = url.scheme + ":";
+	  if (url.host !== null) {
+	    output += "//";
+
+	    if (url.username !== "" || url.password !== "") {
+	      output += url.username;
+	      if (url.password !== "") {
+	        output += ":" + url.password;
+	      }
+	      output += "@";
+	    }
+
+	    output += serializeHost(url.host);
+
+	    if (url.port !== null) {
+	      output += ":" + url.port;
+	    }
+	  } else if (url.host === null && url.scheme === "file") {
+	    output += "//";
+	  }
+
+	  if (url.cannotBeABaseURL) {
+	    output += url.path[0];
+	  } else {
+	    for (const string of url.path) {
+	      output += "/" + string;
+	    }
+	  }
+
+	  if (url.query !== null) {
+	    output += "?" + url.query;
+	  }
+
+	  if (!excludeFragment && url.fragment !== null) {
+	    output += "#" + url.fragment;
+	  }
+
+	  return output;
+	}
+
+	function serializeOrigin(tuple) {
+	  let result = tuple.scheme + "://";
+	  result += serializeHost(tuple.host);
+
+	  if (tuple.port !== null) {
+	    result += ":" + tuple.port;
+	  }
+
+	  return result;
+	}
+
+	module.exports.serializeURL = serializeURL;
+
+	module.exports.serializeURLOrigin = function (url) {
+	  // https://url.spec.whatwg.org/#concept-url-origin
+	  switch (url.scheme) {
+	    case "blob":
+	      try {
+	        return module.exports.serializeURLOrigin(module.exports.parseURL(url.path[0]));
+	      } catch (e) {
+	        // serializing an opaque origin returns "null"
+	        return "null";
+	      }
+	    case "ftp":
+	    case "gopher":
+	    case "http":
+	    case "https":
+	    case "ws":
+	    case "wss":
+	      return serializeOrigin({
+	        scheme: url.scheme,
+	        host: url.host,
+	        port: url.port
+	      });
+	    case "file":
+	      // spec says "exercise to the reader", chrome says "file://"
+	      return "file://";
+	    default:
+	      // serializing an opaque origin returns "null"
+	      return "null";
+	  }
+	};
+
+	module.exports.basicURLParse = function (input, options) {
+	  if (options === undefined) {
+	    options = {};
+	  }
+
+	  const usm = new URLStateMachine(input, options.baseURL, options.encodingOverride, options.url, options.stateOverride);
+	  if (usm.failure) {
+	    return "failure";
+	  }
+
+	  return usm.url;
+	};
+
+	module.exports.setTheUsername = function (url, username) {
+	  url.username = "";
+	  const decoded = punycode.ucs2.decode(username);
+	  for (let i = 0; i < decoded.length; ++i) {
+	    url.username += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
+	  }
+	};
+
+	module.exports.setThePassword = function (url, password) {
+	  url.password = "";
+	  const decoded = punycode.ucs2.decode(password);
+	  for (let i = 0; i < decoded.length; ++i) {
+	    url.password += percentEncodeChar(decoded[i], isUserinfoPercentEncode);
+	  }
+	};
+
+	module.exports.serializeHost = serializeHost;
+
+	module.exports.cannotHaveAUsernamePasswordPort = cannotHaveAUsernamePasswordPort;
+
+	module.exports.serializeInteger = function (integer) {
+	  return String(integer);
+	};
+
+	module.exports.parseURL = function (input, options) {
+	  if (options === undefined) {
+	    options = {};
+	  }
+
+	  // We don't handle blobs, so this just delegates:
+	  return module.exports.basicURLParse(input, { baseURL: options.baseURL, encodingOverride: options.encodingOverride });
+	}; 
+} (urlStateMachine));
+
+var urlStateMachineExports = urlStateMachine.exports;
+
+const usm = urlStateMachineExports;
+
+URLImpl.implementation = class URLImpl {
   constructor(constructorArgs) {
     const url = constructorArgs[0];
     const base = constructorArgs[1];
 
     let parsedBase = null;
     if (base !== undefined) {
-      parsedBase = urlStateMachine.basicURLParse(base);
+      parsedBase = usm.basicURLParse(base);
       if (parsedBase === "failure") {
         throw new TypeError("Invalid base URL");
       }
     }
 
-    const parsedURL = urlStateMachine.basicURLParse(url, { baseURL: parsedBase });
+    const parsedURL = usm.basicURLParse(url, { baseURL: parsedBase });
     if (parsedURL === "failure") {
       throw new TypeError("Invalid URL");
     }
@@ -81056,11 +80936,11 @@ var implementation = class URLImpl {
   }
 
   get href() {
-    return urlStateMachine.serializeURL(this._url);
+    return usm.serializeURL(this._url);
   }
 
   set href(v) {
-    const parsedURL = urlStateMachine.basicURLParse(v);
+    const parsedURL = usm.basicURLParse(v);
     if (parsedURL === "failure") {
       throw new TypeError("Invalid URL");
     }
@@ -81069,7 +80949,7 @@ var implementation = class URLImpl {
   }
 
   get origin() {
-    return urlStateMachine.serializeURLOrigin(this._url);
+    return usm.serializeURLOrigin(this._url);
   }
 
   get protocol() {
@@ -81077,7 +80957,7 @@ var implementation = class URLImpl {
   }
 
   set protocol(v) {
-    urlStateMachine.basicURLParse(v + ":", { url: this._url, stateOverride: "scheme start" });
+    usm.basicURLParse(v + ":", { url: this._url, stateOverride: "scheme start" });
   }
 
   get username() {
@@ -81085,11 +80965,11 @@ var implementation = class URLImpl {
   }
 
   set username(v) {
-    if (urlStateMachine.cannotHaveAUsernamePasswordPort(this._url)) {
+    if (usm.cannotHaveAUsernamePasswordPort(this._url)) {
       return;
     }
 
-    urlStateMachine.setTheUsername(this._url, v);
+    usm.setTheUsername(this._url, v);
   }
 
   get password() {
@@ -81097,11 +80977,11 @@ var implementation = class URLImpl {
   }
 
   set password(v) {
-    if (urlStateMachine.cannotHaveAUsernamePasswordPort(this._url)) {
+    if (usm.cannotHaveAUsernamePasswordPort(this._url)) {
       return;
     }
 
-    urlStateMachine.setThePassword(this._url, v);
+    usm.setThePassword(this._url, v);
   }
 
   get host() {
@@ -81112,10 +80992,10 @@ var implementation = class URLImpl {
     }
 
     if (url.port === null) {
-      return urlStateMachine.serializeHost(url.host);
+      return usm.serializeHost(url.host);
     }
 
-    return urlStateMachine.serializeHost(url.host) + ":" + urlStateMachine.serializeInteger(url.port);
+    return usm.serializeHost(url.host) + ":" + usm.serializeInteger(url.port);
   }
 
   set host(v) {
@@ -81123,7 +81003,7 @@ var implementation = class URLImpl {
       return;
     }
 
-    urlStateMachine.basicURLParse(v, { url: this._url, stateOverride: "host" });
+    usm.basicURLParse(v, { url: this._url, stateOverride: "host" });
   }
 
   get hostname() {
@@ -81131,7 +81011,7 @@ var implementation = class URLImpl {
       return "";
     }
 
-    return urlStateMachine.serializeHost(this._url.host);
+    return usm.serializeHost(this._url.host);
   }
 
   set hostname(v) {
@@ -81139,7 +81019,7 @@ var implementation = class URLImpl {
       return;
     }
 
-    urlStateMachine.basicURLParse(v, { url: this._url, stateOverride: "hostname" });
+    usm.basicURLParse(v, { url: this._url, stateOverride: "hostname" });
   }
 
   get port() {
@@ -81147,18 +81027,18 @@ var implementation = class URLImpl {
       return "";
     }
 
-    return urlStateMachine.serializeInteger(this._url.port);
+    return usm.serializeInteger(this._url.port);
   }
 
   set port(v) {
-    if (urlStateMachine.cannotHaveAUsernamePasswordPort(this._url)) {
+    if (usm.cannotHaveAUsernamePasswordPort(this._url)) {
       return;
     }
 
     if (v === "") {
       this._url.port = null;
     } else {
-      urlStateMachine.basicURLParse(v, { url: this._url, stateOverride: "port" });
+      usm.basicURLParse(v, { url: this._url, stateOverride: "port" });
     }
   }
 
@@ -81180,7 +81060,7 @@ var implementation = class URLImpl {
     }
 
     this._url.path = [];
-    urlStateMachine.basicURLParse(v, { url: this._url, stateOverride: "path start" });
+    usm.basicURLParse(v, { url: this._url, stateOverride: "path start" });
   }
 
   get search() {
@@ -81203,7 +81083,7 @@ var implementation = class URLImpl {
 
     const input = v[0] === "?" ? v.substring(1) : v;
     url.query = "";
-    urlStateMachine.basicURLParse(input, { url, stateOverride: "query" });
+    usm.basicURLParse(input, { url, stateOverride: "query" });
   }
 
   get hash() {
@@ -81222,7 +81102,7 @@ var implementation = class URLImpl {
 
     const input = v[0] === "#" ? v.substring(1) : v;
     this._url.fragment = "";
-    urlStateMachine.basicURLParse(input, { url: this._url, stateOverride: "fragment" });
+    usm.basicURLParse(input, { url: this._url, stateOverride: "fragment" });
   }
 
   toJSON() {
@@ -81230,232 +81110,216 @@ var implementation = class URLImpl {
   }
 };
 
-var URLImpl_1 = {
-	implementation: implementation
-};
+URL$2.exports;
 
-var URL_1 = createCommonjsModule(function (module) {
+(function (module) {
 
+	const conversions = lib$1;
+	const utils = utilsExports;
+	const Impl = URLImpl;
 
+	const impl = utils.implSymbol;
 
+	function URL(url) {
+	  if (!this || this[impl] || !(this instanceof URL)) {
+	    throw new TypeError("Failed to construct 'URL': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
+	  }
+	  if (arguments.length < 1) {
+	    throw new TypeError("Failed to construct 'URL': 1 argument required, but only " + arguments.length + " present.");
+	  }
+	  const args = [];
+	  for (let i = 0; i < arguments.length && i < 2; ++i) {
+	    args[i] = arguments[i];
+	  }
+	  args[0] = conversions["USVString"](args[0]);
+	  if (args[1] !== undefined) {
+	  args[1] = conversions["USVString"](args[1]);
+	  }
 
+	  module.exports.setup(this, args);
+	}
 
-const impl = utils.implSymbol;
+	URL.prototype.toJSON = function toJSON() {
+	  if (!this || !module.exports.is(this)) {
+	    throw new TypeError("Illegal invocation");
+	  }
+	  const args = [];
+	  for (let i = 0; i < arguments.length && i < 0; ++i) {
+	    args[i] = arguments[i];
+	  }
+	  return this[impl].toJSON.apply(this[impl], args);
+	};
+	Object.defineProperty(URL.prototype, "href", {
+	  get() {
+	    return this[impl].href;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].href = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-function URL(url) {
-  if (!this || this[impl] || !(this instanceof URL)) {
-    throw new TypeError("Failed to construct 'URL': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
-  }
-  if (arguments.length < 1) {
-    throw new TypeError("Failed to construct 'URL': 1 argument required, but only " + arguments.length + " present.");
-  }
-  const args = [];
-  for (let i = 0; i < arguments.length && i < 2; ++i) {
-    args[i] = arguments[i];
-  }
-  args[0] = lib$2["USVString"](args[0]);
-  if (args[1] !== undefined) {
-  args[1] = lib$2["USVString"](args[1]);
-  }
+	URL.prototype.toString = function () {
+	  if (!this || !module.exports.is(this)) {
+	    throw new TypeError("Illegal invocation");
+	  }
+	  return this.href;
+	};
 
-  module.exports.setup(this, args);
-}
+	Object.defineProperty(URL.prototype, "origin", {
+	  get() {
+	    return this[impl].origin;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-URL.prototype.toJSON = function toJSON() {
-  if (!this || !module.exports.is(this)) {
-    throw new TypeError("Illegal invocation");
-  }
-  const args = [];
-  for (let i = 0; i < arguments.length && i < 0; ++i) {
-    args[i] = arguments[i];
-  }
-  return this[impl].toJSON.apply(this[impl], args);
-};
-Object.defineProperty(URL.prototype, "href", {
-  get() {
-    return this[impl].href;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].href = V;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "protocol", {
+	  get() {
+	    return this[impl].protocol;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].protocol = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-URL.prototype.toString = function () {
-  if (!this || !module.exports.is(this)) {
-    throw new TypeError("Illegal invocation");
-  }
-  return this.href;
-};
+	Object.defineProperty(URL.prototype, "username", {
+	  get() {
+	    return this[impl].username;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].username = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-Object.defineProperty(URL.prototype, "origin", {
-  get() {
-    return this[impl].origin;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "password", {
+	  get() {
+	    return this[impl].password;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].password = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-Object.defineProperty(URL.prototype, "protocol", {
-  get() {
-    return this[impl].protocol;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].protocol = V;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "host", {
+	  get() {
+	    return this[impl].host;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].host = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-Object.defineProperty(URL.prototype, "username", {
-  get() {
-    return this[impl].username;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].username = V;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "hostname", {
+	  get() {
+	    return this[impl].hostname;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].hostname = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-Object.defineProperty(URL.prototype, "password", {
-  get() {
-    return this[impl].password;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].password = V;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "port", {
+	  get() {
+	    return this[impl].port;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].port = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-Object.defineProperty(URL.prototype, "host", {
-  get() {
-    return this[impl].host;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].host = V;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "pathname", {
+	  get() {
+	    return this[impl].pathname;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].pathname = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-Object.defineProperty(URL.prototype, "hostname", {
-  get() {
-    return this[impl].hostname;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].hostname = V;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "search", {
+	  get() {
+	    return this[impl].search;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].search = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
-Object.defineProperty(URL.prototype, "port", {
-  get() {
-    return this[impl].port;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].port = V;
-  },
-  enumerable: true,
-  configurable: true
-});
-
-Object.defineProperty(URL.prototype, "pathname", {
-  get() {
-    return this[impl].pathname;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].pathname = V;
-  },
-  enumerable: true,
-  configurable: true
-});
-
-Object.defineProperty(URL.prototype, "search", {
-  get() {
-    return this[impl].search;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].search = V;
-  },
-  enumerable: true,
-  configurable: true
-});
-
-Object.defineProperty(URL.prototype, "hash", {
-  get() {
-    return this[impl].hash;
-  },
-  set(V) {
-    V = lib$2["USVString"](V);
-    this[impl].hash = V;
-  },
-  enumerable: true,
-  configurable: true
-});
+	Object.defineProperty(URL.prototype, "hash", {
+	  get() {
+	    return this[impl].hash;
+	  },
+	  set(V) {
+	    V = conversions["USVString"](V);
+	    this[impl].hash = V;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
 
 
-module.exports = {
-  is(obj) {
-    return !!obj && obj[impl] instanceof URLImpl_1.implementation;
-  },
-  create(constructorArgs, privateData) {
-    let obj = Object.create(URL.prototype);
-    this.setup(obj, constructorArgs, privateData);
-    return obj;
-  },
-  setup(obj, constructorArgs, privateData) {
-    if (!privateData) privateData = {};
-    privateData.wrapper = obj;
+	module.exports = {
+	  is(obj) {
+	    return !!obj && obj[impl] instanceof Impl.implementation;
+	  },
+	  create(constructorArgs, privateData) {
+	    let obj = Object.create(URL.prototype);
+	    this.setup(obj, constructorArgs, privateData);
+	    return obj;
+	  },
+	  setup(obj, constructorArgs, privateData) {
+	    if (!privateData) privateData = {};
+	    privateData.wrapper = obj;
 
-    obj[impl] = new URLImpl_1.implementation(constructorArgs, privateData);
-    obj[impl][utils.wrapperSymbol] = obj;
-  },
-  interface: URL,
-  expose: {
-    Window: { URL: URL },
-    Worker: { URL: URL }
-  }
-};
-});
-URL_1.is;
-URL_1.create;
-URL_1.setup;
-URL_1.expose;
+	    obj[impl] = new Impl.implementation(constructorArgs, privateData);
+	    obj[impl][utils.wrapperSymbol] = obj;
+	  },
+	  interface: URL,
+	  expose: {
+	    Window: { URL: URL },
+	    Worker: { URL: URL }
+	  }
+	}; 
+} (URL$2));
 
-var URL$2 = URL_1.interface;
-var serializeURL = urlStateMachine.serializeURL;
-var serializeURLOrigin = urlStateMachine.serializeURLOrigin;
-var basicURLParse = urlStateMachine.basicURLParse;
-var setTheUsername = urlStateMachine.setTheUsername;
-var setThePassword = urlStateMachine.setThePassword;
-var serializeHost = urlStateMachine.serializeHost;
-var serializeInteger = urlStateMachine.serializeInteger;
-var parseURL$1 = urlStateMachine.parseURL;
+var URLExports = URL$2.exports;
 
-var publicApi = {
-	URL: URL$2,
-	serializeURL: serializeURL,
-	serializeURLOrigin: serializeURLOrigin,
-	basicURLParse: basicURLParse,
-	setTheUsername: setTheUsername,
-	setThePassword: setThePassword,
-	serializeHost: serializeHost,
-	serializeInteger: serializeInteger,
-	parseURL: parseURL$1
-};
+publicApi.URL = URLExports.interface;
+publicApi.serializeURL = urlStateMachineExports.serializeURL;
+publicApi.serializeURLOrigin = urlStateMachineExports.serializeURLOrigin;
+publicApi.basicURLParse = urlStateMachineExports.basicURLParse;
+publicApi.setTheUsername = urlStateMachineExports.setTheUsername;
+publicApi.setThePassword = urlStateMachineExports.setThePassword;
+publicApi.serializeHost = urlStateMachineExports.serializeHost;
+publicApi.serializeInteger = urlStateMachineExports.serializeInteger;
+publicApi.parseURL = urlStateMachineExports.parseURL;
 
 // Based on https://github.com/tmpvar/jsdom/blob/aa85b2abf07766ff7bf5c1f6daafb3726f2f2db5/lib/jsdom/living/blob.js
 
@@ -83223,7 +83087,7 @@ fetch.isRedirect = function (code) {
 // expose Promise
 fetch.Promise = global.Promise;
 
-var lib$1 = /*#__PURE__*/Object.freeze({
+var lib = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	'default': fetch,
 	Headers: Headers,
@@ -83233,21 +83097,20 @@ var lib$1 = /*#__PURE__*/Object.freeze({
 	AbortError: AbortError
 });
 
-var require$$0 = getCjsExportFromNamespace(lib$1);
+var require$$0 = /*@__PURE__*/getAugmentedNamespace(lib);
 
-var papiModule = createCommonjsModule(function (module, exports) {
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.papi_fetch = exports.getPerformance = void 0;
+Object.defineProperty(papiModule, "__esModule", { value: true });
+papiModule.papi_fetch = papiModule.getPerformance = void 0;
 const node_fetch_1 = __importDefault(require$$0);
 function getPerformance() {
     var _a;
     try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         if (commonjsGlobal != undefined) {
-            return (_a = perf_hooks__default["default"]) === null || _a === void 0 ? void 0 : _a.performance;
+            return (_a = require('perf_hooks')) === null || _a === void 0 ? void 0 : _a.performance;
         }
     }
     catch (_b) { }
@@ -83258,15 +83121,9 @@ function getPerformance() {
     }
     catch (_c) { }
 }
-exports.getPerformance = getPerformance;
-exports.papi_fetch = typeof window !== 'undefined' ? window.fetch.bind(window) : node_fetch_1.default;
-});
+papiModule.getPerformance = getPerformance;
+papiModule.papi_fetch = typeof window !== 'undefined' ? window.fetch.bind(window) : node_fetch_1.default;
 
-unwrapExports(papiModule);
-papiModule.papi_fetch;
-papiModule.getPerformance;
-
-var papiClient = createCommonjsModule(function (module, exports) {
 var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -83286,26 +83143,26 @@ var __importStar = (commonjsGlobal && commonjsGlobal.__importStar) || function (
     __setModuleDefault(result, mod);
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PapiClient = void 0;
+Object.defineProperty(papiClient, "__esModule", { value: true });
+papiClient.PapiClient = void 0;
 const endpoint_1 = __importStar(endpoint);
-
-
+const endpoints_1 = endpoints;
+const papi_module_1 = papiModule;
 class PapiClient {
     constructor(options) {
         this.options = options;
         this.metaData = {
             userDefinedTables: new endpoint_1.default(this, '/meta_data/user_defined_tables'),
-            flags: new endpoints.DistributorFlagsEndpoint(this),
+            flags: new endpoints_1.DistributorFlagsEndpoint(this),
             type: (typeObject) => {
-                return new endpoints.TypeMetaData(this, typeObject);
+                return new endpoints_1.TypeMetaData(this, typeObject);
             },
             dataViews: new endpoint_1.default(this, '/meta_data/data_views'),
             pepperiObjects: new endpoint_1.default(this, '/meta_data/pepperiObjects'),
         };
         this.userDefinedTables = new endpoint_1.default(this, '/user_defined_tables');
-        this.addons = new endpoints.AddonEndpoint(this);
-        this.codeJobs = new endpoints.CodeJobsEndpoint(this);
+        this.addons = new endpoints_1.AddonEndpoint(this);
+        this.codeJobs = new endpoints_1.CodeJobsEndpoint(this);
         this.activities = new endpoint_1.default(this, '/activities');
         this.transactions = new endpoint_1.default(this, '/transactions');
         this.allActivities = new endpoint_1.default(this, '/all_activities');
@@ -83313,32 +83170,32 @@ class PapiClient {
         this.users = new endpoint_1.default(this, '/users');
         this.uiControls = new endpoint_1.default(this, '/uicontrols');
         this.profiles = new endpoint_1.default(this, '/profiles');
-        this.fileStorage = new endpoints.FileStorageEndpoint(this);
-        this.maintenance = new endpoints.MaintenanceEndpoint(this);
-        this.auditLogs = new endpoints.AuditLogsEndpoint(this);
+        this.fileStorage = new endpoints_1.FileStorageEndpoint(this);
+        this.maintenance = new endpoints_1.MaintenanceEndpoint(this);
+        this.auditLogs = new endpoints_1.AuditLogsEndpoint(this);
         this.types = new endpoint_1.IterableEndpoint(this, '/types');
         this.catalogs = new endpoint_1.default(this, '/catalogs');
         this.application = {
-            sync: new endpoints.SyncEndpoint(this),
+            sync: new endpoints_1.SyncEndpoint(this),
         };
         this.items = new endpoint_1.default(this, '/items');
         this.transactionLines = new endpoint_1.default(this, '/transaction_lines');
         this.contacts = new endpoint_1.default(this, '/contacts');
         this.images = new endpoint_1.default(this, '/images');
-        this.notification = new endpoints.NotificationEndpoint(this);
+        this.notification = new endpoints_1.NotificationEndpoint(this);
         this.pages = new endpoint_1.default(this, '/pages');
         this.userDefinedCollections = {
-            schemes: new endpoints.SchemesEndpoint(this),
+            schemes: new endpoints_1.SchemesEndpoint(this),
             documents: (collectionName) => {
                 return new endpoint_1.default(this, `/user_defined_collections/${collectionName}`);
             },
         };
         this.resources = {
             resource: (resourceName) => {
-                return new endpoints.GenericResourceEndpoint(this, `/resources/${resourceName}`);
+                return new endpoints_1.GenericResourceEndpoint(this, `/resources/${resourceName}`);
             },
         };
-        this.userDefinedFlows = new endpoints.FlowsEndpoint(this);
+        this.userDefinedFlows = new endpoints_1.FlowsEndpoint(this);
         this.policies = new endpoint_1.default(this, '/policies');
         this.policyProfiles = new endpoint_1.default(this, '/policy_profiles');
     }
@@ -83376,9 +83233,9 @@ class PapiClient {
         if (this.options.codeJobUUID) {
             options.headers['X-Pepperi-CodeJobID'] = this.options.codeJobUUID;
         }
-        const performance = papiModule.getPerformance();
+        const performance = papi_module_1.getPerformance();
         const t0 = performance === null || performance === void 0 ? void 0 : performance.now();
-        const res = await papiModule.papi_fetch(fullURL, options);
+        const res = await papi_module_1.papi_fetch(fullURL, options);
         const t1 = performance === null || performance === void 0 ? void 0 : performance.now();
         if (!this.options.suppressLogging) {
             const diff = t0 && t1 ? (t1 - t0).toFixed(2) : 0;
@@ -83396,15 +83253,12 @@ class PapiClient {
         return res;
     }
 }
-exports.PapiClient = PapiClient;
-});
+papiClient.PapiClient = PapiClient;
 
-unwrapExports(papiClient);
-papiClient.PapiClient;
+var helper = {};
 
-var helper = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Helper = void 0;
+Object.defineProperty(helper, "__esModule", { value: true });
+helper.Helper = void 0;
 class Helper {
     normalizeHeaders(requestHeaders) {
         const headers = {};
@@ -83414,33 +83268,27 @@ class Helper {
         return headers;
     }
 }
-exports.Helper = Helper;
-});
+helper.Helper = Helper;
 
-unwrapExports(helper);
-helper.Helper;
-
-var dist = createCommonjsModule(function (module, exports) {
-var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(entities, exports);
-__exportStar(papiClient, exports);
-__exportStar(helper, exports);
-});
-
-var index = unwrapExports(dist);
+(function (exports) {
+	var __createBinding = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+	    if (k2 === undefined) k2 = k;
+	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+	}) : (function(o, m, k, k2) {
+	    if (k2 === undefined) k2 = k;
+	    o[k2] = m[k];
+	}));
+	var __exportStar = (commonjsGlobal && commonjsGlobal.__exportStar) || function(m, exports) {
+	    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	__exportStar(entities, exports);
+	__exportStar(papiClient, exports);
+	__exportStar(helper, exports); 
+} (dist));
 
 var AddonUUID = "3d118baf-f576-4cdb-a81e-c2cc9af4d7ad";
-var AddonVersion = "1.3.2";
+var AddonVersion = "1.3.4";
 var DebugPort = 4500;
 var WebappBaseUrl = "https://app.sandbox.pepperi.com";
 var DefaultEditor = "main";
@@ -83536,11 +83384,11 @@ class Constants {
 Constants.DataURLRegex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,([a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*)$/i;
 Constants.ChartTypes = ["Chart", "Benchmark chart", "Value scorecard", "Series scorecard", "Table chart"];
 
-var helpers = createCommonjsModule(function (module, exports) {
+var helpers$3 = {};
 
+var uri = Url__default["default"];
 
-
-var ValidationError = exports.ValidationError = function ValidationError (message, instance, schema, path, name, argument) {
+var ValidationError = helpers$3.ValidationError = function ValidationError (message, instance, schema, path, name, argument) {
   if(Array.isArray(path)){
     this.path = path;
     this.property = path.reduce(function(sum, item){
@@ -83568,7 +83416,7 @@ ValidationError.prototype.toString = function toString() {
   return this.property + ' ' + this.message;
 };
 
-var ValidatorResult = exports.ValidatorResult = function ValidatorResult(instance, schema, options, ctx) {
+var ValidatorResult$2 = helpers$3.ValidatorResult = function ValidatorResult(instance, schema, options, ctx) {
   this.instance = instance;
   this.schema = schema;
   this.options = options;
@@ -83581,7 +83429,7 @@ var ValidatorResult = exports.ValidatorResult = function ValidatorResult(instanc
   this.disableFormat = options && options.disableFormat === true;
 };
 
-ValidatorResult.prototype.addError = function addError(detail) {
+ValidatorResult$2.prototype.addError = function addError(detail) {
   var err;
   if (typeof detail == 'string') {
     err = new ValidationError(detail, this.instance, this.schema, this.path);
@@ -83594,14 +83442,14 @@ ValidatorResult.prototype.addError = function addError(detail) {
 
   this.errors.push(err);
   if (this.throwFirst) {
-    throw new ValidatorResultError(this);
+    throw new ValidatorResultError$1(this);
   }else if(this.throwError){
     throw err;
   }
   return err;
 };
 
-ValidatorResult.prototype.importErrors = function importErrors(res) {
+ValidatorResult$2.prototype.importErrors = function importErrors(res) {
   if (typeof res == 'string' || (res && res.validatorType)) {
     this.addError(res);
   } else if (res && res.errors) {
@@ -83612,46 +83460,46 @@ ValidatorResult.prototype.importErrors = function importErrors(res) {
 function stringizer (v,i){
   return i+': '+v.toString()+'\n';
 }
-ValidatorResult.prototype.toString = function toString(res) {
+ValidatorResult$2.prototype.toString = function toString(res) {
   return this.errors.map(stringizer).join('');
 };
 
-Object.defineProperty(ValidatorResult.prototype, "valid", { get: function() {
+Object.defineProperty(ValidatorResult$2.prototype, "valid", { get: function() {
   return !this.errors.length;
 } });
 
-module.exports.ValidatorResultError = ValidatorResultError;
-function ValidatorResultError(result) {
+helpers$3.ValidatorResultError = ValidatorResultError$1;
+function ValidatorResultError$1(result) {
   if(Error.captureStackTrace){
-    Error.captureStackTrace(this, ValidatorResultError);
+    Error.captureStackTrace(this, ValidatorResultError$1);
   }
   this.instance = result.instance;
   this.schema = result.schema;
   this.options = result.options;
   this.errors = result.errors;
 }
-ValidatorResultError.prototype = new Error();
-ValidatorResultError.prototype.constructor = ValidatorResultError;
-ValidatorResultError.prototype.name = "Validation Error";
+ValidatorResultError$1.prototype = new Error();
+ValidatorResultError$1.prototype.constructor = ValidatorResultError$1;
+ValidatorResultError$1.prototype.name = "Validation Error";
 
 /**
  * Describes a problem with a Schema which prevents validation of an instance
  * @name SchemaError
  * @constructor
  */
-var SchemaError = exports.SchemaError = function SchemaError (msg, schema) {
+var SchemaError$2 = helpers$3.SchemaError = function SchemaError (msg, schema) {
   this.message = msg;
   this.schema = schema;
   Error.call(this, msg);
   Error.captureStackTrace(this, SchemaError);
 };
-SchemaError.prototype = Object.create(Error.prototype,
+SchemaError$2.prototype = Object.create(Error.prototype,
   {
-    constructor: {value: SchemaError, enumerable: false},
+    constructor: {value: SchemaError$2, enumerable: false},
     name: {value: 'SchemaError', enumerable: false},
   });
 
-var SchemaContext = exports.SchemaContext = function SchemaContext (schema, options, path, base, schemas) {
+var SchemaContext$1 = helpers$3.SchemaContext = function SchemaContext (schema, options, path, base, schemas) {
   this.schema = schema;
   this.options = options;
   if(Array.isArray(path)){
@@ -83666,22 +83514,22 @@ var SchemaContext = exports.SchemaContext = function SchemaContext (schema, opti
   this.schemas = schemas;
 };
 
-SchemaContext.prototype.resolve = function resolve (target) {
-  return Url__default["default"].resolve(this.base, target);
+SchemaContext$1.prototype.resolve = function resolve (target) {
+  return uri.resolve(this.base, target);
 };
 
-SchemaContext.prototype.makeChild = function makeChild(schema, propertyName){
+SchemaContext$1.prototype.makeChild = function makeChild(schema, propertyName){
   var path = (propertyName===undefined) ? this.path : this.path.concat([propertyName]);
   var id = schema.$id || schema.id;
-  var base = Url__default["default"].resolve(this.base, id||'');
-  var ctx = new SchemaContext(schema, this.options, path, base, Object.create(this.schemas));
+  var base = uri.resolve(this.base, id||'');
+  var ctx = new SchemaContext$1(schema, this.options, path, base, Object.create(this.schemas));
   if(id && !ctx.schemas[base]){
     ctx.schemas[base] = schema;
   }
   return ctx;
 };
 
-var FORMAT_REGEXPS = exports.FORMAT_REGEXPS = {
+var FORMAT_REGEXPS = helpers$3.FORMAT_REGEXPS = {
   // 7.3.1. Dates, Times, and Duration
   'date-time': /^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-(3[01]|0[1-9]|[12][0-9])[tT ](2[0-4]|[01][0-9]):([0-5][0-9]):(60|[0-5][0-9])(\.\d+)?([zZ]|[+-]([0-5][0-9]):(60|[0-5][0-9]))$/,
   'date': /^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-(3[01]|0[1-9]|[12][0-9])$/,
@@ -83749,7 +83597,7 @@ FORMAT_REGEXPS.regexp = FORMAT_REGEXPS.regex;
 FORMAT_REGEXPS.pattern = FORMAT_REGEXPS.regex;
 FORMAT_REGEXPS.ipv4 = FORMAT_REGEXPS['ip-address'];
 
-exports.isFormat = function isFormat (input, format, validator) {
+helpers$3.isFormat = function isFormat (input, format, validator) {
   if (typeof input === 'string' && FORMAT_REGEXPS[format] !== undefined) {
     if (FORMAT_REGEXPS[format] instanceof RegExp) {
       return FORMAT_REGEXPS[format].test(input);
@@ -83764,7 +83612,7 @@ exports.isFormat = function isFormat (input, format, validator) {
   return true;
 };
 
-var makeSuffix = exports.makeSuffix = function makeSuffix (key) {
+var makeSuffix = helpers$3.makeSuffix = function makeSuffix (key) {
   key = key.toString();
   // This function could be capable of outputting valid a ECMAScript string, but the
   // resulting code for testing which form to use would be tens of thousands of characters long
@@ -83778,7 +83626,7 @@ var makeSuffix = exports.makeSuffix = function makeSuffix (key) {
   return '[' + JSON.stringify(key) + ']';
 };
 
-exports.deepCompareStrict = function deepCompareStrict (a, b) {
+helpers$3.deepCompareStrict = function deepCompareStrict (a, b) {
   if (typeof a !== typeof b) {
     return false;
   }
@@ -83854,7 +83702,7 @@ function deepMerge (target, src) {
   return dst;
 }
 
-module.exports.deepMerge = deepMerge;
+helpers$3.deepMerge = deepMerge;
 
 /**
  * Validates instance against the provided schema
@@ -83863,7 +83711,7 @@ module.exports.deepMerge = deepMerge;
  * @param s The path to walk o along
  * @return any
  */
-exports.objectGetPath = function objectGetPath(o, s) {
+helpers$3.objectGetPath = function objectGetPath(o, s) {
   var parts = s.split('/').slice(1);
   var k;
   while (typeof (k=parts.shift()) == 'string') {
@@ -83882,7 +83730,7 @@ function pathEncoder (v) {
  * @param Array a
  * @return {String}
  */
-exports.encodePath = function encodePointer(a){
+helpers$3.encodePath = function encodePointer(a){
   // ~ must be encoded explicitly because hacks
   // the slash is encoded by encodeURIComponent
   return a.map(pathEncoder).join('');
@@ -83896,7 +83744,7 @@ exports.encodePath = function encodePointer(a){
  * @param number
  * @returns {number}
  */
-exports.getDecimalPlaces = function getDecimalPlaces(number) {
+helpers$3.getDecimalPlaces = function getDecimalPlaces(number) {
 
   var decimalPlaces = 0;
   if (isNaN(number)) return decimalPlaces;
@@ -83922,33 +83770,20 @@ exports.getDecimalPlaces = function getDecimalPlaces(number) {
   return decimalPlaces;
 };
 
-exports.isSchema = function isSchema(val){
+helpers$3.isSchema = function isSchema(val){
   return (typeof val === 'object' && val) || (typeof val === 'boolean');
 };
-});
-helpers.ValidationError;
-helpers.ValidatorResult;
-helpers.ValidatorResultError;
-helpers.SchemaError;
-helpers.SchemaContext;
-helpers.FORMAT_REGEXPS;
-helpers.isFormat;
-helpers.makeSuffix;
-helpers.deepCompareStrict;
-helpers.deepMerge;
-helpers.objectGetPath;
-helpers.encodePath;
-helpers.getDecimalPlaces;
-helpers.isSchema;
+
+var helpers$2 = helpers$3;
 
 /** @type ValidatorResult */
-var ValidatorResult$1 = helpers.ValidatorResult;
+var ValidatorResult$1 = helpers$2.ValidatorResult;
 /** @type SchemaError */
-var SchemaError$1 = helpers.SchemaError;
+var SchemaError$1 = helpers$2.SchemaError;
 
-var attribute = {};
+var attribute$1 = {};
 
-attribute.ignoreProperties = {
+attribute$1.ignoreProperties = {
   // informative properties
   'id': true,
   'default': true,
@@ -83967,7 +83802,7 @@ attribute.ignoreProperties = {
 /**
  * @name validators
  */
-var validators = attribute.validators = {};
+var validators = attribute$1.validators = {};
 
 /**
  * Validates whether the instance if of a certain type
@@ -84137,18 +83972,18 @@ validators.oneOf = function validateOneOf (instance, schema, options, ctx) {
 validators.if = function validateIf (instance, schema, options, ctx) {
   // Ignore undefined instances
   if (instance === undefined) return null;
-  if (!helpers.isSchema(schema.if)) throw new Error('Expected "if" keyword to be a schema');
+  if (!helpers$2.isSchema(schema.if)) throw new Error('Expected "if" keyword to be a schema');
   var ifValid = testSchemaNoThrow.call(this, instance, options, ctx, null, schema.if);
   var result = new ValidatorResult$1(instance, schema, options, ctx);
   var res;
   if(ifValid){
     if (schema.then === undefined) return;
-    if (!helpers.isSchema(schema.then)) throw new Error('Expected "then" keyword to be a schema');
+    if (!helpers$2.isSchema(schema.then)) throw new Error('Expected "then" keyword to be a schema');
     res = this.validateSchema(instance, schema.then, options, ctx.makeChild(schema.then));
     result.importErrors(res);
   }else {
     if (schema.else === undefined) return;
-    if (!helpers.isSchema(schema.else)) throw new Error('Expected "else" keyword to be a schema');
+    if (!helpers$2.isSchema(schema.else)) throw new Error('Expected "else" keyword to be a schema');
     res = this.validateSchema(instance, schema.else, options, ctx.makeChild(schema.else));
     result.importErrors(res);
   }
@@ -84178,7 +84013,7 @@ validators.propertyNames = function validatePropertyNames (instance, schema, opt
   if(!this.types.object(instance)) return;
   var result = new ValidatorResult$1(instance, schema, options, ctx);
   var subschema = schema.propertyNames!==undefined ? schema.propertyNames : {};
-  if(!helpers.isSchema(subschema)) throw new SchemaError$1('Expected "propertyNames" to be a schema (object or boolean)');
+  if(!helpers$2.isSchema(subschema)) throw new SchemaError$1('Expected "propertyNames" to be a schema (object or boolean)');
 
   for (var property in instance) {
     if(getEnumerableProperty(instance, property) !== undefined){
@@ -84411,7 +84246,7 @@ validators.contains = function validateContains (instance, schema, options, ctx)
   var self = this;
   if (!this.types.array(instance)) return;
   if (schema.contains===undefined) return;
-  if (!helpers.isSchema(schema.contains)) throw new Error('Expected "contains" keyword to be a schema');
+  if (!helpers$2.isSchema(schema.contains)) throw new Error('Expected "contains" keyword to be a schema');
   var result = new ValidatorResult$1(instance, schema, options, ctx);
   var count = instance.some(function (value, i) {
     var res = self.validateSchema(value, schema.contains, options, ctx.makeChild(schema.contains, i));
@@ -84547,8 +84382,8 @@ var validateMultipleOfOrDivisbleBy = function validateMultipleOfOrDivisbleBy (in
 
   var result = new ValidatorResult$1(instance, schema, options, ctx);
 
-  var instanceDecimals = helpers.getDecimalPlaces(instance);
-  var divisorDecimals = helpers.getDecimalPlaces(validationArgument);
+  var instanceDecimals = helpers$2.getDecimalPlaces(instance);
+  var divisorDecimals = helpers$2.getDecimalPlaces(validationArgument);
 
   var maxDecimals = Math.max(instanceDecimals , divisorDecimals);
   var multiplier = Math.pow(10, maxDecimals);
@@ -84663,7 +84498,7 @@ validators.pattern = function validatePattern (instance, schema, options, ctx) {
 validators.format = function validateFormat (instance, schema, options, ctx) {
   if (instance===undefined) return;
   var result = new ValidatorResult$1(instance, schema, options, ctx);
-  if (!result.disableFormat && !helpers.isFormat(instance, schema.format, this)) {
+  if (!result.disableFormat && !helpers$2.isFormat(instance, schema.format, this)) {
     result.addError({
       name: 'format',
       argument: schema.format,
@@ -84765,7 +84600,7 @@ validators.maxItems = function validateMaxItems (instance, schema, options, ctx)
 function testArrays (v, i, a) {
   var j, len = a.length;
   for (j = i + 1, len; j < len; j++) {
-    if (helpers.deepCompareStrict(v, a[j])) {
+    if (helpers$2.deepCompareStrict(v, a[j])) {
       return false;
     }
   }
@@ -84853,7 +84688,7 @@ validators['enum'] = function validateEnum (instance, schema, options, ctx) {
     throw new SchemaError$1("enum expects an array", schema);
   }
   var result = new ValidatorResult$1(instance, schema, options, ctx);
-  if (!schema['enum'].some(helpers.deepCompareStrict.bind(null, instance))) {
+  if (!schema['enum'].some(helpers$2.deepCompareStrict.bind(null, instance))) {
     result.addError({
       name: 'enum',
       argument: schema['enum'],
@@ -84875,7 +84710,7 @@ validators['const'] = function validateEnum (instance, schema, options, ctx) {
     return null;
   }
   var result = new ValidatorResult$1(instance, schema, options, ctx);
-  if (!helpers.deepCompareStrict(schema['const'], instance)) {
+  if (!helpers$2.deepCompareStrict(schema['const'], instance)) {
     result.addError({
       name: 'const',
       argument: schema['const'],
@@ -84914,9 +84749,14 @@ validators.not = validators.disallow = function validateNot (instance, schema, o
   return result;
 };
 
-var attribute_1 = attribute;
+var attribute_1 = attribute$1;
 
-var SchemaScanResult_1 = SchemaScanResult;
+var scan = {};
+
+var urilib$1 = Url__default["default"];
+var helpers$1 = helpers$3;
+
+scan.SchemaScanResult = SchemaScanResult;
 function SchemaScanResult(found, ref){
   this.id = found;
   this.ref = ref;
@@ -84928,22 +84768,22 @@ function SchemaScanResult(found, ref){
  * @param object schema
  * @return {Object}
  */
-var scan_1 = function scan(base, schema){
+scan.scan = function scan(base, schema){
   function scanSchema(baseuri, schema){
     if(!schema || typeof schema!='object') return;
     // Mark all referenced schemas so we can tell later which schemas are referred to, but never defined
     if(schema.$ref){
-      var resolvedUri = Url__default["default"].resolve(baseuri, schema.$ref);
+      var resolvedUri = urilib$1.resolve(baseuri, schema.$ref);
       ref[resolvedUri] = ref[resolvedUri] ? ref[resolvedUri]+1 : 0;
       return;
     }
     var id = schema.$id || schema.id;
-    var ourBase = id ? Url__default["default"].resolve(baseuri, id) : baseuri;
+    var ourBase = id ? urilib$1.resolve(baseuri, id) : baseuri;
     if (ourBase) {
       // If there's no fragment, append an empty one
       if(ourBase.indexOf('#')<0) ourBase += '#';
       if(found[ourBase]){
-        if(!helpers.deepCompareStrict(found[ourBase], schema)){
+        if(!helpers$1.deepCompareStrict(found[ourBase], schema)){
           throw new Error('Schema <'+ourBase+'> already exists with different definition');
         }
         return found[ourBase];
@@ -84987,11 +84827,10 @@ var scan_1 = function scan(base, schema){
   return new SchemaScanResult(found, ref);
 };
 
-var scan = {
-	SchemaScanResult: SchemaScanResult_1,
-	scan: scan_1
-};
+var urilib = Url__default["default"];
 
+var attribute = attribute_1;
+var helpers = helpers$3;
 var scanSchema = scan.scan;
 var ValidatorResult = helpers.ValidatorResult;
 var ValidatorResultError = helpers.ValidatorResultError;
@@ -85014,7 +84853,7 @@ var Validator = function Validator () {
 
   // Use Object.create to make this extensible without Validator instances stepping on each other's toes.
   this.types = Object.create(types);
-  this.attributes = Object.create(attribute_1.validators);
+  this.attributes = Object.create(attribute.validators);
 };
 
 // Allow formats to be registered globally.
@@ -85103,7 +84942,7 @@ Validator.prototype.validate = function validate (instance, schema, options, ctx
   // This section indexes subschemas in the provided schema, so they don't need to be added with Validator#addSchema
   // This will work so long as the function at uri.resolve() will resolve a relative URI to a relative URI
   var id = schema.$id || schema.id;
-  var base = Url__default["default"].resolve(options.base||anonymousBase, id||'');
+  var base = urilib.resolve(options.base||anonymousBase, id||'');
   if(!ctx){
     ctx = new SchemaContext(schema, options, [], base, Object.create(this.schemas));
     if (!ctx.schemas[base]) {
@@ -85189,7 +85028,7 @@ Validator.prototype.validateSchema = function validateSchema (instance, schema, 
   var skipAttributes = options && options.skipAttributes || [];
   // Validate each schema attribute against the instance
   for (var key in schema) {
-    if (!attribute_1.ignoreProperties[key] && skipAttributes.indexOf(key) < 0) {
+    if (!attribute.ignoreProperties[key] && skipAttributes.indexOf(key) < 0) {
       var validatorErr = null;
       var validator = this.attributes[key];
       if (validator) {
@@ -85250,7 +85089,7 @@ Validator.prototype.resolve = function resolve (schema, switchSchema, ctx) {
     return {subschema: ctx.schemas[switchSchema], switchSchema: switchSchema};
   }
   // Else try walking the property pointer
-  var parsed = Url__default["default"].parse(switchSchema);
+  var parsed = urilib.parse(switchSchema);
   var fragment = parsed && parsed.hash;
   var document = fragment && fragment.length && switchSchema.substr(0, switchSchema.length - fragment.length);
   if (!document || !ctx.schemas[document]) {
@@ -85323,35 +85162,19 @@ types.object = function testObject (instance) {
 
 var validator = Validator;
 
-var lib = createCommonjsModule(function (module) {
+var Validator_1;
 
-var Validator = module.exports.Validator = validator;
+Validator_1 = validator;
 
-module.exports.ValidatorResult = helpers.ValidatorResult;
-module.exports.ValidatorResultError = helpers.ValidatorResultError;
-module.exports.ValidationError = helpers.ValidationError;
-module.exports.SchemaError = helpers.SchemaError;
-module.exports.SchemaScanResult = scan.SchemaScanResult;
-module.exports.scan = scan.scan;
-
-module.exports.validate = function (instance, schema, options) {
-  var v = new Validator();
-  return v.validate(instance, schema, options);
-};
-});
-var lib_1 = lib.Validator;
-lib.ValidatorResult;
-lib.ValidatorResultError;
-lib.ValidationError;
-lib.SchemaError;
-lib.SchemaScanResult;
-lib.scan;
-lib.validate;
+helpers$3.ValidatorResult;
+helpers$3.ValidatorResultError;
+helpers$3.ValidationError;
+helpers$3.SchemaError;
 
 class ChartService {
     constructor(client) {
         this.client = client;
-        this.papiClient = new index.PapiClient({
+        this.papiClient = new dist.PapiClient({
             baseURL: client.BaseURL,
             token: client.OAuthAccessToken,
             actionUUID: client.ActionUUID,
@@ -85437,7 +85260,7 @@ class ChartService {
     async importDataSource(body) {
         console.log(`@@@@importing chart: ${JSON.stringify(body)}@@@@`);
         body.DIMXObjects = await Promise.all(body.DIMXObjects.map(async (item) => {
-            const validator = new lib_1();
+            const validator = new Validator_1();
             const validSchema = this.getValidSchema();
             const validationResult = validator.validate(item.Object, validSchema);
             if (!validationResult.valid) {
@@ -85481,6 +85304,8 @@ class ChartService {
     }
 }
 
+var re$2 = {exports: {}};
+
 // Note: this is the semver.org version of the spec that it implements
 // Not necessarily the package version of this code.
 const SEMVER_SPEC_VERSION = '2.0.0';
@@ -85506,7 +85331,7 @@ const RELEASE_TYPES = [
   'prerelease',
 ];
 
-var constants = {
+var constants$1 = {
   MAX_LENGTH: MAX_LENGTH$1,
   MAX_SAFE_COMPONENT_LENGTH,
   MAX_SAFE_BUILD_LENGTH,
@@ -85517,7 +85342,7 @@ var constants = {
   FLAG_LOOSE: 0b010,
 };
 
-const debug = (
+const debug$1 = (
   typeof process === 'object' &&
   process.env &&
   process.env.NODE_DEBUG &&
@@ -85525,234 +85350,231 @@ const debug = (
 ) ? (...args) => console.error('SEMVER', ...args)
   : () => {};
 
-var debug_1 = debug;
+var debug_1 = debug$1;
 
-var re_1 = createCommonjsModule(function (module, exports) {
-const {
-  MAX_SAFE_COMPONENT_LENGTH,
-  MAX_SAFE_BUILD_LENGTH,
-  MAX_LENGTH,
-} = constants;
+re$2.exports;
 
-exports = module.exports = {};
+(function (module, exports) {
+	const {
+	  MAX_SAFE_COMPONENT_LENGTH,
+	  MAX_SAFE_BUILD_LENGTH,
+	  MAX_LENGTH,
+	} = constants$1;
+	const debug = debug_1;
+	exports = module.exports = {};
 
-// The actual regexps go on exports.re
-const re = exports.re = [];
-const safeRe = exports.safeRe = [];
-const src = exports.src = [];
-const t = exports.t = {};
-let R = 0;
+	// The actual regexps go on exports.re
+	const re = exports.re = [];
+	const safeRe = exports.safeRe = [];
+	const src = exports.src = [];
+	const t = exports.t = {};
+	let R = 0;
 
-const LETTERDASHNUMBER = '[a-zA-Z0-9-]';
+	const LETTERDASHNUMBER = '[a-zA-Z0-9-]';
 
-// Replace some greedy regex tokens to prevent regex dos issues. These regex are
-// used internally via the safeRe object since all inputs in this library get
-// normalized first to trim and collapse all extra whitespace. The original
-// regexes are exported for userland consumption and lower level usage. A
-// future breaking change could export the safer regex only with a note that
-// all input should have extra whitespace removed.
-const safeRegexReplacements = [
-  ['\\s', 1],
-  ['\\d', MAX_LENGTH],
-  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
-];
+	// Replace some greedy regex tokens to prevent regex dos issues. These regex are
+	// used internally via the safeRe object since all inputs in this library get
+	// normalized first to trim and collapse all extra whitespace. The original
+	// regexes are exported for userland consumption and lower level usage. A
+	// future breaking change could export the safer regex only with a note that
+	// all input should have extra whitespace removed.
+	const safeRegexReplacements = [
+	  ['\\s', 1],
+	  ['\\d', MAX_LENGTH],
+	  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
+	];
 
-const makeSafeRegex = (value) => {
-  for (const [token, max] of safeRegexReplacements) {
-    value = value
-      .split(`${token}*`).join(`${token}{0,${max}}`)
-      .split(`${token}+`).join(`${token}{1,${max}}`);
-  }
-  return value
-};
+	const makeSafeRegex = (value) => {
+	  for (const [token, max] of safeRegexReplacements) {
+	    value = value
+	      .split(`${token}*`).join(`${token}{0,${max}}`)
+	      .split(`${token}+`).join(`${token}{1,${max}}`);
+	  }
+	  return value
+	};
 
-const createToken = (name, value, isGlobal) => {
-  const safe = makeSafeRegex(value);
-  const index = R++;
-  debug_1(name, index, value);
-  t[name] = index;
-  src[index] = value;
-  re[index] = new RegExp(value, isGlobal ? 'g' : undefined);
-  safeRe[index] = new RegExp(safe, isGlobal ? 'g' : undefined);
-};
+	const createToken = (name, value, isGlobal) => {
+	  const safe = makeSafeRegex(value);
+	  const index = R++;
+	  debug(name, index, value);
+	  t[name] = index;
+	  src[index] = value;
+	  re[index] = new RegExp(value, isGlobal ? 'g' : undefined);
+	  safeRe[index] = new RegExp(safe, isGlobal ? 'g' : undefined);
+	};
 
-// The following Regular Expressions can be used for tokenizing,
-// validating, and parsing SemVer version strings.
+	// The following Regular Expressions can be used for tokenizing,
+	// validating, and parsing SemVer version strings.
 
-// ## Numeric Identifier
-// A single `0`, or a non-zero digit followed by zero or more digits.
+	// ## Numeric Identifier
+	// A single `0`, or a non-zero digit followed by zero or more digits.
 
-createToken('NUMERICIDENTIFIER', '0|[1-9]\\d*');
-createToken('NUMERICIDENTIFIERLOOSE', '\\d+');
+	createToken('NUMERICIDENTIFIER', '0|[1-9]\\d*');
+	createToken('NUMERICIDENTIFIERLOOSE', '\\d+');
 
-// ## Non-numeric Identifier
-// Zero or more digits, followed by a letter or hyphen, and then zero or
-// more letters, digits, or hyphens.
+	// ## Non-numeric Identifier
+	// Zero or more digits, followed by a letter or hyphen, and then zero or
+	// more letters, digits, or hyphens.
 
-createToken('NONNUMERICIDENTIFIER', `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`);
+	createToken('NONNUMERICIDENTIFIER', `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`);
 
-// ## Main Version
-// Three dot-separated numeric identifiers.
+	// ## Main Version
+	// Three dot-separated numeric identifiers.
 
-createToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\.` +
-                   `(${src[t.NUMERICIDENTIFIER]})\\.` +
-                   `(${src[t.NUMERICIDENTIFIER]})`);
+	createToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\.` +
+	                   `(${src[t.NUMERICIDENTIFIER]})\\.` +
+	                   `(${src[t.NUMERICIDENTIFIER]})`);
 
-createToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
-                        `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
-                        `(${src[t.NUMERICIDENTIFIERLOOSE]})`);
+	createToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
+	                        `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
+	                        `(${src[t.NUMERICIDENTIFIERLOOSE]})`);
 
-// ## Pre-release Version Identifier
-// A numeric identifier, or a non-numeric identifier.
+	// ## Pre-release Version Identifier
+	// A numeric identifier, or a non-numeric identifier.
 
-createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]
-}|${src[t.NONNUMERICIDENTIFIER]})`);
+	createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]
+	}|${src[t.NONNUMERICIDENTIFIER]})`);
 
-createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]
-}|${src[t.NONNUMERICIDENTIFIER]})`);
+	createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]
+	}|${src[t.NONNUMERICIDENTIFIER]})`);
 
-// ## Pre-release Version
-// Hyphen, followed by one or more dot-separated pre-release version
-// identifiers.
+	// ## Pre-release Version
+	// Hyphen, followed by one or more dot-separated pre-release version
+	// identifiers.
 
-createToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]
-}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`);
+	createToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]
+	}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`);
 
-createToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]
-}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`);
+	createToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]
+	}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`);
 
-// ## Build Metadata Identifier
-// Any combination of digits, letters, or hyphens.
+	// ## Build Metadata Identifier
+	// Any combination of digits, letters, or hyphens.
 
-createToken('BUILDIDENTIFIER', `${LETTERDASHNUMBER}+`);
+	createToken('BUILDIDENTIFIER', `${LETTERDASHNUMBER}+`);
 
-// ## Build Metadata
-// Plus sign, followed by one or more period-separated build metadata
-// identifiers.
+	// ## Build Metadata
+	// Plus sign, followed by one or more period-separated build metadata
+	// identifiers.
 
-createToken('BUILD', `(?:\\+(${src[t.BUILDIDENTIFIER]
-}(?:\\.${src[t.BUILDIDENTIFIER]})*))`);
+	createToken('BUILD', `(?:\\+(${src[t.BUILDIDENTIFIER]
+	}(?:\\.${src[t.BUILDIDENTIFIER]})*))`);
 
-// ## Full Version String
-// A main version, followed optionally by a pre-release version and
-// build metadata.
+	// ## Full Version String
+	// A main version, followed optionally by a pre-release version and
+	// build metadata.
 
-// Note that the only major, minor, patch, and pre-release sections of
-// the version string are capturing groups.  The build metadata is not a
-// capturing group, because it should not ever be used in version
-// comparison.
+	// Note that the only major, minor, patch, and pre-release sections of
+	// the version string are capturing groups.  The build metadata is not a
+	// capturing group, because it should not ever be used in version
+	// comparison.
 
-createToken('FULLPLAIN', `v?${src[t.MAINVERSION]
-}${src[t.PRERELEASE]}?${
-  src[t.BUILD]}?`);
+	createToken('FULLPLAIN', `v?${src[t.MAINVERSION]
+	}${src[t.PRERELEASE]}?${
+	  src[t.BUILD]}?`);
 
-createToken('FULL', `^${src[t.FULLPLAIN]}$`);
+	createToken('FULL', `^${src[t.FULLPLAIN]}$`);
 
-// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
-// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
-// common in the npm registry.
-createToken('LOOSEPLAIN', `[v=\\s]*${src[t.MAINVERSIONLOOSE]
-}${src[t.PRERELEASELOOSE]}?${
-  src[t.BUILD]}?`);
+	// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
+	// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
+	// common in the npm registry.
+	createToken('LOOSEPLAIN', `[v=\\s]*${src[t.MAINVERSIONLOOSE]
+	}${src[t.PRERELEASELOOSE]}?${
+	  src[t.BUILD]}?`);
 
-createToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`);
+	createToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`);
 
-createToken('GTLT', '((?:<|>)?=?)');
+	createToken('GTLT', '((?:<|>)?=?)');
 
-// Something like "2.*" or "1.2.x".
-// Note that "x.x" is a valid xRange identifer, meaning "any version"
-// Only the first item is strictly required.
-createToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
-createToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`);
+	// Something like "2.*" or "1.2.x".
+	// Note that "x.x" is a valid xRange identifer, meaning "any version"
+	// Only the first item is strictly required.
+	createToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
+	createToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`);
 
-createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:${src[t.PRERELEASE]})?${
-                     src[t.BUILD]}?` +
-                   `)?)?`);
+	createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})` +
+	                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
+	                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
+	                   `(?:${src[t.PRERELEASE]})?${
+	                     src[t.BUILD]}?` +
+	                   `)?)?`);
 
-createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:${src[t.PRERELEASELOOSE]})?${
-                          src[t.BUILD]}?` +
-                        `)?)?`);
+	createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +
+	                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
+	                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
+	                        `(?:${src[t.PRERELEASELOOSE]})?${
+	                          src[t.BUILD]}?` +
+	                        `)?)?`);
 
-createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`);
-createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`);
+	createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`);
+	createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`);
 
-// Coercion.
-// Extract anything that could conceivably be a part of a valid semver
-createToken('COERCE', `${'(^|[^\\d])' +
-              '(\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})` +
-              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
-              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
-              `(?:$|[^\\d])`);
-createToken('COERCERTL', src[t.COERCE], true);
+	// Coercion.
+	// Extract anything that could conceivably be a part of a valid semver
+	createToken('COERCE', `${'(^|[^\\d])' +
+	              '(\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})` +
+	              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
+	              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
+	              `(?:$|[^\\d])`);
+	createToken('COERCERTL', src[t.COERCE], true);
 
-// Tilde ranges.
-// Meaning is "reasonably at or greater than"
-createToken('LONETILDE', '(?:~>?)');
+	// Tilde ranges.
+	// Meaning is "reasonably at or greater than"
+	createToken('LONETILDE', '(?:~>?)');
 
-createToken('TILDETRIM', `(\\s*)${src[t.LONETILDE]}\\s+`, true);
-exports.tildeTrimReplace = '$1~';
+	createToken('TILDETRIM', `(\\s*)${src[t.LONETILDE]}\\s+`, true);
+	exports.tildeTrimReplace = '$1~';
 
-createToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`);
-createToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`);
+	createToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`);
+	createToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`);
 
-// Caret ranges.
-// Meaning is "at least and backwards compatible with"
-createToken('LONECARET', '(?:\\^)');
+	// Caret ranges.
+	// Meaning is "at least and backwards compatible with"
+	createToken('LONECARET', '(?:\\^)');
 
-createToken('CARETTRIM', `(\\s*)${src[t.LONECARET]}\\s+`, true);
-exports.caretTrimReplace = '$1^';
+	createToken('CARETTRIM', `(\\s*)${src[t.LONECARET]}\\s+`, true);
+	exports.caretTrimReplace = '$1^';
 
-createToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`);
-createToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`);
+	createToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`);
+	createToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`);
 
-// A simple gt/lt/eq thing, or just "" to indicate "any version"
-createToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`);
-createToken('COMPARATOR', `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`);
+	// A simple gt/lt/eq thing, or just "" to indicate "any version"
+	createToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`);
+	createToken('COMPARATOR', `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`);
 
-// An expression to strip any whitespace between the gtlt and the thing
-// it modifies, so that `> 1.2.3` ==> `>1.2.3`
-createToken('COMPARATORTRIM', `(\\s*)${src[t.GTLT]
-}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true);
-exports.comparatorTrimReplace = '$1$2$3';
+	// An expression to strip any whitespace between the gtlt and the thing
+	// it modifies, so that `> 1.2.3` ==> `>1.2.3`
+	createToken('COMPARATORTRIM', `(\\s*)${src[t.GTLT]
+	}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true);
+	exports.comparatorTrimReplace = '$1$2$3';
 
-// Something like `1.2.3 - 1.2.4`
-// Note that these all use the loose form, because they'll be
-// checked against either the strict or loose comparator form
-// later.
-createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})` +
-                   `\\s+-\\s+` +
-                   `(${src[t.XRANGEPLAIN]})` +
-                   `\\s*$`);
+	// Something like `1.2.3 - 1.2.4`
+	// Note that these all use the loose form, because they'll be
+	// checked against either the strict or loose comparator form
+	// later.
+	createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})` +
+	                   `\\s+-\\s+` +
+	                   `(${src[t.XRANGEPLAIN]})` +
+	                   `\\s*$`);
 
-createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})` +
-                        `\\s+-\\s+` +
-                        `(${src[t.XRANGEPLAINLOOSE]})` +
-                        `\\s*$`);
+	createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})` +
+	                        `\\s+-\\s+` +
+	                        `(${src[t.XRANGEPLAINLOOSE]})` +
+	                        `\\s*$`);
 
-// Star ranges basically just allow anything at all.
-createToken('STAR', '(<|>)?=?\\s*\\*');
-// >=0.0.0 is like a star
-createToken('GTE0', '^\\s*>=\\s*0\\.0\\.0\\s*$');
-createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$');
-});
-re_1.re;
-re_1.safeRe;
-re_1.src;
-re_1.t;
-re_1.tildeTrimReplace;
-re_1.caretTrimReplace;
-re_1.comparatorTrimReplace;
+	// Star ranges basically just allow anything at all.
+	createToken('STAR', '(<|>)?=?\\s*\\*');
+	// >=0.0.0 is like a star
+	createToken('GTE0', '^\\s*>=\\s*0\\.0\\.0\\s*$');
+	createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$'); 
+} (re$2, re$2.exports));
+
+var reExports = re$2.exports;
 
 // parse out just the options we care about
 const looseOption = Object.freeze({ loose: true });
 const emptyOpts = Object.freeze({ });
-const parseOptions = options => {
+const parseOptions$1 = options => {
   if (!options) {
     return emptyOpts
   }
@@ -85763,7 +85585,7 @@ const parseOptions = options => {
 
   return options
 };
-var parseOptions_1 = parseOptions;
+var parseOptions_1 = parseOptions$1;
 
 const numeric = /^[0-9]+$/;
 const compareIdentifiers$1 = (a, b) => {
@@ -85784,21 +85606,22 @@ const compareIdentifiers$1 = (a, b) => {
 
 const rcompareIdentifiers = (a, b) => compareIdentifiers$1(b, a);
 
-var identifiers = {
+var identifiers$1 = {
   compareIdentifiers: compareIdentifiers$1,
   rcompareIdentifiers,
 };
 
-const { MAX_LENGTH, MAX_SAFE_INTEGER } = constants;
-const { safeRe: re$3, t: t$3 } = re_1;
+const debug = debug_1;
+const { MAX_LENGTH, MAX_SAFE_INTEGER } = constants$1;
+const { safeRe: re$1, t: t$1 } = reExports;
 
-
-const { compareIdentifiers } = identifiers;
-class SemVer {
+const parseOptions = parseOptions_1;
+const { compareIdentifiers } = identifiers$1;
+class SemVer$d {
   constructor (version, options) {
-    options = parseOptions_1(options);
+    options = parseOptions(options);
 
-    if (version instanceof SemVer) {
+    if (version instanceof SemVer$d) {
       if (version.loose === !!options.loose &&
           version.includePrerelease === !!options.includePrerelease) {
         return version
@@ -85815,14 +85638,14 @@ class SemVer {
       )
     }
 
-    debug_1('SemVer', version, options);
+    debug('SemVer', version, options);
     this.options = options;
     this.loose = !!options.loose;
     // this isn't actually relevant for versions, but keep it so that we
     // don't run into trouble passing this.options around.
     this.includePrerelease = !!options.includePrerelease;
 
-    const m = version.trim().match(options.loose ? re$3[t$3.LOOSE] : re$3[t$3.FULL]);
+    const m = version.trim().match(options.loose ? re$1[t$1.LOOSE] : re$1[t$1.FULL]);
 
     if (!m) {
       throw new TypeError(`Invalid Version: ${version}`)
@@ -85879,12 +85702,12 @@ class SemVer {
   }
 
   compare (other) {
-    debug_1('SemVer.compare', this.version, this.options, other);
-    if (!(other instanceof SemVer)) {
+    debug('SemVer.compare', this.version, this.options, other);
+    if (!(other instanceof SemVer$d)) {
       if (typeof other === 'string' && other === this.version) {
         return 0
       }
-      other = new SemVer(other, this.options);
+      other = new SemVer$d(other, this.options);
     }
 
     if (other.version === this.version) {
@@ -85895,8 +85718,8 @@ class SemVer {
   }
 
   compareMain (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
+    if (!(other instanceof SemVer$d)) {
+      other = new SemVer$d(other, this.options);
     }
 
     return (
@@ -85907,8 +85730,8 @@ class SemVer {
   }
 
   comparePre (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
+    if (!(other instanceof SemVer$d)) {
+      other = new SemVer$d(other, this.options);
     }
 
     // NOT having a prerelease is > having one
@@ -85924,7 +85747,7 @@ class SemVer {
     do {
       const a = this.prerelease[i];
       const b = other.prerelease[i];
-      debug_1('prerelease compare', i, a, b);
+      debug('prerelease compare', i, a, b);
       if (a === undefined && b === undefined) {
         return 0
       } else if (b === undefined) {
@@ -85940,15 +85763,15 @@ class SemVer {
   }
 
   compareBuild (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
+    if (!(other instanceof SemVer$d)) {
+      other = new SemVer$d(other, this.options);
     }
 
     let i = 0;
     do {
       const a = this.build[i];
       const b = other.build[i];
-      debug_1('prerelease compare', i, a, b);
+      debug('prerelease compare', i, a, b);
       if (a === undefined && b === undefined) {
         return 0
       } else if (b === undefined) {
@@ -86089,14 +85912,15 @@ class SemVer {
   }
 }
 
-var semver$1 = SemVer;
+var semver$2 = SemVer$d;
 
-const parse = (version, options, throwErrors = false) => {
-  if (version instanceof semver$1) {
+const SemVer$c = semver$2;
+const parse$6 = (version, options, throwErrors = false) => {
+  if (version instanceof SemVer$c) {
     return version
   }
   try {
-    return new semver$1(version, options)
+    return new SemVer$c(version, options)
   } catch (er) {
     if (!throwErrors) {
       return null
@@ -86105,21 +85929,25 @@ const parse = (version, options, throwErrors = false) => {
   }
 };
 
-var parse_1 = parse;
+var parse_1 = parse$6;
 
-const valid$1 = (version, options) => {
-  const v = parse_1(version, options);
+const parse$5 = parse_1;
+const valid$2 = (version, options) => {
+  const v = parse$5(version, options);
   return v ? v.version : null
 };
-var valid_1 = valid$1;
+var valid_1 = valid$2;
 
-const clean = (version, options) => {
-  const s = parse_1(version.trim().replace(/^[=v]+/, ''), options);
+const parse$4 = parse_1;
+const clean$1 = (version, options) => {
+  const s = parse$4(version.trim().replace(/^[=v]+/, ''), options);
   return s ? s.version : null
 };
-var clean_1 = clean;
+var clean_1 = clean$1;
 
-const inc = (version, release, options, identifier, identifierBase) => {
+const SemVer$b = semver$2;
+
+const inc$1 = (version, release, options, identifier, identifierBase) => {
   if (typeof (options) === 'string') {
     identifierBase = identifier;
     identifier = options;
@@ -86127,19 +85955,21 @@ const inc = (version, release, options, identifier, identifierBase) => {
   }
 
   try {
-    return new semver$1(
-      version instanceof semver$1 ? version.version : version,
+    return new SemVer$b(
+      version instanceof SemVer$b ? version.version : version,
       options
     ).inc(release, identifier, identifierBase).version
   } catch (er) {
     return null
   }
 };
-var inc_1 = inc;
+var inc_1 = inc$1;
 
-const diff = (version1, version2) => {
-  const v1 = parse_1(version1, null, true);
-  const v2 = parse_1(version2, null, true);
+const parse$3 = parse_1;
+
+const diff$1 = (version1, version2) => {
+  const v1 = parse$3(version1, null, true);
+  const v2 = parse$3(version2, null, true);
   const comparison = v1.compare(v2);
 
   if (comparison === 0) {
@@ -86199,66 +86029,89 @@ const diff = (version1, version2) => {
   return 'prerelease'
 };
 
-var diff_1 = diff;
+var diff_1 = diff$1;
 
-const major = (a, loose) => new semver$1(a, loose).major;
-var major_1 = major;
+const SemVer$a = semver$2;
+const major$1 = (a, loose) => new SemVer$a(a, loose).major;
+var major_1 = major$1;
 
-const minor = (a, loose) => new semver$1(a, loose).minor;
-var minor_1 = minor;
+const SemVer$9 = semver$2;
+const minor$1 = (a, loose) => new SemVer$9(a, loose).minor;
+var minor_1 = minor$1;
 
-const patch = (a, loose) => new semver$1(a, loose).patch;
-var patch_1 = patch;
+const SemVer$8 = semver$2;
+const patch$1 = (a, loose) => new SemVer$8(a, loose).patch;
+var patch_1 = patch$1;
 
-const prerelease = (version, options) => {
-  const parsed = parse_1(version, options);
+const parse$2 = parse_1;
+const prerelease$1 = (version, options) => {
+  const parsed = parse$2(version, options);
   return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
 };
-var prerelease_1 = prerelease;
+var prerelease_1 = prerelease$1;
 
-const compare = (a, b, loose) =>
-  new semver$1(a, loose).compare(new semver$1(b, loose));
+const SemVer$7 = semver$2;
+const compare$b = (a, b, loose) =>
+  new SemVer$7(a, loose).compare(new SemVer$7(b, loose));
 
-var compare_1 = compare;
+var compare_1 = compare$b;
 
-const rcompare = (a, b, loose) => compare_1(b, a, loose);
-var rcompare_1 = rcompare;
+const compare$a = compare_1;
+const rcompare$1 = (a, b, loose) => compare$a(b, a, loose);
+var rcompare_1 = rcompare$1;
 
-const compareLoose = (a, b) => compare_1(a, b, true);
-var compareLoose_1 = compareLoose;
+const compare$9 = compare_1;
+const compareLoose$1 = (a, b) => compare$9(a, b, true);
+var compareLoose_1 = compareLoose$1;
 
-const compareBuild = (a, b, loose) => {
-  const versionA = new semver$1(a, loose);
-  const versionB = new semver$1(b, loose);
+const SemVer$6 = semver$2;
+const compareBuild$3 = (a, b, loose) => {
+  const versionA = new SemVer$6(a, loose);
+  const versionB = new SemVer$6(b, loose);
   return versionA.compare(versionB) || versionA.compareBuild(versionB)
 };
-var compareBuild_1 = compareBuild;
+var compareBuild_1 = compareBuild$3;
 
-const sort = (list, loose) => list.sort((a, b) => compareBuild_1(a, b, loose));
-var sort_1 = sort;
+const compareBuild$2 = compareBuild_1;
+const sort$1 = (list, loose) => list.sort((a, b) => compareBuild$2(a, b, loose));
+var sort_1 = sort$1;
 
-const rsort = (list, loose) => list.sort((a, b) => compareBuild_1(b, a, loose));
-var rsort_1 = rsort;
+const compareBuild$1 = compareBuild_1;
+const rsort$1 = (list, loose) => list.sort((a, b) => compareBuild$1(b, a, loose));
+var rsort_1 = rsort$1;
 
-const gt = (a, b, loose) => compare_1(a, b, loose) > 0;
-var gt_1 = gt;
+const compare$8 = compare_1;
+const gt$4 = (a, b, loose) => compare$8(a, b, loose) > 0;
+var gt_1 = gt$4;
 
-const lt = (a, b, loose) => compare_1(a, b, loose) < 0;
-var lt_1 = lt;
+const compare$7 = compare_1;
+const lt$3 = (a, b, loose) => compare$7(a, b, loose) < 0;
+var lt_1 = lt$3;
 
-const eq = (a, b, loose) => compare_1(a, b, loose) === 0;
-var eq_1 = eq;
+const compare$6 = compare_1;
+const eq$2 = (a, b, loose) => compare$6(a, b, loose) === 0;
+var eq_1 = eq$2;
 
-const neq = (a, b, loose) => compare_1(a, b, loose) !== 0;
-var neq_1 = neq;
+const compare$5 = compare_1;
+const neq$2 = (a, b, loose) => compare$5(a, b, loose) !== 0;
+var neq_1 = neq$2;
 
-const gte = (a, b, loose) => compare_1(a, b, loose) >= 0;
-var gte_1 = gte;
+const compare$4 = compare_1;
+const gte$3 = (a, b, loose) => compare$4(a, b, loose) >= 0;
+var gte_1 = gte$3;
 
-const lte = (a, b, loose) => compare_1(a, b, loose) <= 0;
-var lte_1 = lte;
+const compare$3 = compare_1;
+const lte$3 = (a, b, loose) => compare$3(a, b, loose) <= 0;
+var lte_1 = lte$3;
 
-const cmp = (a, op, b, loose) => {
+const eq$1 = eq_1;
+const neq$1 = neq_1;
+const gt$3 = gt_1;
+const gte$2 = gte_1;
+const lt$2 = lt_1;
+const lte$2 = lte_1;
+
+const cmp$1 = (a, op, b, loose) => {
   switch (op) {
     case '===':
       if (typeof a === 'object') {
@@ -86281,33 +86134,35 @@ const cmp = (a, op, b, loose) => {
     case '':
     case '=':
     case '==':
-      return eq_1(a, b, loose)
+      return eq$1(a, b, loose)
 
     case '!=':
-      return neq_1(a, b, loose)
+      return neq$1(a, b, loose)
 
     case '>':
-      return gt_1(a, b, loose)
+      return gt$3(a, b, loose)
 
     case '>=':
-      return gte_1(a, b, loose)
+      return gte$2(a, b, loose)
 
     case '<':
-      return lt_1(a, b, loose)
+      return lt$2(a, b, loose)
 
     case '<=':
-      return lte_1(a, b, loose)
+      return lte$2(a, b, loose)
 
     default:
       throw new TypeError(`Invalid operator: ${op}`)
   }
 };
-var cmp_1 = cmp;
+var cmp_1 = cmp$1;
 
-const { safeRe: re$2, t: t$2 } = re_1;
+const SemVer$5 = semver$2;
+const parse$1 = parse_1;
+const { safeRe: re, t } = reExports;
 
-const coerce = (version, options) => {
-  if (version instanceof semver$1) {
+const coerce$1 = (version, options) => {
+  if (version instanceof SemVer$5) {
     return version
   }
 
@@ -86323,7 +86178,7 @@ const coerce = (version, options) => {
 
   let match = null;
   if (!options.rtl) {
-    match = version.match(re$2[t$2.COERCE]);
+    match = version.match(re[t.COERCE]);
   } else {
     // Find the right-most coercible string that does not share
     // a terminus with a more left-ward coercible string.
@@ -86334,1497 +86189,1546 @@ const coerce = (version, options) => {
     // Stop when we get a match that ends at the string end, since no
     // coercible string can be more right-ward without the same terminus.
     let next;
-    while ((next = re$2[t$2.COERCERTL].exec(version)) &&
+    while ((next = re[t.COERCERTL].exec(version)) &&
         (!match || match.index + match[0].length !== version.length)
     ) {
       if (!match ||
             next.index + next[0].length !== match.index + match[0].length) {
         match = next;
       }
-      re$2[t$2.COERCERTL].lastIndex = next.index + next[1].length + next[2].length;
+      re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length;
     }
     // leave it in a clean state
-    re$2[t$2.COERCERTL].lastIndex = -1;
+    re[t.COERCERTL].lastIndex = -1;
   }
 
   if (match === null) {
     return null
   }
 
-  return parse_1(`${match[2]}.${match[3] || '0'}.${match[4] || '0'}`, options)
+  return parse$1(`${match[2]}.${match[3] || '0'}.${match[4] || '0'}`, options)
 };
-var coerce_1 = coerce;
+var coerce_1 = coerce$1;
 
-var iterator = function (Yallist) {
-  Yallist.prototype[Symbol.iterator] = function* () {
-    for (let walker = this.head; walker; walker = walker.next) {
-      yield walker.value;
-    }
-  };
-};
+var iterator;
+var hasRequiredIterator;
 
-var yallist = Yallist;
-
-Yallist.Node = Node;
-Yallist.create = Yallist;
-
-function Yallist (list) {
-  var self = this;
-  if (!(self instanceof Yallist)) {
-    self = new Yallist();
-  }
-
-  self.tail = null;
-  self.head = null;
-  self.length = 0;
-
-  if (list && typeof list.forEach === 'function') {
-    list.forEach(function (item) {
-      self.push(item);
-    });
-  } else if (arguments.length > 0) {
-    for (var i = 0, l = arguments.length; i < l; i++) {
-      self.push(arguments[i]);
-    }
-  }
-
-  return self
+function requireIterator () {
+	if (hasRequiredIterator) return iterator;
+	hasRequiredIterator = 1;
+	iterator = function (Yallist) {
+	  Yallist.prototype[Symbol.iterator] = function* () {
+	    for (let walker = this.head; walker; walker = walker.next) {
+	      yield walker.value;
+	    }
+	  };
+	};
+	return iterator;
 }
 
-Yallist.prototype.removeNode = function (node) {
-  if (node.list !== this) {
-    throw new Error('removing node which does not belong to this list')
-  }
+var yallist;
+var hasRequiredYallist;
 
-  var next = node.next;
-  var prev = node.prev;
+function requireYallist () {
+	if (hasRequiredYallist) return yallist;
+	hasRequiredYallist = 1;
+	yallist = Yallist;
 
-  if (next) {
-    next.prev = prev;
-  }
+	Yallist.Node = Node;
+	Yallist.create = Yallist;
 
-  if (prev) {
-    prev.next = next;
-  }
+	function Yallist (list) {
+	  var self = this;
+	  if (!(self instanceof Yallist)) {
+	    self = new Yallist();
+	  }
 
-  if (node === this.head) {
-    this.head = next;
-  }
-  if (node === this.tail) {
-    this.tail = prev;
-  }
+	  self.tail = null;
+	  self.head = null;
+	  self.length = 0;
 
-  node.list.length--;
-  node.next = null;
-  node.prev = null;
-  node.list = null;
+	  if (list && typeof list.forEach === 'function') {
+	    list.forEach(function (item) {
+	      self.push(item);
+	    });
+	  } else if (arguments.length > 0) {
+	    for (var i = 0, l = arguments.length; i < l; i++) {
+	      self.push(arguments[i]);
+	    }
+	  }
 
-  return next
-};
+	  return self
+	}
 
-Yallist.prototype.unshiftNode = function (node) {
-  if (node === this.head) {
-    return
-  }
+	Yallist.prototype.removeNode = function (node) {
+	  if (node.list !== this) {
+	    throw new Error('removing node which does not belong to this list')
+	  }
 
-  if (node.list) {
-    node.list.removeNode(node);
-  }
+	  var next = node.next;
+	  var prev = node.prev;
 
-  var head = this.head;
-  node.list = this;
-  node.next = head;
-  if (head) {
-    head.prev = node;
-  }
+	  if (next) {
+	    next.prev = prev;
+	  }
 
-  this.head = node;
-  if (!this.tail) {
-    this.tail = node;
-  }
-  this.length++;
-};
+	  if (prev) {
+	    prev.next = next;
+	  }
 
-Yallist.prototype.pushNode = function (node) {
-  if (node === this.tail) {
-    return
-  }
+	  if (node === this.head) {
+	    this.head = next;
+	  }
+	  if (node === this.tail) {
+	    this.tail = prev;
+	  }
 
-  if (node.list) {
-    node.list.removeNode(node);
-  }
+	  node.list.length--;
+	  node.next = null;
+	  node.prev = null;
+	  node.list = null;
 
-  var tail = this.tail;
-  node.list = this;
-  node.prev = tail;
-  if (tail) {
-    tail.next = node;
-  }
+	  return next
+	};
 
-  this.tail = node;
-  if (!this.head) {
-    this.head = node;
-  }
-  this.length++;
-};
+	Yallist.prototype.unshiftNode = function (node) {
+	  if (node === this.head) {
+	    return
+	  }
 
-Yallist.prototype.push = function () {
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    push(this, arguments[i]);
-  }
-  return this.length
-};
+	  if (node.list) {
+	    node.list.removeNode(node);
+	  }
 
-Yallist.prototype.unshift = function () {
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    unshift(this, arguments[i]);
-  }
-  return this.length
-};
+	  var head = this.head;
+	  node.list = this;
+	  node.next = head;
+	  if (head) {
+	    head.prev = node;
+	  }
 
-Yallist.prototype.pop = function () {
-  if (!this.tail) {
-    return undefined
-  }
+	  this.head = node;
+	  if (!this.tail) {
+	    this.tail = node;
+	  }
+	  this.length++;
+	};
 
-  var res = this.tail.value;
-  this.tail = this.tail.prev;
-  if (this.tail) {
-    this.tail.next = null;
-  } else {
-    this.head = null;
-  }
-  this.length--;
-  return res
-};
+	Yallist.prototype.pushNode = function (node) {
+	  if (node === this.tail) {
+	    return
+	  }
 
-Yallist.prototype.shift = function () {
-  if (!this.head) {
-    return undefined
-  }
+	  if (node.list) {
+	    node.list.removeNode(node);
+	  }
 
-  var res = this.head.value;
-  this.head = this.head.next;
-  if (this.head) {
-    this.head.prev = null;
-  } else {
-    this.tail = null;
-  }
-  this.length--;
-  return res
-};
+	  var tail = this.tail;
+	  node.list = this;
+	  node.prev = tail;
+	  if (tail) {
+	    tail.next = node;
+	  }
 
-Yallist.prototype.forEach = function (fn, thisp) {
-  thisp = thisp || this;
-  for (var walker = this.head, i = 0; walker !== null; i++) {
-    fn.call(thisp, walker.value, i, this);
-    walker = walker.next;
-  }
-};
+	  this.tail = node;
+	  if (!this.head) {
+	    this.head = node;
+	  }
+	  this.length++;
+	};
 
-Yallist.prototype.forEachReverse = function (fn, thisp) {
-  thisp = thisp || this;
-  for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
-    fn.call(thisp, walker.value, i, this);
-    walker = walker.prev;
-  }
-};
+	Yallist.prototype.push = function () {
+	  for (var i = 0, l = arguments.length; i < l; i++) {
+	    push(this, arguments[i]);
+	  }
+	  return this.length
+	};
 
-Yallist.prototype.get = function (n) {
-  for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
-    // abort out of the list early if we hit a cycle
-    walker = walker.next;
-  }
-  if (i === n && walker !== null) {
-    return walker.value
-  }
-};
+	Yallist.prototype.unshift = function () {
+	  for (var i = 0, l = arguments.length; i < l; i++) {
+	    unshift(this, arguments[i]);
+	  }
+	  return this.length
+	};
 
-Yallist.prototype.getReverse = function (n) {
-  for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
-    // abort out of the list early if we hit a cycle
-    walker = walker.prev;
-  }
-  if (i === n && walker !== null) {
-    return walker.value
-  }
-};
+	Yallist.prototype.pop = function () {
+	  if (!this.tail) {
+	    return undefined
+	  }
 
-Yallist.prototype.map = function (fn, thisp) {
-  thisp = thisp || this;
-  var res = new Yallist();
-  for (var walker = this.head; walker !== null;) {
-    res.push(fn.call(thisp, walker.value, this));
-    walker = walker.next;
-  }
-  return res
-};
+	  var res = this.tail.value;
+	  this.tail = this.tail.prev;
+	  if (this.tail) {
+	    this.tail.next = null;
+	  } else {
+	    this.head = null;
+	  }
+	  this.length--;
+	  return res
+	};
 
-Yallist.prototype.mapReverse = function (fn, thisp) {
-  thisp = thisp || this;
-  var res = new Yallist();
-  for (var walker = this.tail; walker !== null;) {
-    res.push(fn.call(thisp, walker.value, this));
-    walker = walker.prev;
-  }
-  return res
-};
+	Yallist.prototype.shift = function () {
+	  if (!this.head) {
+	    return undefined
+	  }
 
-Yallist.prototype.reduce = function (fn, initial) {
-  var acc;
-  var walker = this.head;
-  if (arguments.length > 1) {
-    acc = initial;
-  } else if (this.head) {
-    walker = this.head.next;
-    acc = this.head.value;
-  } else {
-    throw new TypeError('Reduce of empty list with no initial value')
-  }
+	  var res = this.head.value;
+	  this.head = this.head.next;
+	  if (this.head) {
+	    this.head.prev = null;
+	  } else {
+	    this.tail = null;
+	  }
+	  this.length--;
+	  return res
+	};
 
-  for (var i = 0; walker !== null; i++) {
-    acc = fn(acc, walker.value, i);
-    walker = walker.next;
-  }
+	Yallist.prototype.forEach = function (fn, thisp) {
+	  thisp = thisp || this;
+	  for (var walker = this.head, i = 0; walker !== null; i++) {
+	    fn.call(thisp, walker.value, i, this);
+	    walker = walker.next;
+	  }
+	};
 
-  return acc
-};
+	Yallist.prototype.forEachReverse = function (fn, thisp) {
+	  thisp = thisp || this;
+	  for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
+	    fn.call(thisp, walker.value, i, this);
+	    walker = walker.prev;
+	  }
+	};
 
-Yallist.prototype.reduceReverse = function (fn, initial) {
-  var acc;
-  var walker = this.tail;
-  if (arguments.length > 1) {
-    acc = initial;
-  } else if (this.tail) {
-    walker = this.tail.prev;
-    acc = this.tail.value;
-  } else {
-    throw new TypeError('Reduce of empty list with no initial value')
-  }
+	Yallist.prototype.get = function (n) {
+	  for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
+	    // abort out of the list early if we hit a cycle
+	    walker = walker.next;
+	  }
+	  if (i === n && walker !== null) {
+	    return walker.value
+	  }
+	};
 
-  for (var i = this.length - 1; walker !== null; i--) {
-    acc = fn(acc, walker.value, i);
-    walker = walker.prev;
-  }
+	Yallist.prototype.getReverse = function (n) {
+	  for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
+	    // abort out of the list early if we hit a cycle
+	    walker = walker.prev;
+	  }
+	  if (i === n && walker !== null) {
+	    return walker.value
+	  }
+	};
 
-  return acc
-};
+	Yallist.prototype.map = function (fn, thisp) {
+	  thisp = thisp || this;
+	  var res = new Yallist();
+	  for (var walker = this.head; walker !== null;) {
+	    res.push(fn.call(thisp, walker.value, this));
+	    walker = walker.next;
+	  }
+	  return res
+	};
 
-Yallist.prototype.toArray = function () {
-  var arr = new Array(this.length);
-  for (var i = 0, walker = this.head; walker !== null; i++) {
-    arr[i] = walker.value;
-    walker = walker.next;
-  }
-  return arr
-};
+	Yallist.prototype.mapReverse = function (fn, thisp) {
+	  thisp = thisp || this;
+	  var res = new Yallist();
+	  for (var walker = this.tail; walker !== null;) {
+	    res.push(fn.call(thisp, walker.value, this));
+	    walker = walker.prev;
+	  }
+	  return res
+	};
 
-Yallist.prototype.toArrayReverse = function () {
-  var arr = new Array(this.length);
-  for (var i = 0, walker = this.tail; walker !== null; i++) {
-    arr[i] = walker.value;
-    walker = walker.prev;
-  }
-  return arr
-};
+	Yallist.prototype.reduce = function (fn, initial) {
+	  var acc;
+	  var walker = this.head;
+	  if (arguments.length > 1) {
+	    acc = initial;
+	  } else if (this.head) {
+	    walker = this.head.next;
+	    acc = this.head.value;
+	  } else {
+	    throw new TypeError('Reduce of empty list with no initial value')
+	  }
 
-Yallist.prototype.slice = function (from, to) {
-  to = to || this.length;
-  if (to < 0) {
-    to += this.length;
-  }
-  from = from || 0;
-  if (from < 0) {
-    from += this.length;
-  }
-  var ret = new Yallist();
-  if (to < from || to < 0) {
-    return ret
-  }
-  if (from < 0) {
-    from = 0;
-  }
-  if (to > this.length) {
-    to = this.length;
-  }
-  for (var i = 0, walker = this.head; walker !== null && i < from; i++) {
-    walker = walker.next;
-  }
-  for (; walker !== null && i < to; i++, walker = walker.next) {
-    ret.push(walker.value);
-  }
-  return ret
-};
+	  for (var i = 0; walker !== null; i++) {
+	    acc = fn(acc, walker.value, i);
+	    walker = walker.next;
+	  }
 
-Yallist.prototype.sliceReverse = function (from, to) {
-  to = to || this.length;
-  if (to < 0) {
-    to += this.length;
-  }
-  from = from || 0;
-  if (from < 0) {
-    from += this.length;
-  }
-  var ret = new Yallist();
-  if (to < from || to < 0) {
-    return ret
-  }
-  if (from < 0) {
-    from = 0;
-  }
-  if (to > this.length) {
-    to = this.length;
-  }
-  for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
-    walker = walker.prev;
-  }
-  for (; walker !== null && i > from; i--, walker = walker.prev) {
-    ret.push(walker.value);
-  }
-  return ret
-};
+	  return acc
+	};
 
-Yallist.prototype.splice = function (start, deleteCount, ...nodes) {
-  if (start > this.length) {
-    start = this.length - 1;
-  }
-  if (start < 0) {
-    start = this.length + start;
-  }
+	Yallist.prototype.reduceReverse = function (fn, initial) {
+	  var acc;
+	  var walker = this.tail;
+	  if (arguments.length > 1) {
+	    acc = initial;
+	  } else if (this.tail) {
+	    walker = this.tail.prev;
+	    acc = this.tail.value;
+	  } else {
+	    throw new TypeError('Reduce of empty list with no initial value')
+	  }
 
-  for (var i = 0, walker = this.head; walker !== null && i < start; i++) {
-    walker = walker.next;
-  }
+	  for (var i = this.length - 1; walker !== null; i--) {
+	    acc = fn(acc, walker.value, i);
+	    walker = walker.prev;
+	  }
 
-  var ret = [];
-  for (var i = 0; walker && i < deleteCount; i++) {
-    ret.push(walker.value);
-    walker = this.removeNode(walker);
-  }
-  if (walker === null) {
-    walker = this.tail;
-  }
+	  return acc
+	};
 
-  if (walker !== this.head && walker !== this.tail) {
-    walker = walker.prev;
-  }
+	Yallist.prototype.toArray = function () {
+	  var arr = new Array(this.length);
+	  for (var i = 0, walker = this.head; walker !== null; i++) {
+	    arr[i] = walker.value;
+	    walker = walker.next;
+	  }
+	  return arr
+	};
 
-  for (var i = 0; i < nodes.length; i++) {
-    walker = insert(this, walker, nodes[i]);
-  }
-  return ret;
-};
+	Yallist.prototype.toArrayReverse = function () {
+	  var arr = new Array(this.length);
+	  for (var i = 0, walker = this.tail; walker !== null; i++) {
+	    arr[i] = walker.value;
+	    walker = walker.prev;
+	  }
+	  return arr
+	};
 
-Yallist.prototype.reverse = function () {
-  var head = this.head;
-  var tail = this.tail;
-  for (var walker = head; walker !== null; walker = walker.prev) {
-    var p = walker.prev;
-    walker.prev = walker.next;
-    walker.next = p;
-  }
-  this.head = tail;
-  this.tail = head;
-  return this
-};
+	Yallist.prototype.slice = function (from, to) {
+	  to = to || this.length;
+	  if (to < 0) {
+	    to += this.length;
+	  }
+	  from = from || 0;
+	  if (from < 0) {
+	    from += this.length;
+	  }
+	  var ret = new Yallist();
+	  if (to < from || to < 0) {
+	    return ret
+	  }
+	  if (from < 0) {
+	    from = 0;
+	  }
+	  if (to > this.length) {
+	    to = this.length;
+	  }
+	  for (var i = 0, walker = this.head; walker !== null && i < from; i++) {
+	    walker = walker.next;
+	  }
+	  for (; walker !== null && i < to; i++, walker = walker.next) {
+	    ret.push(walker.value);
+	  }
+	  return ret
+	};
 
-function insert (self, node, value) {
-  var inserted = node === self.head ?
-    new Node(value, null, node, self) :
-    new Node(value, node, node.next, self);
+	Yallist.prototype.sliceReverse = function (from, to) {
+	  to = to || this.length;
+	  if (to < 0) {
+	    to += this.length;
+	  }
+	  from = from || 0;
+	  if (from < 0) {
+	    from += this.length;
+	  }
+	  var ret = new Yallist();
+	  if (to < from || to < 0) {
+	    return ret
+	  }
+	  if (from < 0) {
+	    from = 0;
+	  }
+	  if (to > this.length) {
+	    to = this.length;
+	  }
+	  for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
+	    walker = walker.prev;
+	  }
+	  for (; walker !== null && i > from; i--, walker = walker.prev) {
+	    ret.push(walker.value);
+	  }
+	  return ret
+	};
 
-  if (inserted.next === null) {
-    self.tail = inserted;
-  }
-  if (inserted.prev === null) {
-    self.head = inserted;
-  }
+	Yallist.prototype.splice = function (start, deleteCount, ...nodes) {
+	  if (start > this.length) {
+	    start = this.length - 1;
+	  }
+	  if (start < 0) {
+	    start = this.length + start;
+	  }
 
-  self.length++;
+	  for (var i = 0, walker = this.head; walker !== null && i < start; i++) {
+	    walker = walker.next;
+	  }
 
-  return inserted
+	  var ret = [];
+	  for (var i = 0; walker && i < deleteCount; i++) {
+	    ret.push(walker.value);
+	    walker = this.removeNode(walker);
+	  }
+	  if (walker === null) {
+	    walker = this.tail;
+	  }
+
+	  if (walker !== this.head && walker !== this.tail) {
+	    walker = walker.prev;
+	  }
+
+	  for (var i = 0; i < nodes.length; i++) {
+	    walker = insert(this, walker, nodes[i]);
+	  }
+	  return ret;
+	};
+
+	Yallist.prototype.reverse = function () {
+	  var head = this.head;
+	  var tail = this.tail;
+	  for (var walker = head; walker !== null; walker = walker.prev) {
+	    var p = walker.prev;
+	    walker.prev = walker.next;
+	    walker.next = p;
+	  }
+	  this.head = tail;
+	  this.tail = head;
+	  return this
+	};
+
+	function insert (self, node, value) {
+	  var inserted = node === self.head ?
+	    new Node(value, null, node, self) :
+	    new Node(value, node, node.next, self);
+
+	  if (inserted.next === null) {
+	    self.tail = inserted;
+	  }
+	  if (inserted.prev === null) {
+	    self.head = inserted;
+	  }
+
+	  self.length++;
+
+	  return inserted
+	}
+
+	function push (self, item) {
+	  self.tail = new Node(item, self.tail, null, self);
+	  if (!self.head) {
+	    self.head = self.tail;
+	  }
+	  self.length++;
+	}
+
+	function unshift (self, item) {
+	  self.head = new Node(item, null, self.head, self);
+	  if (!self.tail) {
+	    self.tail = self.head;
+	  }
+	  self.length++;
+	}
+
+	function Node (value, prev, next, list) {
+	  if (!(this instanceof Node)) {
+	    return new Node(value, prev, next, list)
+	  }
+
+	  this.list = list;
+	  this.value = value;
+
+	  if (prev) {
+	    prev.next = this;
+	    this.prev = prev;
+	  } else {
+	    this.prev = null;
+	  }
+
+	  if (next) {
+	    next.prev = this;
+	    this.next = next;
+	  } else {
+	    this.next = null;
+	  }
+	}
+
+	try {
+	  // add if support for Symbol.iterator is present
+	  requireIterator()(Yallist);
+	} catch (er) {}
+	return yallist;
 }
 
-function push (self, item) {
-  self.tail = new Node(item, self.tail, null, self);
-  if (!self.head) {
-    self.head = self.tail;
-  }
-  self.length++;
+var lruCache;
+var hasRequiredLruCache;
+
+function requireLruCache () {
+	if (hasRequiredLruCache) return lruCache;
+	hasRequiredLruCache = 1;
+
+	// A linked list to keep track of recently-used-ness
+	const Yallist = requireYallist();
+
+	const MAX = Symbol('max');
+	const LENGTH = Symbol('length');
+	const LENGTH_CALCULATOR = Symbol('lengthCalculator');
+	const ALLOW_STALE = Symbol('allowStale');
+	const MAX_AGE = Symbol('maxAge');
+	const DISPOSE = Symbol('dispose');
+	const NO_DISPOSE_ON_SET = Symbol('noDisposeOnSet');
+	const LRU_LIST = Symbol('lruList');
+	const CACHE = Symbol('cache');
+	const UPDATE_AGE_ON_GET = Symbol('updateAgeOnGet');
+
+	const naiveLength = () => 1;
+
+	// lruList is a yallist where the head is the youngest
+	// item, and the tail is the oldest.  the list contains the Hit
+	// objects as the entries.
+	// Each Hit object has a reference to its Yallist.Node.  This
+	// never changes.
+	//
+	// cache is a Map (or PseudoMap) that matches the keys to
+	// the Yallist.Node object.
+	class LRUCache {
+	  constructor (options) {
+	    if (typeof options === 'number')
+	      options = { max: options };
+
+	    if (!options)
+	      options = {};
+
+	    if (options.max && (typeof options.max !== 'number' || options.max < 0))
+	      throw new TypeError('max must be a non-negative number')
+	    // Kind of weird to have a default max of Infinity, but oh well.
+	    this[MAX] = options.max || Infinity;
+
+	    const lc = options.length || naiveLength;
+	    this[LENGTH_CALCULATOR] = (typeof lc !== 'function') ? naiveLength : lc;
+	    this[ALLOW_STALE] = options.stale || false;
+	    if (options.maxAge && typeof options.maxAge !== 'number')
+	      throw new TypeError('maxAge must be a number')
+	    this[MAX_AGE] = options.maxAge || 0;
+	    this[DISPOSE] = options.dispose;
+	    this[NO_DISPOSE_ON_SET] = options.noDisposeOnSet || false;
+	    this[UPDATE_AGE_ON_GET] = options.updateAgeOnGet || false;
+	    this.reset();
+	  }
+
+	  // resize the cache when the max changes.
+	  set max (mL) {
+	    if (typeof mL !== 'number' || mL < 0)
+	      throw new TypeError('max must be a non-negative number')
+
+	    this[MAX] = mL || Infinity;
+	    trim(this);
+	  }
+	  get max () {
+	    return this[MAX]
+	  }
+
+	  set allowStale (allowStale) {
+	    this[ALLOW_STALE] = !!allowStale;
+	  }
+	  get allowStale () {
+	    return this[ALLOW_STALE]
+	  }
+
+	  set maxAge (mA) {
+	    if (typeof mA !== 'number')
+	      throw new TypeError('maxAge must be a non-negative number')
+
+	    this[MAX_AGE] = mA;
+	    trim(this);
+	  }
+	  get maxAge () {
+	    return this[MAX_AGE]
+	  }
+
+	  // resize the cache when the lengthCalculator changes.
+	  set lengthCalculator (lC) {
+	    if (typeof lC !== 'function')
+	      lC = naiveLength;
+
+	    if (lC !== this[LENGTH_CALCULATOR]) {
+	      this[LENGTH_CALCULATOR] = lC;
+	      this[LENGTH] = 0;
+	      this[LRU_LIST].forEach(hit => {
+	        hit.length = this[LENGTH_CALCULATOR](hit.value, hit.key);
+	        this[LENGTH] += hit.length;
+	      });
+	    }
+	    trim(this);
+	  }
+	  get lengthCalculator () { return this[LENGTH_CALCULATOR] }
+
+	  get length () { return this[LENGTH] }
+	  get itemCount () { return this[LRU_LIST].length }
+
+	  rforEach (fn, thisp) {
+	    thisp = thisp || this;
+	    for (let walker = this[LRU_LIST].tail; walker !== null;) {
+	      const prev = walker.prev;
+	      forEachStep(this, fn, walker, thisp);
+	      walker = prev;
+	    }
+	  }
+
+	  forEach (fn, thisp) {
+	    thisp = thisp || this;
+	    for (let walker = this[LRU_LIST].head; walker !== null;) {
+	      const next = walker.next;
+	      forEachStep(this, fn, walker, thisp);
+	      walker = next;
+	    }
+	  }
+
+	  keys () {
+	    return this[LRU_LIST].toArray().map(k => k.key)
+	  }
+
+	  values () {
+	    return this[LRU_LIST].toArray().map(k => k.value)
+	  }
+
+	  reset () {
+	    if (this[DISPOSE] &&
+	        this[LRU_LIST] &&
+	        this[LRU_LIST].length) {
+	      this[LRU_LIST].forEach(hit => this[DISPOSE](hit.key, hit.value));
+	    }
+
+	    this[CACHE] = new Map(); // hash of items by key
+	    this[LRU_LIST] = new Yallist(); // list of items in order of use recency
+	    this[LENGTH] = 0; // length of items in the list
+	  }
+
+	  dump () {
+	    return this[LRU_LIST].map(hit =>
+	      isStale(this, hit) ? false : {
+	        k: hit.key,
+	        v: hit.value,
+	        e: hit.now + (hit.maxAge || 0)
+	      }).toArray().filter(h => h)
+	  }
+
+	  dumpLru () {
+	    return this[LRU_LIST]
+	  }
+
+	  set (key, value, maxAge) {
+	    maxAge = maxAge || this[MAX_AGE];
+
+	    if (maxAge && typeof maxAge !== 'number')
+	      throw new TypeError('maxAge must be a number')
+
+	    const now = maxAge ? Date.now() : 0;
+	    const len = this[LENGTH_CALCULATOR](value, key);
+
+	    if (this[CACHE].has(key)) {
+	      if (len > this[MAX]) {
+	        del(this, this[CACHE].get(key));
+	        return false
+	      }
+
+	      const node = this[CACHE].get(key);
+	      const item = node.value;
+
+	      // dispose of the old one before overwriting
+	      // split out into 2 ifs for better coverage tracking
+	      if (this[DISPOSE]) {
+	        if (!this[NO_DISPOSE_ON_SET])
+	          this[DISPOSE](key, item.value);
+	      }
+
+	      item.now = now;
+	      item.maxAge = maxAge;
+	      item.value = value;
+	      this[LENGTH] += len - item.length;
+	      item.length = len;
+	      this.get(key);
+	      trim(this);
+	      return true
+	    }
+
+	    const hit = new Entry(key, value, len, now, maxAge);
+
+	    // oversized objects fall out of cache automatically.
+	    if (hit.length > this[MAX]) {
+	      if (this[DISPOSE])
+	        this[DISPOSE](key, value);
+
+	      return false
+	    }
+
+	    this[LENGTH] += hit.length;
+	    this[LRU_LIST].unshift(hit);
+	    this[CACHE].set(key, this[LRU_LIST].head);
+	    trim(this);
+	    return true
+	  }
+
+	  has (key) {
+	    if (!this[CACHE].has(key)) return false
+	    const hit = this[CACHE].get(key).value;
+	    return !isStale(this, hit)
+	  }
+
+	  get (key) {
+	    return get(this, key, true)
+	  }
+
+	  peek (key) {
+	    return get(this, key, false)
+	  }
+
+	  pop () {
+	    const node = this[LRU_LIST].tail;
+	    if (!node)
+	      return null
+
+	    del(this, node);
+	    return node.value
+	  }
+
+	  del (key) {
+	    del(this, this[CACHE].get(key));
+	  }
+
+	  load (arr) {
+	    // reset the cache
+	    this.reset();
+
+	    const now = Date.now();
+	    // A previous serialized cache has the most recent items first
+	    for (let l = arr.length - 1; l >= 0; l--) {
+	      const hit = arr[l];
+	      const expiresAt = hit.e || 0;
+	      if (expiresAt === 0)
+	        // the item was created without expiration in a non aged cache
+	        this.set(hit.k, hit.v);
+	      else {
+	        const maxAge = expiresAt - now;
+	        // dont add already expired items
+	        if (maxAge > 0) {
+	          this.set(hit.k, hit.v, maxAge);
+	        }
+	      }
+	    }
+	  }
+
+	  prune () {
+	    this[CACHE].forEach((value, key) => get(this, key, false));
+	  }
+	}
+
+	const get = (self, key, doUse) => {
+	  const node = self[CACHE].get(key);
+	  if (node) {
+	    const hit = node.value;
+	    if (isStale(self, hit)) {
+	      del(self, node);
+	      if (!self[ALLOW_STALE])
+	        return undefined
+	    } else {
+	      if (doUse) {
+	        if (self[UPDATE_AGE_ON_GET])
+	          node.value.now = Date.now();
+	        self[LRU_LIST].unshiftNode(node);
+	      }
+	    }
+	    return hit.value
+	  }
+	};
+
+	const isStale = (self, hit) => {
+	  if (!hit || (!hit.maxAge && !self[MAX_AGE]))
+	    return false
+
+	  const diff = Date.now() - hit.now;
+	  return hit.maxAge ? diff > hit.maxAge
+	    : self[MAX_AGE] && (diff > self[MAX_AGE])
+	};
+
+	const trim = self => {
+	  if (self[LENGTH] > self[MAX]) {
+	    for (let walker = self[LRU_LIST].tail;
+	      self[LENGTH] > self[MAX] && walker !== null;) {
+	      // We know that we're about to delete this one, and also
+	      // what the next least recently used key will be, so just
+	      // go ahead and set it now.
+	      const prev = walker.prev;
+	      del(self, walker);
+	      walker = prev;
+	    }
+	  }
+	};
+
+	const del = (self, node) => {
+	  if (node) {
+	    const hit = node.value;
+	    if (self[DISPOSE])
+	      self[DISPOSE](hit.key, hit.value);
+
+	    self[LENGTH] -= hit.length;
+	    self[CACHE].delete(hit.key);
+	    self[LRU_LIST].removeNode(node);
+	  }
+	};
+
+	class Entry {
+	  constructor (key, value, length, now, maxAge) {
+	    this.key = key;
+	    this.value = value;
+	    this.length = length;
+	    this.now = now;
+	    this.maxAge = maxAge || 0;
+	  }
+	}
+
+	const forEachStep = (self, fn, node, thisp) => {
+	  let hit = node.value;
+	  if (isStale(self, hit)) {
+	    del(self, node);
+	    if (!self[ALLOW_STALE])
+	      hit = undefined;
+	  }
+	  if (hit)
+	    fn.call(thisp, hit.value, hit.key, self);
+	};
+
+	lruCache = LRUCache;
+	return lruCache;
 }
 
-function unshift (self, item) {
-  self.head = new Node(item, null, self.head, self);
-  if (!self.tail) {
-    self.tail = self.head;
-  }
-  self.length++;
+var range;
+var hasRequiredRange;
+
+function requireRange () {
+	if (hasRequiredRange) return range;
+	hasRequiredRange = 1;
+	// hoisted class for cyclic dependency
+	class Range {
+	  constructor (range, options) {
+	    options = parseOptions(options);
+
+	    if (range instanceof Range) {
+	      if (
+	        range.loose === !!options.loose &&
+	        range.includePrerelease === !!options.includePrerelease
+	      ) {
+	        return range
+	      } else {
+	        return new Range(range.raw, options)
+	      }
+	    }
+
+	    if (range instanceof Comparator) {
+	      // just put it in the set and return
+	      this.raw = range.value;
+	      this.set = [[range]];
+	      this.format();
+	      return this
+	    }
+
+	    this.options = options;
+	    this.loose = !!options.loose;
+	    this.includePrerelease = !!options.includePrerelease;
+
+	    // First reduce all whitespace as much as possible so we do not have to rely
+	    // on potentially slow regexes like \s*. This is then stored and used for
+	    // future error messages as well.
+	    this.raw = range
+	      .trim()
+	      .split(/\s+/)
+	      .join(' ');
+
+	    // First, split on ||
+	    this.set = this.raw
+	      .split('||')
+	      // map the range to a 2d array of comparators
+	      .map(r => this.parseRange(r.trim()))
+	      // throw out any comparator lists that are empty
+	      // this generally means that it was not a valid range, which is allowed
+	      // in loose mode, but will still throw if the WHOLE range is invalid.
+	      .filter(c => c.length);
+
+	    if (!this.set.length) {
+	      throw new TypeError(`Invalid SemVer Range: ${this.raw}`)
+	    }
+
+	    // if we have any that are not the null set, throw out null sets.
+	    if (this.set.length > 1) {
+	      // keep the first one, in case they're all null sets
+	      const first = this.set[0];
+	      this.set = this.set.filter(c => !isNullSet(c[0]));
+	      if (this.set.length === 0) {
+	        this.set = [first];
+	      } else if (this.set.length > 1) {
+	        // if we have any that are *, then the range is just *
+	        for (const c of this.set) {
+	          if (c.length === 1 && isAny(c[0])) {
+	            this.set = [c];
+	            break
+	          }
+	        }
+	      }
+	    }
+
+	    this.format();
+	  }
+
+	  format () {
+	    this.range = this.set
+	      .map((comps) => comps.join(' ').trim())
+	      .join('||')
+	      .trim();
+	    return this.range
+	  }
+
+	  toString () {
+	    return this.range
+	  }
+
+	  parseRange (range) {
+	    // memoize range parsing for performance.
+	    // this is a very hot path, and fully deterministic.
+	    const memoOpts =
+	      (this.options.includePrerelease && FLAG_INCLUDE_PRERELEASE) |
+	      (this.options.loose && FLAG_LOOSE);
+	    const memoKey = memoOpts + ':' + range;
+	    const cached = cache.get(memoKey);
+	    if (cached) {
+	      return cached
+	    }
+
+	    const loose = this.options.loose;
+	    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+	    const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE];
+	    range = range.replace(hr, hyphenReplace(this.options.includePrerelease));
+	    debug('hyphen replace', range);
+
+	    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+	    range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace);
+	    debug('comparator trim', range);
+
+	    // `~ 1.2.3` => `~1.2.3`
+	    range = range.replace(re[t.TILDETRIM], tildeTrimReplace);
+	    debug('tilde trim', range);
+
+	    // `^ 1.2.3` => `^1.2.3`
+	    range = range.replace(re[t.CARETTRIM], caretTrimReplace);
+	    debug('caret trim', range);
+
+	    // At this point, the range is completely trimmed and
+	    // ready to be split into comparators.
+
+	    let rangeList = range
+	      .split(' ')
+	      .map(comp => parseComparator(comp, this.options))
+	      .join(' ')
+	      .split(/\s+/)
+	      // >=0.0.0 is equivalent to *
+	      .map(comp => replaceGTE0(comp, this.options));
+
+	    if (loose) {
+	      // in loose mode, throw out any that are not valid comparators
+	      rangeList = rangeList.filter(comp => {
+	        debug('loose invalid filter', comp, this.options);
+	        return !!comp.match(re[t.COMPARATORLOOSE])
+	      });
+	    }
+	    debug('range list', rangeList);
+
+	    // if any comparators are the null set, then replace with JUST null set
+	    // if more than one comparator, remove any * comparators
+	    // also, don't include the same comparator more than once
+	    const rangeMap = new Map();
+	    const comparators = rangeList.map(comp => new Comparator(comp, this.options));
+	    for (const comp of comparators) {
+	      if (isNullSet(comp)) {
+	        return [comp]
+	      }
+	      rangeMap.set(comp.value, comp);
+	    }
+	    if (rangeMap.size > 1 && rangeMap.has('')) {
+	      rangeMap.delete('');
+	    }
+
+	    const result = [...rangeMap.values()];
+	    cache.set(memoKey, result);
+	    return result
+	  }
+
+	  intersects (range, options) {
+	    if (!(range instanceof Range)) {
+	      throw new TypeError('a Range is required')
+	    }
+
+	    return this.set.some((thisComparators) => {
+	      return (
+	        isSatisfiable(thisComparators, options) &&
+	        range.set.some((rangeComparators) => {
+	          return (
+	            isSatisfiable(rangeComparators, options) &&
+	            thisComparators.every((thisComparator) => {
+	              return rangeComparators.every((rangeComparator) => {
+	                return thisComparator.intersects(rangeComparator, options)
+	              })
+	            })
+	          )
+	        })
+	      )
+	    })
+	  }
+
+	  // if ANY of the sets match ALL of its comparators, then pass
+	  test (version) {
+	    if (!version) {
+	      return false
+	    }
+
+	    if (typeof version === 'string') {
+	      try {
+	        version = new SemVer(version, this.options);
+	      } catch (er) {
+	        return false
+	      }
+	    }
+
+	    for (let i = 0; i < this.set.length; i++) {
+	      if (testSet(this.set[i], version, this.options)) {
+	        return true
+	      }
+	    }
+	    return false
+	  }
+	}
+
+	range = Range;
+
+	const LRU = requireLruCache();
+	const cache = new LRU({ max: 1000 });
+
+	const parseOptions = parseOptions_1;
+	const Comparator = requireComparator();
+	const debug = debug_1;
+	const SemVer = semver$2;
+	const {
+	  safeRe: re,
+	  t,
+	  comparatorTrimReplace,
+	  tildeTrimReplace,
+	  caretTrimReplace,
+	} = reExports;
+	const { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = constants$1;
+
+	const isNullSet = c => c.value === '<0.0.0-0';
+	const isAny = c => c.value === '';
+
+	// take a set of comparators and determine whether there
+	// exists a version which can satisfy it
+	const isSatisfiable = (comparators, options) => {
+	  let result = true;
+	  const remainingComparators = comparators.slice();
+	  let testComparator = remainingComparators.pop();
+
+	  while (result && remainingComparators.length) {
+	    result = remainingComparators.every((otherComparator) => {
+	      return testComparator.intersects(otherComparator, options)
+	    });
+
+	    testComparator = remainingComparators.pop();
+	  }
+
+	  return result
+	};
+
+	// comprised of xranges, tildes, stars, and gtlt's at this point.
+	// already replaced the hyphen ranges
+	// turn into a set of JUST comparators.
+	const parseComparator = (comp, options) => {
+	  debug('comp', comp, options);
+	  comp = replaceCarets(comp, options);
+	  debug('caret', comp);
+	  comp = replaceTildes(comp, options);
+	  debug('tildes', comp);
+	  comp = replaceXRanges(comp, options);
+	  debug('xrange', comp);
+	  comp = replaceStars(comp, options);
+	  debug('stars', comp);
+	  return comp
+	};
+
+	const isX = id => !id || id.toLowerCase() === 'x' || id === '*';
+
+	// ~, ~> --> * (any, kinda silly)
+	// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0
+	// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0
+	// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
+	// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
+	// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
+	// ~0.0.1 --> >=0.0.1 <0.1.0-0
+	const replaceTildes = (comp, options) => {
+	  return comp
+	    .trim()
+	    .split(/\s+/)
+	    .map((c) => replaceTilde(c, options))
+	    .join(' ')
+	};
+
+	const replaceTilde = (comp, options) => {
+	  const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE];
+	  return comp.replace(r, (_, M, m, p, pr) => {
+	    debug('tilde', comp, _, M, m, p, pr);
+	    let ret;
+
+	    if (isX(M)) {
+	      ret = '';
+	    } else if (isX(m)) {
+	      ret = `>=${M}.0.0 <${+M + 1}.0.0-0`;
+	    } else if (isX(p)) {
+	      // ~1.2 == >=1.2.0 <1.3.0-0
+	      ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`;
+	    } else if (pr) {
+	      debug('replaceTilde pr', pr);
+	      ret = `>=${M}.${m}.${p}-${pr
+	      } <${M}.${+m + 1}.0-0`;
+	    } else {
+	      // ~1.2.3 == >=1.2.3 <1.3.0-0
+	      ret = `>=${M}.${m}.${p
+	      } <${M}.${+m + 1}.0-0`;
+	    }
+
+	    debug('tilde return', ret);
+	    return ret
+	  })
+	};
+
+	// ^ --> * (any, kinda silly)
+	// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0
+	// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0
+	// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
+	// ^1.2.3 --> >=1.2.3 <2.0.0-0
+	// ^1.2.0 --> >=1.2.0 <2.0.0-0
+	// ^0.0.1 --> >=0.0.1 <0.0.2-0
+	// ^0.1.0 --> >=0.1.0 <0.2.0-0
+	const replaceCarets = (comp, options) => {
+	  return comp
+	    .trim()
+	    .split(/\s+/)
+	    .map((c) => replaceCaret(c, options))
+	    .join(' ')
+	};
+
+	const replaceCaret = (comp, options) => {
+	  debug('caret', comp, options);
+	  const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET];
+	  const z = options.includePrerelease ? '-0' : '';
+	  return comp.replace(r, (_, M, m, p, pr) => {
+	    debug('caret', comp, _, M, m, p, pr);
+	    let ret;
+
+	    if (isX(M)) {
+	      ret = '';
+	    } else if (isX(m)) {
+	      ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`;
+	    } else if (isX(p)) {
+	      if (M === '0') {
+	        ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`;
+	      } else {
+	        ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`;
+	      }
+	    } else if (pr) {
+	      debug('replaceCaret pr', pr);
+	      if (M === '0') {
+	        if (m === '0') {
+	          ret = `>=${M}.${m}.${p}-${pr
+	          } <${M}.${m}.${+p + 1}-0`;
+	        } else {
+	          ret = `>=${M}.${m}.${p}-${pr
+	          } <${M}.${+m + 1}.0-0`;
+	        }
+	      } else {
+	        ret = `>=${M}.${m}.${p}-${pr
+	        } <${+M + 1}.0.0-0`;
+	      }
+	    } else {
+	      debug('no pr');
+	      if (M === '0') {
+	        if (m === '0') {
+	          ret = `>=${M}.${m}.${p
+	          }${z} <${M}.${m}.${+p + 1}-0`;
+	        } else {
+	          ret = `>=${M}.${m}.${p
+	          }${z} <${M}.${+m + 1}.0-0`;
+	        }
+	      } else {
+	        ret = `>=${M}.${m}.${p
+	        } <${+M + 1}.0.0-0`;
+	      }
+	    }
+
+	    debug('caret return', ret);
+	    return ret
+	  })
+	};
+
+	const replaceXRanges = (comp, options) => {
+	  debug('replaceXRanges', comp, options);
+	  return comp
+	    .split(/\s+/)
+	    .map((c) => replaceXRange(c, options))
+	    .join(' ')
+	};
+
+	const replaceXRange = (comp, options) => {
+	  comp = comp.trim();
+	  const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE];
+	  return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
+	    debug('xRange', comp, ret, gtlt, M, m, p, pr);
+	    const xM = isX(M);
+	    const xm = xM || isX(m);
+	    const xp = xm || isX(p);
+	    const anyX = xp;
+
+	    if (gtlt === '=' && anyX) {
+	      gtlt = '';
+	    }
+
+	    // if we're including prereleases in the match, then we need
+	    // to fix this to -0, the lowest possible prerelease value
+	    pr = options.includePrerelease ? '-0' : '';
+
+	    if (xM) {
+	      if (gtlt === '>' || gtlt === '<') {
+	        // nothing is allowed
+	        ret = '<0.0.0-0';
+	      } else {
+	        // nothing is forbidden
+	        ret = '*';
+	      }
+	    } else if (gtlt && anyX) {
+	      // we know patch is an x, because we have any x at all.
+	      // replace X with 0
+	      if (xm) {
+	        m = 0;
+	      }
+	      p = 0;
+
+	      if (gtlt === '>') {
+	        // >1 => >=2.0.0
+	        // >1.2 => >=1.3.0
+	        gtlt = '>=';
+	        if (xm) {
+	          M = +M + 1;
+	          m = 0;
+	          p = 0;
+	        } else {
+	          m = +m + 1;
+	          p = 0;
+	        }
+	      } else if (gtlt === '<=') {
+	        // <=0.7.x is actually <0.8.0, since any 0.7.x should
+	        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
+	        gtlt = '<';
+	        if (xm) {
+	          M = +M + 1;
+	        } else {
+	          m = +m + 1;
+	        }
+	      }
+
+	      if (gtlt === '<') {
+	        pr = '-0';
+	      }
+
+	      ret = `${gtlt + M}.${m}.${p}${pr}`;
+	    } else if (xm) {
+	      ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`;
+	    } else if (xp) {
+	      ret = `>=${M}.${m}.0${pr
+	      } <${M}.${+m + 1}.0-0`;
+	    }
+
+	    debug('xRange return', ret);
+
+	    return ret
+	  })
+	};
+
+	// Because * is AND-ed with everything else in the comparator,
+	// and '' means "any version", just remove the *s entirely.
+	const replaceStars = (comp, options) => {
+	  debug('replaceStars', comp, options);
+	  // Looseness is ignored here.  star is always as loose as it gets!
+	  return comp
+	    .trim()
+	    .replace(re[t.STAR], '')
+	};
+
+	const replaceGTE0 = (comp, options) => {
+	  debug('replaceGTE0', comp, options);
+	  return comp
+	    .trim()
+	    .replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '')
+	};
+
+	// This function is passed to string.replace(re[t.HYPHENRANGE])
+	// M, m, patch, prerelease, build
+	// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
+	// 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
+	// 1.2 - 3.4 => >=1.2.0 <3.5.0-0
+	const hyphenReplace = incPr => ($0,
+	  from, fM, fm, fp, fpr, fb,
+	  to, tM, tm, tp, tpr, tb) => {
+	  if (isX(fM)) {
+	    from = '';
+	  } else if (isX(fm)) {
+	    from = `>=${fM}.0.0${incPr ? '-0' : ''}`;
+	  } else if (isX(fp)) {
+	    from = `>=${fM}.${fm}.0${incPr ? '-0' : ''}`;
+	  } else if (fpr) {
+	    from = `>=${from}`;
+	  } else {
+	    from = `>=${from}${incPr ? '-0' : ''}`;
+	  }
+
+	  if (isX(tM)) {
+	    to = '';
+	  } else if (isX(tm)) {
+	    to = `<${+tM + 1}.0.0-0`;
+	  } else if (isX(tp)) {
+	    to = `<${tM}.${+tm + 1}.0-0`;
+	  } else if (tpr) {
+	    to = `<=${tM}.${tm}.${tp}-${tpr}`;
+	  } else if (incPr) {
+	    to = `<${tM}.${tm}.${+tp + 1}-0`;
+	  } else {
+	    to = `<=${to}`;
+	  }
+
+	  return `${from} ${to}`.trim()
+	};
+
+	const testSet = (set, version, options) => {
+	  for (let i = 0; i < set.length; i++) {
+	    if (!set[i].test(version)) {
+	      return false
+	    }
+	  }
+
+	  if (version.prerelease.length && !options.includePrerelease) {
+	    // Find the set of versions that are allowed to have prereleases
+	    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
+	    // That should allow `1.2.3-pr.2` to pass.
+	    // However, `1.2.4-alpha.notready` should NOT be allowed,
+	    // even though it's within the range set by the comparators.
+	    for (let i = 0; i < set.length; i++) {
+	      debug(set[i].semver);
+	      if (set[i].semver === Comparator.ANY) {
+	        continue
+	      }
+
+	      if (set[i].semver.prerelease.length > 0) {
+	        const allowed = set[i].semver;
+	        if (allowed.major === version.major &&
+	            allowed.minor === version.minor &&
+	            allowed.patch === version.patch) {
+	          return true
+	        }
+	      }
+	    }
+
+	    // Version has a -pre, but it's not one of the ones we like.
+	    return false
+	  }
+
+	  return true
+	};
+	return range;
 }
 
-function Node (value, prev, next, list) {
-  if (!(this instanceof Node)) {
-    return new Node(value, prev, next, list)
-  }
+var comparator;
+var hasRequiredComparator;
 
-  this.list = list;
-  this.value = value;
+function requireComparator () {
+	if (hasRequiredComparator) return comparator;
+	hasRequiredComparator = 1;
+	const ANY = Symbol('SemVer ANY');
+	// hoisted class for cyclic dependency
+	class Comparator {
+	  static get ANY () {
+	    return ANY
+	  }
 
-  if (prev) {
-    prev.next = this;
-    this.prev = prev;
-  } else {
-    this.prev = null;
-  }
+	  constructor (comp, options) {
+	    options = parseOptions(options);
 
-  if (next) {
-    next.prev = this;
-    this.next = next;
-  } else {
-    this.next = null;
-  }
+	    if (comp instanceof Comparator) {
+	      if (comp.loose === !!options.loose) {
+	        return comp
+	      } else {
+	        comp = comp.value;
+	      }
+	    }
+
+	    comp = comp.trim().split(/\s+/).join(' ');
+	    debug('comparator', comp, options);
+	    this.options = options;
+	    this.loose = !!options.loose;
+	    this.parse(comp);
+
+	    if (this.semver === ANY) {
+	      this.value = '';
+	    } else {
+	      this.value = this.operator + this.semver.version;
+	    }
+
+	    debug('comp', this);
+	  }
+
+	  parse (comp) {
+	    const r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR];
+	    const m = comp.match(r);
+
+	    if (!m) {
+	      throw new TypeError(`Invalid comparator: ${comp}`)
+	    }
+
+	    this.operator = m[1] !== undefined ? m[1] : '';
+	    if (this.operator === '=') {
+	      this.operator = '';
+	    }
+
+	    // if it literally is just '>' or '' then allow anything.
+	    if (!m[2]) {
+	      this.semver = ANY;
+	    } else {
+	      this.semver = new SemVer(m[2], this.options.loose);
+	    }
+	  }
+
+	  toString () {
+	    return this.value
+	  }
+
+	  test (version) {
+	    debug('Comparator.test', version, this.options.loose);
+
+	    if (this.semver === ANY || version === ANY) {
+	      return true
+	    }
+
+	    if (typeof version === 'string') {
+	      try {
+	        version = new SemVer(version, this.options);
+	      } catch (er) {
+	        return false
+	      }
+	    }
+
+	    return cmp(version, this.operator, this.semver, this.options)
+	  }
+
+	  intersects (comp, options) {
+	    if (!(comp instanceof Comparator)) {
+	      throw new TypeError('a Comparator is required')
+	    }
+
+	    if (this.operator === '') {
+	      if (this.value === '') {
+	        return true
+	      }
+	      return new Range(comp.value, options).test(this.value)
+	    } else if (comp.operator === '') {
+	      if (comp.value === '') {
+	        return true
+	      }
+	      return new Range(this.value, options).test(comp.semver)
+	    }
+
+	    options = parseOptions(options);
+
+	    // Special cases where nothing can possibly be lower
+	    if (options.includePrerelease &&
+	      (this.value === '<0.0.0-0' || comp.value === '<0.0.0-0')) {
+	      return false
+	    }
+	    if (!options.includePrerelease &&
+	      (this.value.startsWith('<0.0.0') || comp.value.startsWith('<0.0.0'))) {
+	      return false
+	    }
+
+	    // Same direction increasing (> or >=)
+	    if (this.operator.startsWith('>') && comp.operator.startsWith('>')) {
+	      return true
+	    }
+	    // Same direction decreasing (< or <=)
+	    if (this.operator.startsWith('<') && comp.operator.startsWith('<')) {
+	      return true
+	    }
+	    // same SemVer and both sides are inclusive (<= or >=)
+	    if (
+	      (this.semver.version === comp.semver.version) &&
+	      this.operator.includes('=') && comp.operator.includes('=')) {
+	      return true
+	    }
+	    // opposite directions less than
+	    if (cmp(this.semver, '<', comp.semver, options) &&
+	      this.operator.startsWith('>') && comp.operator.startsWith('<')) {
+	      return true
+	    }
+	    // opposite directions greater than
+	    if (cmp(this.semver, '>', comp.semver, options) &&
+	      this.operator.startsWith('<') && comp.operator.startsWith('>')) {
+	      return true
+	    }
+	    return false
+	  }
+	}
+
+	comparator = Comparator;
+
+	const parseOptions = parseOptions_1;
+	const { safeRe: re, t } = reExports;
+	const cmp = cmp_1;
+	const debug = debug_1;
+	const SemVer = semver$2;
+	const Range = requireRange();
+	return comparator;
 }
 
-try {
-  // add if support for Symbol.iterator is present
-  iterator(Yallist);
-} catch (er) {}
-
-// A linked list to keep track of recently-used-ness
-
-
-const MAX = Symbol('max');
-const LENGTH = Symbol('length');
-const LENGTH_CALCULATOR = Symbol('lengthCalculator');
-const ALLOW_STALE = Symbol('allowStale');
-const MAX_AGE = Symbol('maxAge');
-const DISPOSE = Symbol('dispose');
-const NO_DISPOSE_ON_SET = Symbol('noDisposeOnSet');
-const LRU_LIST = Symbol('lruList');
-const CACHE = Symbol('cache');
-const UPDATE_AGE_ON_GET = Symbol('updateAgeOnGet');
-
-const naiveLength = () => 1;
-
-// lruList is a yallist where the head is the youngest
-// item, and the tail is the oldest.  the list contains the Hit
-// objects as the entries.
-// Each Hit object has a reference to its Yallist.Node.  This
-// never changes.
-//
-// cache is a Map (or PseudoMap) that matches the keys to
-// the Yallist.Node object.
-class LRUCache {
-  constructor (options) {
-    if (typeof options === 'number')
-      options = { max: options };
-
-    if (!options)
-      options = {};
-
-    if (options.max && (typeof options.max !== 'number' || options.max < 0))
-      throw new TypeError('max must be a non-negative number')
-    // Kind of weird to have a default max of Infinity, but oh well.
-    this[MAX] = options.max || Infinity;
-
-    const lc = options.length || naiveLength;
-    this[LENGTH_CALCULATOR] = (typeof lc !== 'function') ? naiveLength : lc;
-    this[ALLOW_STALE] = options.stale || false;
-    if (options.maxAge && typeof options.maxAge !== 'number')
-      throw new TypeError('maxAge must be a number')
-    this[MAX_AGE] = options.maxAge || 0;
-    this[DISPOSE] = options.dispose;
-    this[NO_DISPOSE_ON_SET] = options.noDisposeOnSet || false;
-    this[UPDATE_AGE_ON_GET] = options.updateAgeOnGet || false;
-    this.reset();
-  }
-
-  // resize the cache when the max changes.
-  set max (mL) {
-    if (typeof mL !== 'number' || mL < 0)
-      throw new TypeError('max must be a non-negative number')
-
-    this[MAX] = mL || Infinity;
-    trim(this);
-  }
-  get max () {
-    return this[MAX]
-  }
-
-  set allowStale (allowStale) {
-    this[ALLOW_STALE] = !!allowStale;
-  }
-  get allowStale () {
-    return this[ALLOW_STALE]
-  }
-
-  set maxAge (mA) {
-    if (typeof mA !== 'number')
-      throw new TypeError('maxAge must be a non-negative number')
-
-    this[MAX_AGE] = mA;
-    trim(this);
-  }
-  get maxAge () {
-    return this[MAX_AGE]
-  }
-
-  // resize the cache when the lengthCalculator changes.
-  set lengthCalculator (lC) {
-    if (typeof lC !== 'function')
-      lC = naiveLength;
-
-    if (lC !== this[LENGTH_CALCULATOR]) {
-      this[LENGTH_CALCULATOR] = lC;
-      this[LENGTH] = 0;
-      this[LRU_LIST].forEach(hit => {
-        hit.length = this[LENGTH_CALCULATOR](hit.value, hit.key);
-        this[LENGTH] += hit.length;
-      });
-    }
-    trim(this);
-  }
-  get lengthCalculator () { return this[LENGTH_CALCULATOR] }
-
-  get length () { return this[LENGTH] }
-  get itemCount () { return this[LRU_LIST].length }
-
-  rforEach (fn, thisp) {
-    thisp = thisp || this;
-    for (let walker = this[LRU_LIST].tail; walker !== null;) {
-      const prev = walker.prev;
-      forEachStep(this, fn, walker, thisp);
-      walker = prev;
-    }
-  }
-
-  forEach (fn, thisp) {
-    thisp = thisp || this;
-    for (let walker = this[LRU_LIST].head; walker !== null;) {
-      const next = walker.next;
-      forEachStep(this, fn, walker, thisp);
-      walker = next;
-    }
-  }
-
-  keys () {
-    return this[LRU_LIST].toArray().map(k => k.key)
-  }
-
-  values () {
-    return this[LRU_LIST].toArray().map(k => k.value)
-  }
-
-  reset () {
-    if (this[DISPOSE] &&
-        this[LRU_LIST] &&
-        this[LRU_LIST].length) {
-      this[LRU_LIST].forEach(hit => this[DISPOSE](hit.key, hit.value));
-    }
-
-    this[CACHE] = new Map(); // hash of items by key
-    this[LRU_LIST] = new yallist(); // list of items in order of use recency
-    this[LENGTH] = 0; // length of items in the list
-  }
-
-  dump () {
-    return this[LRU_LIST].map(hit =>
-      isStale(this, hit) ? false : {
-        k: hit.key,
-        v: hit.value,
-        e: hit.now + (hit.maxAge || 0)
-      }).toArray().filter(h => h)
-  }
-
-  dumpLru () {
-    return this[LRU_LIST]
-  }
-
-  set (key, value, maxAge) {
-    maxAge = maxAge || this[MAX_AGE];
-
-    if (maxAge && typeof maxAge !== 'number')
-      throw new TypeError('maxAge must be a number')
-
-    const now = maxAge ? Date.now() : 0;
-    const len = this[LENGTH_CALCULATOR](value, key);
-
-    if (this[CACHE].has(key)) {
-      if (len > this[MAX]) {
-        del(this, this[CACHE].get(key));
-        return false
-      }
-
-      const node = this[CACHE].get(key);
-      const item = node.value;
-
-      // dispose of the old one before overwriting
-      // split out into 2 ifs for better coverage tracking
-      if (this[DISPOSE]) {
-        if (!this[NO_DISPOSE_ON_SET])
-          this[DISPOSE](key, item.value);
-      }
-
-      item.now = now;
-      item.maxAge = maxAge;
-      item.value = value;
-      this[LENGTH] += len - item.length;
-      item.length = len;
-      this.get(key);
-      trim(this);
-      return true
-    }
-
-    const hit = new Entry(key, value, len, now, maxAge);
-
-    // oversized objects fall out of cache automatically.
-    if (hit.length > this[MAX]) {
-      if (this[DISPOSE])
-        this[DISPOSE](key, value);
-
-      return false
-    }
-
-    this[LENGTH] += hit.length;
-    this[LRU_LIST].unshift(hit);
-    this[CACHE].set(key, this[LRU_LIST].head);
-    trim(this);
-    return true
-  }
-
-  has (key) {
-    if (!this[CACHE].has(key)) return false
-    const hit = this[CACHE].get(key).value;
-    return !isStale(this, hit)
-  }
-
-  get (key) {
-    return get(this, key, true)
-  }
-
-  peek (key) {
-    return get(this, key, false)
-  }
-
-  pop () {
-    const node = this[LRU_LIST].tail;
-    if (!node)
-      return null
-
-    del(this, node);
-    return node.value
-  }
-
-  del (key) {
-    del(this, this[CACHE].get(key));
-  }
-
-  load (arr) {
-    // reset the cache
-    this.reset();
-
-    const now = Date.now();
-    // A previous serialized cache has the most recent items first
-    for (let l = arr.length - 1; l >= 0; l--) {
-      const hit = arr[l];
-      const expiresAt = hit.e || 0;
-      if (expiresAt === 0)
-        // the item was created without expiration in a non aged cache
-        this.set(hit.k, hit.v);
-      else {
-        const maxAge = expiresAt - now;
-        // dont add already expired items
-        if (maxAge > 0) {
-          this.set(hit.k, hit.v, maxAge);
-        }
-      }
-    }
-  }
-
-  prune () {
-    this[CACHE].forEach((value, key) => get(this, key, false));
-  }
-}
-
-const get = (self, key, doUse) => {
-  const node = self[CACHE].get(key);
-  if (node) {
-    const hit = node.value;
-    if (isStale(self, hit)) {
-      del(self, node);
-      if (!self[ALLOW_STALE])
-        return undefined
-    } else {
-      if (doUse) {
-        if (self[UPDATE_AGE_ON_GET])
-          node.value.now = Date.now();
-        self[LRU_LIST].unshiftNode(node);
-      }
-    }
-    return hit.value
-  }
-};
-
-const isStale = (self, hit) => {
-  if (!hit || (!hit.maxAge && !self[MAX_AGE]))
-    return false
-
-  const diff = Date.now() - hit.now;
-  return hit.maxAge ? diff > hit.maxAge
-    : self[MAX_AGE] && (diff > self[MAX_AGE])
-};
-
-const trim = self => {
-  if (self[LENGTH] > self[MAX]) {
-    for (let walker = self[LRU_LIST].tail;
-      self[LENGTH] > self[MAX] && walker !== null;) {
-      // We know that we're about to delete this one, and also
-      // what the next least recently used key will be, so just
-      // go ahead and set it now.
-      const prev = walker.prev;
-      del(self, walker);
-      walker = prev;
-    }
-  }
-};
-
-const del = (self, node) => {
-  if (node) {
-    const hit = node.value;
-    if (self[DISPOSE])
-      self[DISPOSE](hit.key, hit.value);
-
-    self[LENGTH] -= hit.length;
-    self[CACHE].delete(hit.key);
-    self[LRU_LIST].removeNode(node);
-  }
-};
-
-class Entry {
-  constructor (key, value, length, now, maxAge) {
-    this.key = key;
-    this.value = value;
-    this.length = length;
-    this.now = now;
-    this.maxAge = maxAge || 0;
-  }
-}
-
-const forEachStep = (self, fn, node, thisp) => {
-  let hit = node.value;
-  if (isStale(self, hit)) {
-    del(self, node);
-    if (!self[ALLOW_STALE])
-      hit = undefined;
-  }
-  if (hit)
-    fn.call(thisp, hit.value, hit.key, self);
-};
-
-var lruCache = LRUCache;
-
-var Comparator$1 = comparator;
-
-// hoisted class for cyclic dependency
-class Range {
-  constructor (range, options) {
-    options = parseOptions_1(options);
-
-    if (range instanceof Range) {
-      if (
-        range.loose === !!options.loose &&
-        range.includePrerelease === !!options.includePrerelease
-      ) {
-        return range
-      } else {
-        return new Range(range.raw, options)
-      }
-    }
-
-    if (range instanceof Comparator$1) {
-      // just put it in the set and return
-      this.raw = range.value;
-      this.set = [[range]];
-      this.format();
-      return this
-    }
-
-    this.options = options;
-    this.loose = !!options.loose;
-    this.includePrerelease = !!options.includePrerelease;
-
-    // First reduce all whitespace as much as possible so we do not have to rely
-    // on potentially slow regexes like \s*. This is then stored and used for
-    // future error messages as well.
-    this.raw = range
-      .trim()
-      .split(/\s+/)
-      .join(' ');
-
-    // First, split on ||
-    this.set = this.raw
-      .split('||')
-      // map the range to a 2d array of comparators
-      .map(r => this.parseRange(r.trim()))
-      // throw out any comparator lists that are empty
-      // this generally means that it was not a valid range, which is allowed
-      // in loose mode, but will still throw if the WHOLE range is invalid.
-      .filter(c => c.length);
-
-    if (!this.set.length) {
-      throw new TypeError(`Invalid SemVer Range: ${this.raw}`)
-    }
-
-    // if we have any that are not the null set, throw out null sets.
-    if (this.set.length > 1) {
-      // keep the first one, in case they're all null sets
-      const first = this.set[0];
-      this.set = this.set.filter(c => !isNullSet(c[0]));
-      if (this.set.length === 0) {
-        this.set = [first];
-      } else if (this.set.length > 1) {
-        // if we have any that are *, then the range is just *
-        for (const c of this.set) {
-          if (c.length === 1 && isAny(c[0])) {
-            this.set = [c];
-            break
-          }
-        }
-      }
-    }
-
-    this.format();
-  }
-
-  format () {
-    this.range = this.set
-      .map((comps) => comps.join(' ').trim())
-      .join('||')
-      .trim();
-    return this.range
-  }
-
-  toString () {
-    return this.range
-  }
-
-  parseRange (range) {
-    // memoize range parsing for performance.
-    // this is a very hot path, and fully deterministic.
-    const memoOpts =
-      (this.options.includePrerelease && FLAG_INCLUDE_PRERELEASE) |
-      (this.options.loose && FLAG_LOOSE);
-    const memoKey = memoOpts + ':' + range;
-    const cached = cache.get(memoKey);
-    if (cached) {
-      return cached
-    }
-
-    const loose = this.options.loose;
-    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-    const hr = loose ? re$1[t$1.HYPHENRANGELOOSE] : re$1[t$1.HYPHENRANGE];
-    range = range.replace(hr, hyphenReplace(this.options.includePrerelease));
-    debug_1('hyphen replace', range);
-
-    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-    range = range.replace(re$1[t$1.COMPARATORTRIM], comparatorTrimReplace);
-    debug_1('comparator trim', range);
-
-    // `~ 1.2.3` => `~1.2.3`
-    range = range.replace(re$1[t$1.TILDETRIM], tildeTrimReplace);
-    debug_1('tilde trim', range);
-
-    // `^ 1.2.3` => `^1.2.3`
-    range = range.replace(re$1[t$1.CARETTRIM], caretTrimReplace);
-    debug_1('caret trim', range);
-
-    // At this point, the range is completely trimmed and
-    // ready to be split into comparators.
-
-    let rangeList = range
-      .split(' ')
-      .map(comp => parseComparator(comp, this.options))
-      .join(' ')
-      .split(/\s+/)
-      // >=0.0.0 is equivalent to *
-      .map(comp => replaceGTE0(comp, this.options));
-
-    if (loose) {
-      // in loose mode, throw out any that are not valid comparators
-      rangeList = rangeList.filter(comp => {
-        debug_1('loose invalid filter', comp, this.options);
-        return !!comp.match(re$1[t$1.COMPARATORLOOSE])
-      });
-    }
-    debug_1('range list', rangeList);
-
-    // if any comparators are the null set, then replace with JUST null set
-    // if more than one comparator, remove any * comparators
-    // also, don't include the same comparator more than once
-    const rangeMap = new Map();
-    const comparators = rangeList.map(comp => new Comparator$1(comp, this.options));
-    for (const comp of comparators) {
-      if (isNullSet(comp)) {
-        return [comp]
-      }
-      rangeMap.set(comp.value, comp);
-    }
-    if (rangeMap.size > 1 && rangeMap.has('')) {
-      rangeMap.delete('');
-    }
-
-    const result = [...rangeMap.values()];
-    cache.set(memoKey, result);
-    return result
-  }
-
-  intersects (range, options) {
-    if (!(range instanceof Range)) {
-      throw new TypeError('a Range is required')
-    }
-
-    return this.set.some((thisComparators) => {
-      return (
-        isSatisfiable(thisComparators, options) &&
-        range.set.some((rangeComparators) => {
-          return (
-            isSatisfiable(rangeComparators, options) &&
-            thisComparators.every((thisComparator) => {
-              return rangeComparators.every((rangeComparator) => {
-                return thisComparator.intersects(rangeComparator, options)
-              })
-            })
-          )
-        })
-      )
-    })
-  }
-
-  // if ANY of the sets match ALL of its comparators, then pass
-  test (version) {
-    if (!version) {
-      return false
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new semver$1(version, this.options);
-      } catch (er) {
-        return false
-      }
-    }
-
-    for (let i = 0; i < this.set.length; i++) {
-      if (testSet(this.set[i], version, this.options)) {
-        return true
-      }
-    }
-    return false
-  }
-}
-
-var range = Range;
-
-
-const cache = new lruCache({ max: 1000 });
-
-
-
-
-
-const {
-  safeRe: re$1,
-  t: t$1,
-  comparatorTrimReplace,
-  tildeTrimReplace,
-  caretTrimReplace,
-} = re_1;
-const { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = constants;
-
-const isNullSet = c => c.value === '<0.0.0-0';
-const isAny = c => c.value === '';
-
-// take a set of comparators and determine whether there
-// exists a version which can satisfy it
-const isSatisfiable = (comparators, options) => {
-  let result = true;
-  const remainingComparators = comparators.slice();
-  let testComparator = remainingComparators.pop();
-
-  while (result && remainingComparators.length) {
-    result = remainingComparators.every((otherComparator) => {
-      return testComparator.intersects(otherComparator, options)
-    });
-
-    testComparator = remainingComparators.pop();
-  }
-
-  return result
-};
-
-// comprised of xranges, tildes, stars, and gtlt's at this point.
-// already replaced the hyphen ranges
-// turn into a set of JUST comparators.
-const parseComparator = (comp, options) => {
-  debug_1('comp', comp, options);
-  comp = replaceCarets(comp, options);
-  debug_1('caret', comp);
-  comp = replaceTildes(comp, options);
-  debug_1('tildes', comp);
-  comp = replaceXRanges(comp, options);
-  debug_1('xrange', comp);
-  comp = replaceStars(comp, options);
-  debug_1('stars', comp);
-  return comp
-};
-
-const isX = id => !id || id.toLowerCase() === 'x' || id === '*';
-
-// ~, ~> --> * (any, kinda silly)
-// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0
-// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0
-// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
-// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
-// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
-// ~0.0.1 --> >=0.0.1 <0.1.0-0
-const replaceTildes = (comp, options) => {
-  return comp
-    .trim()
-    .split(/\s+/)
-    .map((c) => replaceTilde(c, options))
-    .join(' ')
-};
-
-const replaceTilde = (comp, options) => {
-  const r = options.loose ? re$1[t$1.TILDELOOSE] : re$1[t$1.TILDE];
-  return comp.replace(r, (_, M, m, p, pr) => {
-    debug_1('tilde', comp, _, M, m, p, pr);
-    let ret;
-
-    if (isX(M)) {
-      ret = '';
-    } else if (isX(m)) {
-      ret = `>=${M}.0.0 <${+M + 1}.0.0-0`;
-    } else if (isX(p)) {
-      // ~1.2 == >=1.2.0 <1.3.0-0
-      ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`;
-    } else if (pr) {
-      debug_1('replaceTilde pr', pr);
-      ret = `>=${M}.${m}.${p}-${pr
-      } <${M}.${+m + 1}.0-0`;
-    } else {
-      // ~1.2.3 == >=1.2.3 <1.3.0-0
-      ret = `>=${M}.${m}.${p
-      } <${M}.${+m + 1}.0-0`;
-    }
-
-    debug_1('tilde return', ret);
-    return ret
-  })
-};
-
-// ^ --> * (any, kinda silly)
-// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0
-// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0
-// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
-// ^1.2.3 --> >=1.2.3 <2.0.0-0
-// ^1.2.0 --> >=1.2.0 <2.0.0-0
-// ^0.0.1 --> >=0.0.1 <0.0.2-0
-// ^0.1.0 --> >=0.1.0 <0.2.0-0
-const replaceCarets = (comp, options) => {
-  return comp
-    .trim()
-    .split(/\s+/)
-    .map((c) => replaceCaret(c, options))
-    .join(' ')
-};
-
-const replaceCaret = (comp, options) => {
-  debug_1('caret', comp, options);
-  const r = options.loose ? re$1[t$1.CARETLOOSE] : re$1[t$1.CARET];
-  const z = options.includePrerelease ? '-0' : '';
-  return comp.replace(r, (_, M, m, p, pr) => {
-    debug_1('caret', comp, _, M, m, p, pr);
-    let ret;
-
-    if (isX(M)) {
-      ret = '';
-    } else if (isX(m)) {
-      ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`;
-    } else if (isX(p)) {
-      if (M === '0') {
-        ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`;
-      } else {
-        ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`;
-      }
-    } else if (pr) {
-      debug_1('replaceCaret pr', pr);
-      if (M === '0') {
-        if (m === '0') {
-          ret = `>=${M}.${m}.${p}-${pr
-          } <${M}.${m}.${+p + 1}-0`;
-        } else {
-          ret = `>=${M}.${m}.${p}-${pr
-          } <${M}.${+m + 1}.0-0`;
-        }
-      } else {
-        ret = `>=${M}.${m}.${p}-${pr
-        } <${+M + 1}.0.0-0`;
-      }
-    } else {
-      debug_1('no pr');
-      if (M === '0') {
-        if (m === '0') {
-          ret = `>=${M}.${m}.${p
-          }${z} <${M}.${m}.${+p + 1}-0`;
-        } else {
-          ret = `>=${M}.${m}.${p
-          }${z} <${M}.${+m + 1}.0-0`;
-        }
-      } else {
-        ret = `>=${M}.${m}.${p
-        } <${+M + 1}.0.0-0`;
-      }
-    }
-
-    debug_1('caret return', ret);
-    return ret
-  })
-};
-
-const replaceXRanges = (comp, options) => {
-  debug_1('replaceXRanges', comp, options);
-  return comp
-    .split(/\s+/)
-    .map((c) => replaceXRange(c, options))
-    .join(' ')
-};
-
-const replaceXRange = (comp, options) => {
-  comp = comp.trim();
-  const r = options.loose ? re$1[t$1.XRANGELOOSE] : re$1[t$1.XRANGE];
-  return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
-    debug_1('xRange', comp, ret, gtlt, M, m, p, pr);
-    const xM = isX(M);
-    const xm = xM || isX(m);
-    const xp = xm || isX(p);
-    const anyX = xp;
-
-    if (gtlt === '=' && anyX) {
-      gtlt = '';
-    }
-
-    // if we're including prereleases in the match, then we need
-    // to fix this to -0, the lowest possible prerelease value
-    pr = options.includePrerelease ? '-0' : '';
-
-    if (xM) {
-      if (gtlt === '>' || gtlt === '<') {
-        // nothing is allowed
-        ret = '<0.0.0-0';
-      } else {
-        // nothing is forbidden
-        ret = '*';
-      }
-    } else if (gtlt && anyX) {
-      // we know patch is an x, because we have any x at all.
-      // replace X with 0
-      if (xm) {
-        m = 0;
-      }
-      p = 0;
-
-      if (gtlt === '>') {
-        // >1 => >=2.0.0
-        // >1.2 => >=1.3.0
-        gtlt = '>=';
-        if (xm) {
-          M = +M + 1;
-          m = 0;
-          p = 0;
-        } else {
-          m = +m + 1;
-          p = 0;
-        }
-      } else if (gtlt === '<=') {
-        // <=0.7.x is actually <0.8.0, since any 0.7.x should
-        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-        gtlt = '<';
-        if (xm) {
-          M = +M + 1;
-        } else {
-          m = +m + 1;
-        }
-      }
-
-      if (gtlt === '<') {
-        pr = '-0';
-      }
-
-      ret = `${gtlt + M}.${m}.${p}${pr}`;
-    } else if (xm) {
-      ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`;
-    } else if (xp) {
-      ret = `>=${M}.${m}.0${pr
-      } <${M}.${+m + 1}.0-0`;
-    }
-
-    debug_1('xRange return', ret);
-
-    return ret
-  })
-};
-
-// Because * is AND-ed with everything else in the comparator,
-// and '' means "any version", just remove the *s entirely.
-const replaceStars = (comp, options) => {
-  debug_1('replaceStars', comp, options);
-  // Looseness is ignored here.  star is always as loose as it gets!
-  return comp
-    .trim()
-    .replace(re$1[t$1.STAR], '')
-};
-
-const replaceGTE0 = (comp, options) => {
-  debug_1('replaceGTE0', comp, options);
-  return comp
-    .trim()
-    .replace(re$1[options.includePrerelease ? t$1.GTE0PRE : t$1.GTE0], '')
-};
-
-// This function is passed to string.replace(re[t.HYPHENRANGE])
-// M, m, patch, prerelease, build
-// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-// 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
-// 1.2 - 3.4 => >=1.2.0 <3.5.0-0
-const hyphenReplace = incPr => ($0,
-  from, fM, fm, fp, fpr, fb,
-  to, tM, tm, tp, tpr, tb) => {
-  if (isX(fM)) {
-    from = '';
-  } else if (isX(fm)) {
-    from = `>=${fM}.0.0${incPr ? '-0' : ''}`;
-  } else if (isX(fp)) {
-    from = `>=${fM}.${fm}.0${incPr ? '-0' : ''}`;
-  } else if (fpr) {
-    from = `>=${from}`;
-  } else {
-    from = `>=${from}${incPr ? '-0' : ''}`;
-  }
-
-  if (isX(tM)) {
-    to = '';
-  } else if (isX(tm)) {
-    to = `<${+tM + 1}.0.0-0`;
-  } else if (isX(tp)) {
-    to = `<${tM}.${+tm + 1}.0-0`;
-  } else if (tpr) {
-    to = `<=${tM}.${tm}.${tp}-${tpr}`;
-  } else if (incPr) {
-    to = `<${tM}.${tm}.${+tp + 1}-0`;
-  } else {
-    to = `<=${to}`;
-  }
-
-  return `${from} ${to}`.trim()
-};
-
-const testSet = (set, version, options) => {
-  for (let i = 0; i < set.length; i++) {
-    if (!set[i].test(version)) {
-      return false
-    }
-  }
-
-  if (version.prerelease.length && !options.includePrerelease) {
-    // Find the set of versions that are allowed to have prereleases
-    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-    // That should allow `1.2.3-pr.2` to pass.
-    // However, `1.2.4-alpha.notready` should NOT be allowed,
-    // even though it's within the range set by the comparators.
-    for (let i = 0; i < set.length; i++) {
-      debug_1(set[i].semver);
-      if (set[i].semver === Comparator$1.ANY) {
-        continue
-      }
-
-      if (set[i].semver.prerelease.length > 0) {
-        const allowed = set[i].semver;
-        if (allowed.major === version.major &&
-            allowed.minor === version.minor &&
-            allowed.patch === version.patch) {
-          return true
-        }
-      }
-    }
-
-    // Version has a -pre, but it's not one of the ones we like.
-    return false
-  }
-
-  return true
-};
-
-const ANY$2 = Symbol('SemVer ANY');
-// hoisted class for cyclic dependency
-class Comparator {
-  static get ANY () {
-    return ANY$2
-  }
-
-  constructor (comp, options) {
-    options = parseOptions_1(options);
-
-    if (comp instanceof Comparator) {
-      if (comp.loose === !!options.loose) {
-        return comp
-      } else {
-        comp = comp.value;
-      }
-    }
-
-    comp = comp.trim().split(/\s+/).join(' ');
-    debug_1('comparator', comp, options);
-    this.options = options;
-    this.loose = !!options.loose;
-    this.parse(comp);
-
-    if (this.semver === ANY$2) {
-      this.value = '';
-    } else {
-      this.value = this.operator + this.semver.version;
-    }
-
-    debug_1('comp', this);
-  }
-
-  parse (comp) {
-    const r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR];
-    const m = comp.match(r);
-
-    if (!m) {
-      throw new TypeError(`Invalid comparator: ${comp}`)
-    }
-
-    this.operator = m[1] !== undefined ? m[1] : '';
-    if (this.operator === '=') {
-      this.operator = '';
-    }
-
-    // if it literally is just '>' or '' then allow anything.
-    if (!m[2]) {
-      this.semver = ANY$2;
-    } else {
-      this.semver = new semver$1(m[2], this.options.loose);
-    }
-  }
-
-  toString () {
-    return this.value
-  }
-
-  test (version) {
-    debug_1('Comparator.test', version, this.options.loose);
-
-    if (this.semver === ANY$2 || version === ANY$2) {
-      return true
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new semver$1(version, this.options);
-      } catch (er) {
-        return false
-      }
-    }
-
-    return cmp_1(version, this.operator, this.semver, this.options)
-  }
-
-  intersects (comp, options) {
-    if (!(comp instanceof Comparator)) {
-      throw new TypeError('a Comparator is required')
-    }
-
-    if (this.operator === '') {
-      if (this.value === '') {
-        return true
-      }
-      return new range(comp.value, options).test(this.value)
-    } else if (comp.operator === '') {
-      if (comp.value === '') {
-        return true
-      }
-      return new range(this.value, options).test(comp.semver)
-    }
-
-    options = parseOptions_1(options);
-
-    // Special cases where nothing can possibly be lower
-    if (options.includePrerelease &&
-      (this.value === '<0.0.0-0' || comp.value === '<0.0.0-0')) {
-      return false
-    }
-    if (!options.includePrerelease &&
-      (this.value.startsWith('<0.0.0') || comp.value.startsWith('<0.0.0'))) {
-      return false
-    }
-
-    // Same direction increasing (> or >=)
-    if (this.operator.startsWith('>') && comp.operator.startsWith('>')) {
-      return true
-    }
-    // Same direction decreasing (< or <=)
-    if (this.operator.startsWith('<') && comp.operator.startsWith('<')) {
-      return true
-    }
-    // same SemVer and both sides are inclusive (<= or >=)
-    if (
-      (this.semver.version === comp.semver.version) &&
-      this.operator.includes('=') && comp.operator.includes('=')) {
-      return true
-    }
-    // opposite directions less than
-    if (cmp_1(this.semver, '<', comp.semver, options) &&
-      this.operator.startsWith('>') && comp.operator.startsWith('<')) {
-      return true
-    }
-    // opposite directions greater than
-    if (cmp_1(this.semver, '>', comp.semver, options) &&
-      this.operator.startsWith('<') && comp.operator.startsWith('>')) {
-      return true
-    }
-    return false
-  }
-}
-
-var comparator = Comparator;
-
-
-const { safeRe: re, t } = re_1;
-
-const satisfies = (version, range$1, options) => {
+const Range$9 = requireRange();
+const satisfies$4 = (version, range, options) => {
   try {
-    range$1 = new range(range$1, options);
+    range = new Range$9(range, options);
   } catch (er) {
     return false
   }
-  return range$1.test(version)
+  return range.test(version)
 };
-var satisfies_1 = satisfies;
+var satisfies_1 = satisfies$4;
+
+const Range$8 = requireRange();
 
 // Mostly just for testing and legacy API reasons
-const toComparators = (range$1, options) =>
-  new range(range$1, options).set
+const toComparators$1 = (range, options) =>
+  new Range$8(range, options).set
     .map(comp => comp.map(c => c.value).join(' ').trim().split(' '));
 
-var toComparators_1 = toComparators;
+var toComparators_1 = toComparators$1;
 
-const maxSatisfying = (versions, range$1, options) => {
+const SemVer$4 = semver$2;
+const Range$7 = requireRange();
+
+const maxSatisfying$1 = (versions, range, options) => {
   let max = null;
   let maxSV = null;
   let rangeObj = null;
   try {
-    rangeObj = new range(range$1, options);
+    rangeObj = new Range$7(range, options);
   } catch (er) {
     return null
   }
@@ -87834,20 +87738,22 @@ const maxSatisfying = (versions, range$1, options) => {
       if (!max || maxSV.compare(v) === -1) {
         // compare(max, v, true)
         max = v;
-        maxSV = new semver$1(max, options);
+        maxSV = new SemVer$4(max, options);
       }
     }
   });
   return max
 };
-var maxSatisfying_1 = maxSatisfying;
+var maxSatisfying_1 = maxSatisfying$1;
 
-const minSatisfying = (versions, range$1, options) => {
+const SemVer$3 = semver$2;
+const Range$6 = requireRange();
+const minSatisfying$1 = (versions, range, options) => {
   let min = null;
   let minSV = null;
   let rangeObj = null;
   try {
-    rangeObj = new range(range$1, options);
+    rangeObj = new Range$6(range, options);
   } catch (er) {
     return null
   }
@@ -87857,35 +87763,39 @@ const minSatisfying = (versions, range$1, options) => {
       if (!min || minSV.compare(v) === 1) {
         // compare(min, v, true)
         min = v;
-        minSV = new semver$1(min, options);
+        minSV = new SemVer$3(min, options);
       }
     }
   });
   return min
 };
-var minSatisfying_1 = minSatisfying;
+var minSatisfying_1 = minSatisfying$1;
 
-const minVersion = (range$1, loose) => {
-  range$1 = new range(range$1, loose);
+const SemVer$2 = semver$2;
+const Range$5 = requireRange();
+const gt$2 = gt_1;
 
-  let minver = new semver$1('0.0.0');
-  if (range$1.test(minver)) {
+const minVersion$1 = (range, loose) => {
+  range = new Range$5(range, loose);
+
+  let minver = new SemVer$2('0.0.0');
+  if (range.test(minver)) {
     return minver
   }
 
-  minver = new semver$1('0.0.0-0');
-  if (range$1.test(minver)) {
+  minver = new SemVer$2('0.0.0-0');
+  if (range.test(minver)) {
     return minver
   }
 
   minver = null;
-  for (let i = 0; i < range$1.set.length; ++i) {
-    const comparators = range$1.set[i];
+  for (let i = 0; i < range.set.length; ++i) {
+    const comparators = range.set[i];
 
     let setMin = null;
     comparators.forEach((comparator) => {
       // Clone to avoid manipulating the comparator's semver object.
-      const compver = new semver$1(comparator.semver.version);
+      const compver = new SemVer$2(comparator.semver.version);
       switch (comparator.operator) {
         case '>':
           if (compver.prerelease.length === 0) {
@@ -87897,7 +87807,7 @@ const minVersion = (range$1, loose) => {
           /* fallthrough */
         case '':
         case '>=':
-          if (!setMin || gt_1(compver, setMin)) {
+          if (!setMin || gt$2(compver, setMin)) {
             setMin = compver;
           }
           break
@@ -87910,55 +87820,58 @@ const minVersion = (range$1, loose) => {
           throw new Error(`Unexpected operation: ${comparator.operator}`)
       }
     });
-    if (setMin && (!minver || gt_1(minver, setMin))) {
+    if (setMin && (!minver || gt$2(minver, setMin))) {
       minver = setMin;
     }
   }
 
-  if (minver && range$1.test(minver)) {
+  if (minver && range.test(minver)) {
     return minver
   }
 
   return null
 };
-var minVersion_1 = minVersion;
+var minVersion_1 = minVersion$1;
 
-const validRange = (range$1, options) => {
+const Range$4 = requireRange();
+const validRange$1 = (range, options) => {
   try {
     // Return '*' instead of '' so that truthiness works.
     // This will throw if it's invalid anyway
-    return new range(range$1, options).range || '*'
+    return new Range$4(range, options).range || '*'
   } catch (er) {
     return null
   }
 };
-var valid = validRange;
+var valid$1 = validRange$1;
 
-const { ANY: ANY$1 } = Comparator$1;
+const SemVer$1 = semver$2;
+const Comparator$2 = requireComparator();
+const { ANY: ANY$1 } = Comparator$2;
+const Range$3 = requireRange();
+const satisfies$3 = satisfies_1;
+const gt$1 = gt_1;
+const lt$1 = lt_1;
+const lte$1 = lte_1;
+const gte$1 = gte_1;
 
-
-
-
-
-
-
-const outside = (version, range$1, hilo, options) => {
-  version = new semver$1(version, options);
-  range$1 = new range(range$1, options);
+const outside$3 = (version, range, hilo, options) => {
+  version = new SemVer$1(version, options);
+  range = new Range$3(range, options);
 
   let gtfn, ltefn, ltfn, comp, ecomp;
   switch (hilo) {
     case '>':
-      gtfn = gt_1;
-      ltefn = lte_1;
-      ltfn = lt_1;
+      gtfn = gt$1;
+      ltefn = lte$1;
+      ltfn = lt$1;
       comp = '>';
       ecomp = '>=';
       break
     case '<':
-      gtfn = lt_1;
-      ltefn = gte_1;
-      ltfn = gt_1;
+      gtfn = lt$1;
+      ltefn = gte$1;
+      ltfn = gt$1;
       comp = '<';
       ecomp = '<=';
       break
@@ -87967,22 +87880,22 @@ const outside = (version, range$1, hilo, options) => {
   }
 
   // If it satisfies the range it is not outside
-  if (satisfies_1(version, range$1, options)) {
+  if (satisfies$3(version, range, options)) {
     return false
   }
 
   // From now on, variable terms are as if we're in "gtr" mode.
   // but note that everything is flipped for the "ltr" function.
 
-  for (let i = 0; i < range$1.set.length; ++i) {
-    const comparators = range$1.set[i];
+  for (let i = 0; i < range.set.length; ++i) {
+    const comparators = range.set[i];
 
     let high = null;
     let low = null;
 
     comparators.forEach((comparator) => {
       if (comparator.semver === ANY$1) {
-        comparator = new Comparator$1('>=0.0.0');
+        comparator = new Comparator$2('>=0.0.0');
       }
       high = high || comparator;
       low = low || comparator;
@@ -88011,36 +87924,38 @@ const outside = (version, range$1, hilo, options) => {
   return true
 };
 
-var outside_1 = outside;
+var outside_1 = outside$3;
 
 // Determine if version is greater than all the versions possible in the range.
+const outside$2 = outside_1;
+const gtr$1 = (version, range, options) => outside$2(version, range, '>', options);
+var gtr_1 = gtr$1;
 
-const gtr = (version, range, options) => outside_1(version, range, '>', options);
-var gtr_1 = gtr;
-
+const outside$1 = outside_1;
 // Determine if version is less than all the versions possible in the range
-const ltr = (version, range, options) => outside_1(version, range, '<', options);
-var ltr_1 = ltr;
+const ltr$1 = (version, range, options) => outside$1(version, range, '<', options);
+var ltr_1 = ltr$1;
 
-const intersects = (r1, r2, options) => {
-  r1 = new range(r1, options);
-  r2 = new range(r2, options);
+const Range$2 = requireRange();
+const intersects$1 = (r1, r2, options) => {
+  r1 = new Range$2(r1, options);
+  r2 = new Range$2(r2, options);
   return r1.intersects(r2, options)
 };
-var intersects_1 = intersects;
+var intersects_1 = intersects$1;
 
 // given a set of versions and a range, create a "simplified" range
 // that includes the same versions that the original range does
 // If the original range is shorter than the simplified one, return that.
-
-
+const satisfies$2 = satisfies_1;
+const compare$2 = compare_1;
 var simplify = (versions, range, options) => {
   const set = [];
   let first = null;
   let prev = null;
-  const v = versions.sort((a, b) => compare_1(a, b, options));
+  const v = versions.sort((a, b) => compare$2(a, b, options));
   for (const version of v) {
-    const included = satisfies_1(version, range, options);
+    const included = satisfies$2(version, range, options);
     if (included) {
       prev = version;
       if (!first) {
@@ -88077,9 +87992,11 @@ var simplify = (versions, range, options) => {
   return simplified.length < original.length ? simplified : range
 };
 
+const Range$1 = requireRange();
+const Comparator$1 = requireComparator();
 const { ANY } = Comparator$1;
-
-
+const satisfies$1 = satisfies_1;
+const compare$1 = compare_1;
 
 // Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:
 // - Every simple range `r1, r2, ...` is a null set, OR
@@ -88117,13 +88034,13 @@ const { ANY } = Comparator$1;
 //     - If no C has a prerelease and the LT.semver tuple, return false
 // - Else return true
 
-const subset = (sub, dom, options = {}) => {
+const subset$1 = (sub, dom, options = {}) => {
   if (sub === dom) {
     return true
   }
 
-  sub = new range(sub, options);
-  dom = new range(dom, options);
+  sub = new Range$1(sub, options);
+  dom = new Range$1(dom, options);
   let sawNonNull = false;
 
   OUTER: for (const simpleSub of sub.set) {
@@ -88189,7 +88106,7 @@ const simpleSubset = (sub, dom, options) => {
 
   let gtltComp;
   if (gt && lt) {
-    gtltComp = compare_1(gt.semver, lt.semver, options);
+    gtltComp = compare$1(gt.semver, lt.semver, options);
     if (gtltComp > 0) {
       return null
     } else if (gtltComp === 0 && (gt.operator !== '>=' || lt.operator !== '<=')) {
@@ -88199,16 +88116,16 @@ const simpleSubset = (sub, dom, options) => {
 
   // will iterate one or zero times
   for (const eq of eqSet) {
-    if (gt && !satisfies_1(eq, String(gt), options)) {
+    if (gt && !satisfies$1(eq, String(gt), options)) {
       return null
     }
 
-    if (lt && !satisfies_1(eq, String(lt), options)) {
+    if (lt && !satisfies$1(eq, String(lt), options)) {
       return null
     }
 
     for (const c of dom) {
-      if (!satisfies_1(eq, String(c), options)) {
+      if (!satisfies$1(eq, String(c), options)) {
         return false
       }
     }
@@ -88249,7 +88166,7 @@ const simpleSubset = (sub, dom, options) => {
         if (higher === c && higher !== gt) {
           return false
         }
-      } else if (gt.operator === '>=' && !satisfies_1(gt.semver, String(c), options)) {
+      } else if (gt.operator === '>=' && !satisfies$1(gt.semver, String(c), options)) {
         return false
       }
     }
@@ -88267,7 +88184,7 @@ const simpleSubset = (sub, dom, options) => {
         if (lower === c && lower !== lt) {
           return false
         }
-      } else if (lt.operator === '<=' && !satisfies_1(lt.semver, String(c), options)) {
+      } else if (lt.operator === '<=' && !satisfies$1(lt.semver, String(c), options)) {
         return false
       }
     }
@@ -88302,7 +88219,7 @@ const higherGT = (a, b, options) => {
   if (!a) {
     return b
   }
-  const comp = compare_1(a.semver, b.semver, options);
+  const comp = compare$1(a.semver, b.semver, options);
   return comp > 0 ? a
     : comp < 0 ? b
     : b.operator === '>' && a.operator === '>=' ? b
@@ -88314,104 +88231,106 @@ const lowerLT = (a, b, options) => {
   if (!a) {
     return b
   }
-  const comp = compare_1(a.semver, b.semver, options);
+  const comp = compare$1(a.semver, b.semver, options);
   return comp < 0 ? a
     : comp > 0 ? b
     : b.operator === '<' && a.operator === '<=' ? b
     : a
 };
 
-var subset_1 = subset;
+var subset_1 = subset$1;
 
 // just pre-load all the stuff that index.js lazily exports
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const internalRe = reExports;
+const constants = constants$1;
+const SemVer = semver$2;
+const identifiers = identifiers$1;
+const parse = parse_1;
+const valid = valid_1;
+const clean = clean_1;
+const inc = inc_1;
+const diff = diff_1;
+const major = major_1;
+const minor = minor_1;
+const patch = patch_1;
+const prerelease = prerelease_1;
+const compare = compare_1;
+const rcompare = rcompare_1;
+const compareLoose = compareLoose_1;
+const compareBuild = compareBuild_1;
+const sort = sort_1;
+const rsort = rsort_1;
+const gt = gt_1;
+const lt = lt_1;
+const eq = eq_1;
+const neq = neq_1;
+const gte = gte_1;
+const lte = lte_1;
+const cmp = cmp_1;
+const coerce = coerce_1;
+const Comparator = requireComparator();
+const Range = requireRange();
+const satisfies = satisfies_1;
+const toComparators = toComparators_1;
+const maxSatisfying = maxSatisfying_1;
+const minSatisfying = minSatisfying_1;
+const minVersion = minVersion_1;
+const validRange = valid$1;
+const outside = outside_1;
+const gtr = gtr_1;
+const ltr = ltr_1;
+const intersects = intersects_1;
+const simplifyRange = simplify;
+const subset = subset_1;
 var semver = {
-  parse: parse_1,
-  valid: valid_1,
-  clean: clean_1,
-  inc: inc_1,
-  diff: diff_1,
-  major: major_1,
-  minor: minor_1,
-  patch: patch_1,
-  prerelease: prerelease_1,
-  compare: compare_1,
-  rcompare: rcompare_1,
-  compareLoose: compareLoose_1,
-  compareBuild: compareBuild_1,
-  sort: sort_1,
-  rsort: rsort_1,
-  gt: gt_1,
-  lt: lt_1,
-  eq: eq_1,
-  neq: neq_1,
-  gte: gte_1,
-  lte: lte_1,
-  cmp: cmp_1,
-  coerce: coerce_1,
-  Comparator: Comparator$1,
-  Range: range,
-  satisfies: satisfies_1,
-  toComparators: toComparators_1,
-  maxSatisfying: maxSatisfying_1,
-  minSatisfying: minSatisfying_1,
-  minVersion: minVersion_1,
-  validRange: valid,
-  outside: outside_1,
-  gtr: gtr_1,
-  ltr: ltr_1,
-  intersects: intersects_1,
-  simplifyRange: simplify,
-  subset: subset_1,
-  SemVer: semver$1,
-  re: re_1.re,
-  src: re_1.src,
-  tokens: re_1.t,
+  parse,
+  valid,
+  clean,
+  inc,
+  diff,
+  major,
+  minor,
+  patch,
+  prerelease,
+  compare,
+  rcompare,
+  compareLoose,
+  compareBuild,
+  sort,
+  rsort,
+  gt,
+  lt,
+  eq,
+  neq,
+  gte,
+  lte,
+  cmp,
+  coerce,
+  Comparator,
+  Range,
+  satisfies,
+  toComparators,
+  maxSatisfying,
+  minSatisfying,
+  minVersion,
+  validRange,
+  outside,
+  gtr,
+  ltr,
+  intersects,
+  simplifyRange,
+  subset,
+  SemVer,
+  re: internalRe.re,
+  src: internalRe.src,
+  tokens: internalRe.t,
   SEMVER_SPEC_VERSION: constants.SEMVER_SPEC_VERSION,
   RELEASE_TYPES: constants.RELEASE_TYPES,
   compareIdentifiers: identifiers.compareIdentifiers,
   rcompareIdentifiers: identifiers.rcompareIdentifiers,
 };
+
+var semver$1 = /*@__PURE__*/getDefaultExportFromCjs(semver);
 
 /*
 The return object format MUST contain the field 'success':
@@ -88438,10 +88357,10 @@ async function uninstall(client, request) {
     return { success: true, resultObject: {} };
 }
 async function upgrade(client, request) {
-    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.0.2') < 0) {
+    if (request.body.FromVersion && semver$1.compare(request.body.FromVersion, '1.0.2') < 0) {
         throw new Error('Upgarding from versions earlier than 1.0.2 is not supported. Please uninstall the addon and install it again.');
     }
-    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '1.2.4') < 0) {
+    if (request.body.FromVersion && semver$1.compare(request.body.FromVersion, '1.2.4') < 0) {
         await create_dimx_relations(client);
         await rename_system_charts(client);
         await set_cache_on_all_charts(client);
